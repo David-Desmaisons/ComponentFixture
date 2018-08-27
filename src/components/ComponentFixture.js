@@ -1,7 +1,7 @@
 import Vue from "vue";
 
 function extractDefaultValue(prop) {
-  const {default: defaultValue} = prop;
+  const { default: defaultValue } = prop;
   if (defaultValue !== undefined) {
     return defaultValue;
   }
@@ -14,7 +14,12 @@ function extractDefaultValue(prop) {
 export default {
   name: "ComponentFixture",
   render(h) {
-    const [slot] = this.$slots.default;
+    const { default: defaultSlot } = this.$slots;
+    if (!defaultSlot || defaultSlot.length !== 1 ){
+      throw new Error("ComponentFixture should have one unique default slot");
+    }
+
+    const [slot] = defaultSlot;
     if (this.stage === 0) {
       return h("div", {}, [slot]);
     }
