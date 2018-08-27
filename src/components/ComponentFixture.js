@@ -1,33 +1,30 @@
 import Vue from "vue";
 
-function extractValue(prop) {
-  const defaultValue = prop.default;
+function extractDefaultValue(prop) {
+  const {default: defaultValue} = prop;
   if (defaultValue !== undefined) {
     return defaultValue;
   }
-
-  if (prop.type) {
-    return prop.type();
+  if (!prop.required) {
+    return undefined;
   }
-
-  return prop.required ? undefined : {};
+  return prop.type ? prop.type() : {};
 }
 
 export default {
   name: "ComponentFixture",
   render(h) {
     const [slot] = this.$slots.default;
-
     if (this.stage === 0) {
       return h("div", {}, [slot]);
     }
-
-    if (this.stage == 1) {
-      Vue.component(slot.componentOptions.tag, slot.componentOptions.Ctor);
+    const { tag, Ctor: ctor } = slot.componentOptions;
+    if (this.stage === 1) {
+      Vue.component(tag, ctor);
     }
     this.stage = 2;
     const props = this.dynamicAttributes;
-    return h(slot.componentOptions.tag, { props }, []);
+    return h(tag, { props }, []);
   },
   mounted() {
     if (this.stage !== 0) {
@@ -35,17 +32,16 @@ export default {
     }
     this.stage = 1;
     const [child] = this.$children;
-    const { props } = child.$options;
+    const { props, name } = child.$options;
+    this.componentName = name;
     const dynamicAttributes = this.dynamicAttributes;
     Object.keys(props).forEach(key =>
-      Vue.set(dynamicAttributes, key, extractValue(props[key]))
+      Vue.set(dynamicAttributes, key, extractDefaultValue(props[key]))
     );
-    this.$nextTick(() => {
-      this.$forceUpdate();
-    });
   },
   data() {
     return {
+      componentName: null,
       stage: 0,
       dynamicAttributes: {}
     };
