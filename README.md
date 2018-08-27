@@ -1,8 +1,8 @@
 
 # ComponentFixture
-[![GitHub open issues](https://img.shields.io/github/issues/desmaisons_david/ComponentFixture.svg?maxAge=2592000)](https://github.com/desmaisons_david/ComponentFixture/issues)
-[![Npm version](https://img.shields.io/npm/v/ComponentFixture.svg?maxAge=2592000)](https://www.npmjs.com/package/ComponentFixture)
-[![MIT License](https://img.shields.io/github/license/desmaisons_david/ComponentFixture.svg)](https://github.com/desmaisons_david/ComponentFixture/blob/master/LICENSE)
+[![GitHub open issues](https://img.shields.io/github/issues/David-Desmaisons/ComponentFixture.svg?maxAge=20)](https://github.com/David-Desmaisons/ComponentFixture/issues)
+[![Npm version](https://img.shields.io/npm/v/ComponentFixture.svg?maxAge=20)](https://www.npmjs.com/package/ComponentFixture)
+[![MIT License](https://img.shields.io/github/license/David-Desmaisons/ComponentFixture.svg)](https://github.com/David-Desmaisons/ComponentFixture/blob/master/LICENSE)
 
 ## Usage
 ```HTML
