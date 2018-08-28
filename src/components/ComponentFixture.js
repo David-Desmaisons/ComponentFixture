@@ -15,7 +15,7 @@ export default {
   name: "ComponentFixture",
   render(h) {
     const { default: defaultSlot } = this.$slots;
-    if (!defaultSlot || defaultSlot.length !== 1 ){
+    if (!defaultSlot || defaultSlot.length !== 1) {
       throw new Error("ComponentFixture should have one unique default slot");
     }
 
@@ -23,13 +23,28 @@ export default {
     if (this.stage === 0) {
       return h("div", {}, [slot]);
     }
+
+    const { control } = this.$slots;
     const { tag, Ctor: ctor } = slot.componentOptions;
     if (this.stage === 1) {
       Vue.component(tag, ctor);
     }
     this.stage = 2;
     const props = this.dynamicAttributes;
-    return h(tag, { props }, []);
+
+    if (!control) {
+      return h(tag, { props }, []);
+    }
+
+    return h("div", { class: { main: true } }, [
+      h("div", { class: { control: true } }, [
+        control({
+          componentName: this.componentName,
+          dynamicAttributes: this.dynamicAttributes
+        })
+      ]),
+      h("div", { class: { component: true } }, [h(tag, { props }, [])])
+    ]);
   },
   mounted() {
     if (this.stage !== 0) {

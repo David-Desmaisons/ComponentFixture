@@ -3,6 +3,8 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <ComponentFixture>
       <tree></tree>
+      <div>
+      </div>
     </ComponentFixture>
   </div>
 </template>
