@@ -76,5 +76,9 @@ export default {
 .main {
   display: flex;
   flex-direction: row;
+
+  .component {
+    width: 100%;
+  }
 }
 </style>

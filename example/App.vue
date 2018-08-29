@@ -3,22 +3,23 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <ComponentFixture>
       <tree></tree>
-      <div slot="control" slot-scope="{ attributes, componentName }" class="control">
-        <h1>{{componentName}}</h1>
-        <pre>{{attributes}}</pre>
-      </div>
+      <Editor slot="control" slot-scope="{ attributes, componentName }" v-bind="{ attributes, componentName }">
+      </Editor>
     </ComponentFixture>
   </div>
 </template>
 
 <script>
 import ComponentFixture from "@/components/ComponentFixture";
+import Editor from "@/components/Editor";
+
 import { tree } from "vued3tree";
 
 export default {
   name: "app",
   components: {
     ComponentFixture,
+    Editor,
     tree
   }
 };
@@ -35,8 +36,5 @@ export default {
 }
 .treeclass {
   height: 300px;
-}
-.control {
-  background-color: lightgrey;
 }
 </style>
