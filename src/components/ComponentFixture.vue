@@ -1,3 +1,4 @@
+<script>
 import Vue from "vue";
 
 function extractDefaultValue(prop) {
@@ -13,6 +14,9 @@ function extractDefaultValue(prop) {
 
 export default {
   name: "ComponentFixture",
+  renderError(h, err) {
+    return h("pre", { style: { color: "red" } }, err.stack);
+  },
   render(h) {
     const { default: defaultSlot } = this.$slots;
     if (!defaultSlot || defaultSlot.length !== 1) {
@@ -24,7 +28,7 @@ export default {
       return h("div", {}, [slot]);
     }
 
-    const { control } = this.$slots;
+    const { control } = this.$scopedSlots;
     const { tag, Ctor: ctor } = slot.componentOptions;
     if (this.stage === 1) {
       Vue.component(tag, ctor);
@@ -40,7 +44,7 @@ export default {
       h("div", { class: { control: true } }, [
         control({
           componentName: this.componentName,
-          dynamicAttributes: this.dynamicAttributes
+          attributes: this.dynamicAttributes
         })
       ]),
       h("div", { class: { component: true } }, [h(tag, { props }, [])])
@@ -67,3 +71,10 @@ export default {
     };
   }
 };
+</script>
+<style lang="less">
+.main {
+  display: flex;
+  flex-direction: row;
+}
+</style>
