@@ -14,9 +14,11 @@ function extractDefaultValue(prop) {
 
 export default {
   name: "ComponentFixture",
+
   renderError(h, err) {
     return h("pre", { style: { color: "red" } }, err.stack);
   },
+
   render(h) {
     const { default: defaultSlot } = this.$slots;
     if (!defaultSlot || defaultSlot.length !== 1) {
@@ -50,6 +52,7 @@ export default {
       h("div", { class: { component: true } }, [h(tag, { props }, [])])
     ]);
   },
+
   mounted() {
     if (this.stage !== 0) {
       return;
@@ -63,6 +66,7 @@ export default {
       Vue.set(dynamicAttributes, key, extractDefaultValue(props[key]))
     );
   },
+
   data() {
     return {
       componentName: null,
