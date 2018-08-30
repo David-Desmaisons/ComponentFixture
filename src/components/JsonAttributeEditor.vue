@@ -14,13 +14,10 @@ export default {
     }
   },
 
-  mounted() {
-    this.textValue = JSON.stringify(this.object[this.attribute]);
-  },
-
   data() {
+    const textValue = this.object[this.attribute];
     return {
-      textValue: null
+      textValue
     };
   },
 

@@ -14,20 +14,19 @@ export default {
     }
   },
 
-  mounted() {
-    this.textValue = this.object[this.attribute];
-  },
-
   data() {
+    const textValue = this.object[this.attribute];
     return {
-      textValue: null
+      textValue,
+      functionValue: this.object[this.attribute]
     };
   },
 
   watch: {
     textValue(value) {
       try {
-        this.object[this.attribute] = new Function(value);
+        this.functionValue = new Function(value);
+        this.object[this.attribute] = this.functionValue;
       } catch (e) {
         return;
       }

@@ -3,7 +3,7 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <ComponentFixture>
       <tree></tree>
-      <Editor slot="control" slot-scope="{ attributes, componentName }" v-bind="{ attributes, componentName }">
+      <Editor slot="control" slot-scope="scope" v-bind="scope">
       </Editor>
     </ComponentFixture>
   </div>
