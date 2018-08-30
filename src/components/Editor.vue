@@ -1,11 +1,19 @@
 <template>
   <div class="control">
     <h1>{{componentName}}</h1>
-    <pre>{{attributes}}</pre>
+    <div>
+      <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key">
+      </attributeEditor>
+    </div>
   </div>
 </template>
 <script>
+import attributeEditor from "./AttributeEditor";
+
 export default {
+  components: {
+    attributeEditor
+  },
   props: {
     attributes: {
       required: true,
