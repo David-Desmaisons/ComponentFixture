@@ -25,8 +25,12 @@ export default {
   watch: {
     textValue(value) {
       try {
-        this.functionValue = new Function(value);
-        this.object[this.attribute] = this.functionValue;
+        const functionValue = eval.call(null, `(${value})`);
+        if (typeof functionValue !== "function") {
+          return;
+        }
+        this.functionValue = functionValue;
+        this.object[this.attribute] = functionValue;
       } catch (e) {
         return;
       }
