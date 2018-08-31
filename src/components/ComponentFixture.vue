@@ -42,10 +42,13 @@ export default {
       return h(tag, { props }, []);
     }
 
+    const { componentName, propsDefinition } = this;
+
     return h("div", { class: { main: true } }, [
       h("div", { class: { control: true } }, [
         control({
-          componentName: this.componentName,
+          componentName,
+          propsDefinition,
           attributes: this.dynamicAttributes
         })
       ]),
@@ -62,16 +65,20 @@ export default {
     const { props, name } = child.$options;
     this.componentName = name;
     const dynamicAttributes = this.dynamicAttributes;
-    Object.keys(props).forEach(key =>
-      Vue.set(dynamicAttributes, key, extractDefaultValue(props[key]))
-    );
+    const propsDefinition = this.propsDefinition;
+    Object.keys(props).forEach(key => {
+      const propsValue = props[key];
+      Vue.set(dynamicAttributes, key, extractDefaultValue(propsValue));
+      Vue.set(propsDefinition, key, propsValue);
+    });
   },
 
   data() {
     return {
       componentName: null,
       stage: 0,
-      dynamicAttributes: {}
+      dynamicAttributes: {},
+      propsDefinition: {}
     };
   }
 };

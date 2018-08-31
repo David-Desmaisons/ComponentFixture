@@ -23,6 +23,10 @@ export default {
       required: true,
       type: Object
     },
+    metaData: {
+      required: true,
+      type: Object
+    },
     attribute: {
       required: true,
       type: String
@@ -31,6 +35,11 @@ export default {
 
   computed: {
     type() {
+      // const typeFromMetada = this.metaData.type;
+      // if (!typeFromMetada) {
+      //   return null;
+      // }
+
       const value = this.object[this.attribute];
       if (typeof value === "boolean") {
         return "boolean";
