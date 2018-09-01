@@ -1,8 +1,9 @@
 <script>
 import Vue from "vue";
+import { getPropDefaultValue } from "../utils/vueHelper";
 
-function extractDefaultValue(prop) {
-  const { default: defaultValue } = prop;
+function extractDefaultValue(vm, prop, key) {
+  const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
     return defaultValue;
   }
@@ -60,6 +61,9 @@ export default {
     if (this.stage !== 0) {
       return;
     }
+    if (this.$children.length !== 1) {
+      return;
+    }
     this.stage = 1;
     const [child] = this.$children;
     const { props, name } = child.$options;
@@ -68,7 +72,7 @@ export default {
     const propsDefinition = this.propsDefinition;
     Object.keys(props).forEach(key => {
       const propsValue = props[key];
-      Vue.set(dynamicAttributes, key, extractDefaultValue(propsValue));
+      Vue.set(dynamicAttributes, key, extractDefaultValue(child, propsValue, key));
       Vue.set(propsDefinition, key, propsValue);
     });
   },

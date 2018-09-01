@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "vue": "^2.5.17",
+    "vue-d3-sunburst": "^0.1.4",
     "vued3tree": "^3.6.1"
   },
   "devDependencies": {

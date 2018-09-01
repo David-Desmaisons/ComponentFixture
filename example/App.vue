@@ -2,7 +2,7 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
     <ComponentFixture>
-      <tree></tree>
+      <sunburst></sunburst>
       <Editor slot="control" slot-scope="scope" v-bind="scope">
       </Editor>
     </ComponentFixture>
@@ -13,14 +13,16 @@
 import ComponentFixture from "@/components/ComponentFixture";
 import Editor from "@/components/Editor";
 
-import { tree } from "vued3tree";
+// import { tree } from "vued3tree";
+import { sunburst } from "vue-d3-sunburst";
 
 export default {
   name: "app",
   components: {
     ComponentFixture,
     Editor,
-    tree
+    sunburst
+    // tree
   }
 };
 </script>
