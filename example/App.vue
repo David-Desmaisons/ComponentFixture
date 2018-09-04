@@ -15,6 +15,7 @@ import Editor from "@/components/Editor";
 
 // import { tree } from "vued3tree";
 import { sunburst } from "vue-d3-sunburst";
+import 'vue-d3-sunburst/dist/vue-d3-sunburst.css';
 
 export default {
   name: "app",

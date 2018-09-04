@@ -6,10 +6,10 @@
       <input :id="'attribute-'+attribute" v-else-if="type === 'boolean'" v-model="object[attribute]" type="checkbox" class="form-control" />
       <input :id="'attribute-'+attribute" v-else-if="type === 'string'" v-model="object[attribute]" class="form-control" />
       <functionAttributeEditor v-else-if="type === 'function'" v-bind="{object, attribute}"></functionAttributeEditor>
-      <jsonAttributeEditor v-else v-bind="{object, attribute}"></jsonAttributeEditor>
+      <jsonAttributeEditor v-else v-bind="{object, attribute, value:object[attribute]}"></jsonAttributeEditor>
     </div>
   </div>
-</template>
+</template> 
 <script>
 import jsonAttributeEditor from "./JsonAttributeEditor";
 import functionAttributeEditor from "./FunctionAttributeEditor";

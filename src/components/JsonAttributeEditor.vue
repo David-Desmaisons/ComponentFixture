@@ -1,10 +1,14 @@
 <template>
-  <input :id="'attribute-'+attribute" v-model="textValue" class="form-control"/>
+  <input :id="'attribute-'+attribute" v-model="textValue" class="form-control" />
 </template>
 <script>
 export default {
   props: {
     object: {
+      required: true,
+      type: Object
+    },
+    value: {
       required: true,
       type: Object
     },
@@ -15,7 +19,7 @@ export default {
   },
 
   data() {
-    const textValue = this.object[this.attribute];
+    const textValue = JSON.stringify(this.object[this.attribute]);
     return {
       textValue
     };
@@ -29,6 +33,9 @@ export default {
       } catch (e) {
         return;
       }
+    },
+    value() {
+      this.textValue = JSON.stringify(this.object[this.attribute]);
     }
   }
 };
