@@ -1,13 +1,15 @@
 <template>
   <div class="control">
     <h1>{{componentName}}</h1>
-    <div>
+    <form>
       <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key]">
       </attributeEditor>
-    </div>
+    </form>
   </div>
 </template>
 <script>
+import "bootstrap/dist/css/bootstrap.css";
+
 import attributeEditor from "./AttributeEditor";
 
 export default {
@@ -30,9 +32,13 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .control {
   background-color: lightgrey;
-  height: 100%;
+  width: 400px;
+
+  form {
+    margin: 10px;
+  }
 }
 </style>

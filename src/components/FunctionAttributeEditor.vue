@@ -1,5 +1,5 @@
 <template>
-  <input v-model="textValue" />
+  <input :id="'attribute-'+attribute" v-model="textValue" class="form-control"/>
 </template>
 <script>
 export default {

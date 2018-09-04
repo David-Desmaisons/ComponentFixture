@@ -72,7 +72,11 @@ export default {
     const propsDefinition = this.propsDefinition;
     Object.keys(props).forEach(key => {
       const propsValue = props[key];
-      Vue.set(dynamicAttributes, key, extractDefaultValue(child, propsValue, key));
+      Vue.set(
+        dynamicAttributes,
+        key,
+        extractDefaultValue(child, propsValue, key)
+      );
       Vue.set(propsDefinition, key, propsValue);
     });
   },

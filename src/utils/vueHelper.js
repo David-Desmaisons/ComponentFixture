@@ -1,6 +1,6 @@
-const hasOwnProperty = Object.prototype.hasOwnProperty
+const hasOwnProperty = Object.prototype.hasOwnProperty;
 function hasOwn(obj, key) {
-  return hasOwnProperty.call(obj, key)
+  return hasOwnProperty.call(obj, key);
 }
 
 function getType(fn) {

@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <label>{{attribute}}</label>
-    <input v-if="type === 'number'" v-model.number="object[attribute]" />
-    <input v-else-if="type === 'boolean'" v-model="object[attribute]" type="checkbox" />
-    <input v-else-if="type === 'string'" v-model="object[attribute]" />
-    <functionAttributeEditor v-else-if="type === 'function'" v-bind="{object, attribute}"></functionAttributeEditor>
-    <jsonAttributeEditor v-else v-bind="{object, attribute}"></jsonAttributeEditor>
+  <div class="form-group row">
+    <label :for="'attribute-'+attribute" class="col-sm-4 col-form-label">{{attribute}}</label>
+    <div class="col-sm-8">
+      <input :id="'attribute-'+attribute" v-if="type === 'number'" v-model.number="object[attribute]" class="form-control" />
+      <input :id="'attribute-'+attribute" v-else-if="type === 'boolean'" v-model="object[attribute]" type="checkbox" class="form-control" />
+      <input :id="'attribute-'+attribute" v-else-if="type === 'string'" v-model="object[attribute]" class="form-control" />
+      <functionAttributeEditor v-else-if="type === 'function'" v-bind="{object, attribute}"></functionAttributeEditor>
+      <jsonAttributeEditor v-else v-bind="{object, attribute}"></jsonAttributeEditor>
+    </div>
   </div>
 </template>
 <script>
