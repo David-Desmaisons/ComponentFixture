@@ -1,5 +1,5 @@
 <template>
-  <input :id="'attribute-'+attribute" v-model="textValue" class="form-control" />
+  <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
 export default {
@@ -18,9 +18,10 @@ export default {
   },
 
   data() {
-    const textValue = JSON.stringify(this.object[this.attribute]);
+    const textValue = JSON.stringify(this.value);
     return {
-      textValue
+      textValue,
+      valid: true
     };
   },
 
@@ -29,7 +30,9 @@ export default {
       try {
         const newObject = JSON.parse(value);
         this.object[this.attribute] = newObject;
+        this.valid = true;
       } catch (e) {
+        this.valid = false;
         return;
       }
     },

@@ -1,5 +1,5 @@
 <template>
-  <input :id="'attribute-'+attribute" v-model="textValue" class="form-control"/>
+  <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
 export default {
@@ -18,6 +18,7 @@ export default {
     const textValue = this.object[this.attribute];
     return {
       textValue,
+      valid: true,
       functionValue: this.object[this.attribute]
     };
   },
@@ -27,12 +28,14 @@ export default {
       try {
         const functionValue = eval.call(null, `(${value})`);
         if (typeof functionValue !== "function") {
+          this.valid = false;
           return;
         }
         this.functionValue = functionValue;
         this.object[this.attribute] = functionValue;
+        this.valid = true;
       } catch (e) {
-        return;
+        this.valid = false;
       }
     }
   }
