@@ -9,7 +9,6 @@ export default {
       type: Object
     },
     value: {
-      required: true,
       type: Object
     },
     attribute: {
