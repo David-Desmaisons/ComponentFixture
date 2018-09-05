@@ -2,6 +2,26 @@
   <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
+function stringify(value) {
+  if (value === undefined) {
+    return "undefined";
+  }
+  if (value === null) {
+    return "null";
+  }
+  return JSON.stringify(value);
+}
+
+function parse(value) {
+  if (value === "undefined") {
+    return undefined;
+  }
+  if (value === "null") {
+    return null;
+  }
+  return JSON.parse(value);
+}
+
 export default {
   props: {
     object: {
@@ -18,9 +38,8 @@ export default {
   },
 
   data() {
-    const textValue = JSON.stringify(this.value);
     return {
-      textValue,
+      textValue: "",
       valid: true
     };
   },
@@ -28,7 +47,7 @@ export default {
   watch: {
     textValue(value) {
       try {
-        const newObject = JSON.parse(value);
+        const newObject = parse(value);
         this.object[this.attribute] = newObject;
         this.valid = true;
       } catch (e) {
@@ -36,8 +55,11 @@ export default {
         return;
       }
     },
-    value() {
-      this.textValue = JSON.stringify(this.object[this.attribute]);
+    value: {
+      handler(value) {
+        this.textValue = stringify(value);
+      },
+      immediate: true
     }
   }
 };
