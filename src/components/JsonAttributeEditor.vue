@@ -58,6 +58,7 @@ export default {
     value: {
       handler(value) {
         this.textValue = stringify(value);
+        this.valid = true;
       },
       immediate: true
     }

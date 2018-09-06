@@ -2,9 +2,9 @@
   <div class="form-group row">
     <label :for="'attribute-'+attribute" class="col-sm-4 col-form-label">{{attribute}}</label>
     <div class="col-sm-8">
-      <input :id="'attribute-'+attribute" v-if="type === 'Number'" v-model.number="object[attribute]" class="form-control" />
-      <input :id="'attribute-'+attribute" v-else-if="type === 'Boolean'" v-model="object[attribute]" type="checkbox" class="form-control" />
-      <input :id="'attribute-'+attribute" v-else-if="type === 'String'" v-model="object[attribute]" class="form-control" />
+      <numberAttributeEditor v-if="type === 'Number'" v-bind="{object, attribute, value:object[attribute]}"></numberAttributeEditor>
+      <input v-else-if="type === 'Boolean'" :id="'attribute-'+attribute" v-model="object[attribute]" type="checkbox" class="form-control" />
+      <input v-else-if="type === 'String'" :id="'attribute-'+attribute" v-model="object[attribute]" class="form-control" />
       <functionAttributeEditor v-else-if="type === 'Function'" v-bind="{object, attribute}"></functionAttributeEditor>
       <jsonAttributeEditor v-else v-bind="{object, attribute, value:object[attribute]}"></jsonAttributeEditor>
     </div>
@@ -13,6 +13,8 @@
 <script>
 import jsonAttributeEditor from "./JsonAttributeEditor";
 import functionAttributeEditor from "./FunctionAttributeEditor";
+import numberAttributeEditor from "./NumberAttributeEditor";
+
 import { getType } from "../utils/vueHelper";
 
 function returnTypeFromValue(value) {
@@ -41,7 +43,8 @@ function getTypeForProp(prop, defaultValue) {
 export default {
   components: {
     jsonAttributeEditor,
-    functionAttributeEditor
+    functionAttributeEditor,
+    numberAttributeEditor
   },
 
   props: {
