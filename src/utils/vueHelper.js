@@ -32,4 +32,4 @@ function getPropDefaultValue(vm, prop, key) {
     : def;
 }
 
-export { getPropDefaultValue };
+export { getType, getPropDefaultValue };
