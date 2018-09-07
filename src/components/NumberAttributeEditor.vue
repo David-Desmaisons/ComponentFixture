@@ -41,9 +41,11 @@ export default {
     },
     value: {
       handler(value) {
-        this.textValue = value;
         this.NumberValue = value;
         this.valid = true;
+        if (filterFloat(this.textValue) != value) {
+          this.textValue = value;
+        }
       }
     }
   }
