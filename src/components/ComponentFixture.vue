@@ -27,24 +27,23 @@ export default {
     }
 
     const [slot] = defaultSlot;
-    if (this.stage === 0) {
+    if (this._stage === 0) {
       return h("div", {}, [slot]);
     }
 
     const { control } = this.$scopedSlots;
     const { tag, Ctor: ctor } = slot.componentOptions;
-    if (this.stage === 1) {
+    if (this._stage === 1) {
       Vue.component(tag, ctor);
+      this._stage = 2;
     }
-    this.stage = 2;
-    const props = this.dynamicAttributes;
 
+    const props = this.dynamicAttributes;
     if (!control) {
       return h(tag, { props }, []);
     }
 
     const { componentName, propsDefinition } = this;
-
     return h("div", { class: { main: true } }, [
       h("div", { class: { control: true } }, [
         control({
@@ -58,13 +57,13 @@ export default {
   },
 
   mounted() {
-    if (this.stage !== 0) {
+    if (this._stage !== 0) {
       return;
     }
     if (this.$children.length !== 1) {
       return;
     }
-    this.stage = 1;
+    this._stage = 1;
     const [child] = this.$children;
     const { props, name } = child.$options;
     this.componentName = name;
@@ -79,12 +78,15 @@ export default {
       );
       Vue.set(propsDefinition, key, propsValue);
     });
+    Vue.nextTick(() => {
+      this.$forceUpdate();
+    });
   },
 
   data() {
+    this._stage = 0;
     return {
       componentName: null,
-      stage: 0,
       dynamicAttributes: {},
       propsDefinition: {}
     };
