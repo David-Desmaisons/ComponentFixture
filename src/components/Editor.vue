@@ -10,7 +10,7 @@
 <script>
 import "bootstrap/dist/css/bootstrap.css";
 
-import attributeEditor from "./AttributeEditor";
+import attributeEditor from "./internals/AttributeEditor";
 
 export default {
   components: {

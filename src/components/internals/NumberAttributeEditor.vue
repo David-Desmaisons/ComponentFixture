@@ -2,7 +2,7 @@
   <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
-import { filterFloat } from "../utils/NumberHelper";
+import { filterFloat } from "@/utils/NumberHelper";
 export default {
   props: {
     object: {

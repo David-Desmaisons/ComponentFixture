@@ -1,4 +1,4 @@
 import ComponentFixture from "./components/ComponentFixture.vue";
-import ComponentFixture from "./components/Editor.vue";
+import Editor from "./components/Editor.vue";
 
 export { ComponentFixture, Editor };
