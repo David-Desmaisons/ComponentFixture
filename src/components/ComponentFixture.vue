@@ -86,8 +86,20 @@ export default {
   data() {
     this._stage = 0;
     return {
+      /**
+       * The component under test name.
+       */
       componentName: null,
+
+      /**
+       * This object will contain all the props to be bound with the component under test.
+       * after initialization.
+       */
       dynamicAttributes: {},
+
+      /**
+       * This object will contain the props definition as declared in the component under test.
+       */
       propsDefinition: {}
     };
   }

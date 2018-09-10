@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <ComponentFixture>
+    <component-fixture>
+
+      <!-- Use the default slot to create the component under test -->
       <sunburst></sunburst>
+
+      <!-- Use this slot to enable edition of props values -->
       <Editor slot="control" slot-scope="scope" v-bind="scope">
       </Editor>
-    </ComponentFixture>
+
+    </component-fixture>
   </div>
 </template>
 
@@ -15,7 +19,7 @@ import Editor from "@/components/Editor";
 
 // import { tree } from "vued3tree";
 import { sunburst } from "vue-d3-sunburst";
-import 'vue-d3-sunburst/dist/vue-d3-sunburst.css';
+import "vue-d3-sunburst/dist/vue-d3-sunburst.css";
 
 export default {
   name: "app",
