@@ -17,9 +17,11 @@ describe("ComponentFixture.vue", () => {
     expect(render).toThrow("ComponentFixture should have one unique default slot");
   });
 
-  test.each([['<div/>', '<div/>'], ['<div/>', '<component1/>', '<component2/>']])(
-    'throws when more than one default slots are passed',
-    (...args) => {
+  const defaultSlotNotUnique = [[[]], [['<div/>', '<div/>']], [['<div/>', '<component1/>', '<component2/>']]];
+
+  test.each(defaultSlotNotUnique)(
+    'throws when there is not exactly than one default slots are passed',
+    (args) => {
       const render = () => shallowMount(ComponentFixture, {
         slots: {
           default: args
