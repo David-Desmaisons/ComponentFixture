@@ -1,6 +1,6 @@
 <script>
 import Vue from "vue";
-import { getPropDefaultValue } from "../utils/vueHelper";
+import { getPropDefaultValue } from "@/utils/vueHelper";
 
 function extractDefaultValue(vm, prop, key) {
   const defaultValue = getPropDefaultValue(vm, prop, key);

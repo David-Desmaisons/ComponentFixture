@@ -2,6 +2,8 @@
   <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
+import { parseFunction } from "@/utils/TypeHelper";
+
 export default {
   props: {
     object: {
@@ -26,11 +28,7 @@ export default {
   watch: {
     textValue(value) {
       try {
-        const functionValue = eval.call(null, `(${value})`);
-        if (typeof functionValue !== "function") {
-          this.valid = false;
-          return;
-        }
+        const functionValue = parseFunction(value);
         this.functionValue = functionValue;
         this.object[this.attribute] = functionValue;
         this.valid = true;

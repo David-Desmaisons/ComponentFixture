@@ -2,25 +2,7 @@
   <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
-function stringify(value) {
-  if (value === undefined) {
-    return "undefined";
-  }
-  if (value === null) {
-    return "null";
-  }
-  return JSON.stringify(value);
-}
-
-function parse(value) {
-  if (value === "undefined") {
-    return undefined;
-  }
-  if (value === "null") {
-    return null;
-  }
-  return JSON.parse(value);
-}
+import { parseObject, stringifyObject } from "@/utils/TypeHelper";
 
 export default {
   props: {
@@ -47,7 +29,7 @@ export default {
   watch: {
     textValue(value) {
       try {
-        const newObject = parse(value);
+        const newObject = parseObject(value);
         this.object[this.attribute] = newObject;
         this.valid = true;
       } catch (e) {
@@ -57,7 +39,7 @@ export default {
     },
     value: {
       handler(value) {
-        this.textValue = stringify(value);
+        this.textValue = stringifyObject(value);
         this.valid = true;
       },
       immediate: true

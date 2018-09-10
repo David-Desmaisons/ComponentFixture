@@ -32,4 +32,27 @@ function getPropDefaultValue(vm, prop, key) {
     : def;
 }
 
-export { getType, getPropDefaultValue };
+function returnTypeFromValue(value) {
+  if (typeof value === "boolean") {
+    return "Boolean";
+  }
+  if (typeof value === "string") {
+    return "String";
+  }
+  if (typeof value === "function") {
+    return "Function";
+  }
+  if (!isNaN(value)) {
+    return "Number";
+  }
+  return "Object";
+}
+
+function getTypeForProp(prop, defaultValue) {
+  if (prop.type) {
+    return getType(prop.type);
+  }
+  return returnTypeFromValue(defaultValue);
+}
+
+export { getType, getPropDefaultValue, getTypeForProp };
