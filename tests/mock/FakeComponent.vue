@@ -18,6 +18,12 @@ export default {
       type: String,
       required: false
     },
+    objectWithFactory: {
+      type: Object,
+      default: () => ({
+        createdByFactory: true
+      })
+    }
   }
 };
 </script>

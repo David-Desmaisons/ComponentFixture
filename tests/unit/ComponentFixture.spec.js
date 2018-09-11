@@ -16,11 +16,11 @@ const mountForTest = async () => {
   const wrapper = mountComponentWithDefaultSlot();
   await await wrapper.vm.$nextTick();
   return wrapper;
-}
+};
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
-    console.error = () => { };
+    console.error = () => {};
   });
 
   afterEach(() => {
@@ -72,7 +72,16 @@ describe("ComponentFixture.vue", () => {
 
   it("computes the dynamicAttributes with default value undefined when required", async () => {
     const wrapper = await mountForTest();
-    expect(wrapper.vm.dynamicAttributes.hasOwnProperty('undefinedString')).toBe(true);
+    expect(wrapper.vm.dynamicAttributes.hasOwnProperty("undefinedString")).toBe(
+      true
+    );
     expect(wrapper.vm.dynamicAttributes.undefinedString).toBe(undefined);
+  });
+
+  it("computes the dynamicAttributes with default value computed from factory", async () => {
+    const wrapper = await mountForTest();
+    expect(wrapper.vm.dynamicAttributes.objectWithFactory).toEqual({
+      createdByFactory: true
+    });
   });
 });
