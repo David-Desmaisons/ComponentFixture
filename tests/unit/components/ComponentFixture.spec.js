@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
-import FakeComponent from "../mock/FakeComponent.vue";
+import FakeComponent from "../../mock/FakeComponent.vue";
 
 const { console } = window;
 const originalError = console.error;
