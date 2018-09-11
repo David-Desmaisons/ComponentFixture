@@ -9,7 +9,6 @@
 </template>
 <script>
 import "bootstrap/dist/css/bootstrap.css";
-
 import attributeEditor from "./internals/AttributeEditor";
 
 export default {
