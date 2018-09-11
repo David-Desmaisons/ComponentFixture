@@ -1,5 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
+import FakeComponent from '../mock/FakeComponent.vue'
 
 const originalError = console.error;
 
@@ -37,6 +38,18 @@ describe("ComponentFixture.vue", () => {
         default: '<component/>'
       }
     });
-    expect(render).not.toThrow("ComponentFixture should have one unique default slot");
+    expect(render).not.toThrow();
+  });
+
+  it("sets the component name", async () => {
+    const wrapper = mount(ComponentFixture, {
+      attachToDocument: true,
+      slots: {
+        default: FakeComponent
+      }
+    });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.vm.componentName).toEqual('FakeComponent');
   });
 });
