@@ -12,6 +12,12 @@ const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
     }
   });
 
+const mountForTest = async () => {
+  const wrapper = mountComponentWithDefaultSlot();
+  await await wrapper.vm.$nextTick();
+  return wrapper;
+}
+
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
     console.error = () => { };
@@ -50,16 +56,23 @@ describe("ComponentFixture.vue", () => {
   });
 
   it("sets the component name", async () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    await wrapper.vm.$nextTick();
-
+    const wrapper = await mountForTest();
     expect(wrapper.vm.componentName).toEqual("FakeComponent");
   });
 
-  it("computes the dynamicAttributes", async () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    await wrapper.vm.$nextTick();
+  it("computes the dynamicAttributes number with default value", async () => {
+    const wrapper = await mountForTest();
+    expect(wrapper.vm.dynamicAttributes.number).toEqual(25);
+  });
 
-    expect(wrapper.vm.componentName).toEqual("FakeComponent");
+  it("computes the dynamicAttributes with default value computed when required", async () => {
+    const wrapper = await mountForTest();
+    expect(wrapper.vm.dynamicAttributes.string).toEqual("");
+  });
+
+  it("computes the dynamicAttributes with default value undefined when required", async () => {
+    const wrapper = await mountForTest();
+    expect(wrapper.vm.dynamicAttributes.hasOwnProperty('undefinedString')).toBe(true);
+    expect(wrapper.vm.dynamicAttributes.undefinedString).toBe(undefined);
   });
 });

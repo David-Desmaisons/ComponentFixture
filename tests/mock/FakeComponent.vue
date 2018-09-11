@@ -7,8 +7,17 @@ export default {
   name: "FakeComponent",
   props: {
     number: {
-      type: Number
-    }
+      type: Number,
+      default: 25
+    },
+    string: {
+      type: String,
+      required: true
+    },
+    undefinedString: {
+      type: String,
+      required: false
+    },
   }
 };
 </script>
