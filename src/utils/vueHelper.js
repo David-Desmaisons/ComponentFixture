@@ -55,4 +55,15 @@ function getTypeForProp(prop, defaultValue) {
   return returnTypeFromValue(defaultValue);
 }
 
-export { getType, getPropDefaultValue, getTypeForProp };
+function extractDefaultValue(vm, prop, key) {
+  const defaultValue = getPropDefaultValue(vm, prop, key);
+  if (defaultValue !== undefined) {
+    return defaultValue;
+  }
+  if (!prop.required) {
+    return undefined;
+  }
+  return prop.type ? prop.type() : {};
+}
+
+export { extractDefaultValue, getType, getPropDefaultValue, getTypeForProp };

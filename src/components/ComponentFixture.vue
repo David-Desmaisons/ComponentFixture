@@ -1,17 +1,6 @@
 <script>
 import Vue from "vue";
-import { getPropDefaultValue } from "@/utils/vueHelper";
-
-function extractDefaultValue(vm, prop, key) {
-  const defaultValue = getPropDefaultValue(vm, prop, key);
-  if (defaultValue !== undefined) {
-    return defaultValue;
-  }
-  if (!prop.required) {
-    return undefined;
-  }
-  return prop.type ? prop.type() : {};
-}
+import { extractDefaultValue } from "@/utils/vueHelper";
 
 export default {
   name: "ComponentFixture",

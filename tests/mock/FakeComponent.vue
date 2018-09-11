@@ -4,11 +4,11 @@
 </template>
 <script>
 export default {
-  name: 'FakeComponent',
-  props:{
-    number:{
+  name: "FakeComponent",
+  props: {
+    number: {
       type: Number
     }
   }
-}
+};
 </script>
