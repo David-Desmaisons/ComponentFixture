@@ -4,6 +4,12 @@ import FakeComponent from '../mock/FakeComponent.vue'
 
 const originalError = console.error;
 
+const mountComponentWithDefaultSlot = (slot) => shallowMount(ComponentFixture, {
+  slots: {
+    default: slot
+  }
+});
+
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
     console.error = () => { };
@@ -18,36 +24,27 @@ describe("ComponentFixture.vue", () => {
     expect(render).toThrow("ComponentFixture should have one unique default slot");
   });
 
-  const defaultSlotNotUnique = [[[]], [['<div/>', '<div/>']], [['<div/>', '<component1/>', '<component2/>']]];
+  const defaultSlotNotUnique = [
+    [[]],
+    [['<div/>', '<div/>']],
+    [['<div/>', '<component1/>', '<component2/>']]
+  ];
 
   test.each(defaultSlotNotUnique)(
     'throws when there is not exactly than one default slots are passed',
     (args) => {
-      const render = () => shallowMount(ComponentFixture, {
-        slots: {
-          default: args
-        }
-      });
+      const render = () => mountComponentWithDefaultSlot(args);
       expect(render).toThrow("ComponentFixture should have one unique default slot");
     },
   );
 
   it("does not throw when one default slot is passed", () => {
-    const render = () => shallowMount(ComponentFixture, {
-      slots: {
-        default: '<component/>'
-      }
-    });
+    const render = () => mountComponentWithDefaultSlot('<component/>');
     expect(render).not.toThrow();
   });
 
   it("sets the component name", async () => {
-    const wrapper = mount(ComponentFixture, {
-      attachToDocument: true,
-      slots: {
-        default: FakeComponent
-      }
-    });
+    const wrapper = mountComponentWithDefaultSlot(FakeComponent);
     await wrapper.vm.$nextTick();
 
     expect(wrapper.vm.componentName).toEqual('FakeComponent');
