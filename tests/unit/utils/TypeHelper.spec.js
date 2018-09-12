@@ -2,7 +2,6 @@ import { filterFloat, parseFunction, parseObject, stringifyObject } from "@/util
 
 
 describe("filterFloat", () => {
-
   const notConvertibleToNumber = [
     '',
     'notANumber',
@@ -35,3 +34,38 @@ describe("filterFloat", () => {
     }
   );
 });
+
+describe("parseObject", () => {
+  const valuesForParse = [
+    ['undefined', undefined],
+    ['null', null],
+    ['{}', {}],
+    ['{"value":25}', { value: 25 }],
+  ];
+
+  test.each(valuesForParse)(
+    "returns parsed values %p => %p",
+    (arg, expected) => {
+      const value = parseObject(arg);
+      expect(value).toEqual(expected);
+    }
+  );
+});
+
+describe("stringifyObject", () => {
+  const valuesForStringify = [
+    [undefined, 'undefined'],
+    [null, 'null'],
+    [{}, '{}'],
+    [{ value: 25 }, '{"value":25}'],
+  ];
+
+  test.each(valuesForStringify)(
+    "returns parsed values %p => %p",
+    (arg, expected) => {
+      const value = stringifyObject(arg);
+      expect(value).toEqual(expected);
+    }
+  );
+});
+
