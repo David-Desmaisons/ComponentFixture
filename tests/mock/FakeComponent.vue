@@ -4,7 +4,7 @@
 </template>
 <script>
 export default {
-  name: "FakeComponent",
+  name: "fake-component",
   props: {
     number: {
       type: Number,

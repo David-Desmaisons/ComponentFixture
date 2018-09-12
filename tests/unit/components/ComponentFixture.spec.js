@@ -14,7 +14,7 @@ const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
 
 const mountForTest = async () => {
   const wrapper = mountComponentWithDefaultSlot();
-  await await wrapper.vm.$nextTick();
+  await wrapper.vm.$nextTick();
   return wrapper;
 };
 
@@ -57,7 +57,7 @@ describe("ComponentFixture.vue", () => {
 
   it("sets the component name", async () => {
     const wrapper = await mountForTest();
-    expect(wrapper.vm.componentName).toEqual("FakeComponent");
+    expect(wrapper.vm.componentName).toEqual("fake-component");
   });
 
   it("computes the dynamicAttributes number with default value", async () => {

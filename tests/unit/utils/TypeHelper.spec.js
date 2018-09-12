@@ -100,11 +100,7 @@ describe("parseFunction", () => {
     }
   );
 
-  const invalidValuesForParseFunction = [
-    ["{}"],
-    ["23 * 55"],
-    ["34"],
-  ];
+  const invalidValuesForParseFunction = [["{}"], ["23 * 55"], ["34"]];
 
   test.each(invalidValuesForParseFunction)("returns parsed values %p", arg => {
     const parse = () => parseFunction(arg);
