@@ -69,3 +69,26 @@ describe("stringifyObject", () => {
   );
 });
 
+
+describe("parseFunction", () => {
+  const valuesForParseFunction = [
+    ['() => 24', () => 24, [null, undefined, 66]],
+    ['v => v', v => v, [null, undefined, 66, 'id']],
+    ['function(v) {return v + 12;}', v => v + 12, [0, 1, 66, -100]],
+    ['({value}) => value', function (v) { return v.value; }, [{ value: null }, { value: 33 }, { value: undefined }]],
+  ];
+
+  test.each(valuesForParseFunction)(
+    "returns parsed values %p => %p",
+    (arg, expected, values) => {
+      const actualFunction = parseFunction(arg);
+
+      values.forEach(v => {
+        const actualResult = actualFunction(v);
+        const expectedResult = expected(v);
+        expect(actualResult).toEqual(expectedResult);
+      })
+    }
+  );
+});
+
