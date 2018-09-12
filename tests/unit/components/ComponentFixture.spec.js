@@ -82,5 +82,9 @@ describe("ComponentFixture.vue", () => {
         createdByFactory: true
       });
     });
+
+    it("should render component from slot", () => {
+      expect(wrapper.contains(FakeComponent)).toBe(true);
+    });
   });
 });
