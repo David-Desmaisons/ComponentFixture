@@ -42,7 +42,8 @@ describe("extractDefaultValue", () => {
     [String, ""],
     [Boolean, false],
     [Number, 0],
-    [Object, {}]
+    [Object, {}],
+    [null, {}]
   ];
 
   test.each(typesFromProp)(
