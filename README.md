@@ -3,7 +3,7 @@
 [![CircleCI](https://circleci.com/gh/David-Desmaisons/ComponentFixture.svg?style=shield)](https://circleci.com/gh/David-Desmaisons/ComponentFixture)
 [![Coverage](https://codecov.io/gh/David-Desmaisons/ComponentFixture/branch/master/graph/badge.svg)](https://codecov.io/gh/David-Desmaisons/ComponentFixture)
 [![GitHub open issues](https://img.shields.io/github/issues/David-Desmaisons/ComponentFixture.svg?maxAge=20)](https://github.com/David-Desmaisons/ComponentFixture/issues)
-[![Npm version](https://img.shields.io/npm/v/ComponentFixture.svg?maxAge=20)](https://www.npmjs.com/package/ComponentFixture)
+[![Npm version](https://img.shields.io/npm/v/component-fixture.svg?maxAge=20)](https://www.npmjs.com/package/component-fixture)
 [![MIT License](https://img.shields.io/github/license/David-Desmaisons/ComponentFixture.svg)](https://github.com/David-Desmaisons/ComponentFixture/blob/master/LICENSE)
 
 ## Usage
