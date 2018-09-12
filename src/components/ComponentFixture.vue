@@ -16,21 +16,16 @@ export default {
     }
 
     const [slot] = defaultSlot;
-    if (this._stage === 0) {
+    if (this.stage === 0) {
       return h("div", {}, [slot]);
     }
 
     const { control } = this.$scopedSlots;
-    const { tag = slot.tag, Ctor: ctor } = slot.componentOptions;
-
-    if (this._stage === 1) {
-      Vue.component(tag, ctor);
-      this._stage = 2;
-    }
+    const { Ctor: ctor } = slot.componentOptions;
 
     const props = this.dynamicAttributes;
     if (!control) {
-      return h(tag, { props }, []);
+      return h(ctor, { props }, []);
     }
 
     const { componentName, propsDefinition } = this;
@@ -42,18 +37,18 @@ export default {
           attributes: this.dynamicAttributes
         })
       ]),
-      h("div", { class: { component: true } }, [h(tag, { props }, [])])
+      h("div", { class: { component: true } }, [h(ctor, { props }, [])])
     ]);
   },
 
   mounted() {
-    if (this._stage !== 0) {
+    if (this.stage !== 0) {
       return;
     }
     if (this.$children.length !== 1) {
       return;
     }
-    this._stage = 1;
+    this.stage = 1;
     const [child] = this.$children;
     const { props, name } = child.$options;
     this.componentName = name;
@@ -74,8 +69,11 @@ export default {
   },
 
   data() {
-    this._stage = 0;
     return {
+      /**
+       * The fixture stage: 0 not ready, 1: ready.
+       */
+      stage: 0,
       /**
        * The component under test name.
        */
