@@ -63,9 +63,6 @@ export default {
         type: getTypeForProp(propsValue, defaultValue)
       });
     });
-    Vue.nextTick(() => {
-      this.$forceUpdate();
-    });
   },
 
   data() {

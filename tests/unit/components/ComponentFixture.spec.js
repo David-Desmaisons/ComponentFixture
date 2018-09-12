@@ -12,12 +12,6 @@ const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
     }
   });
 
-const mountForTest = async () => {
-  const wrapper = mountComponentWithDefaultSlot();
-  await wrapper.vm.$nextTick();
-  return wrapper;
-};
-
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
     console.error = () => {};
@@ -55,31 +49,31 @@ describe("ComponentFixture.vue", () => {
     expect(render).not.toThrow();
   });
 
-  it("sets the component name", async () => {
-    const wrapper = await mountForTest();
+  it("sets the component name", () => {
+    const wrapper = mountComponentWithDefaultSlot();
     expect(wrapper.vm.componentName).toEqual("fake-component");
   });
 
-  it("computes the dynamicAttributes number with default value", async () => {
-    const wrapper = await mountForTest();
+  it("computes the dynamicAttributes number with default value", () => {
+    const wrapper = mountComponentWithDefaultSlot();
     expect(wrapper.vm.dynamicAttributes.number).toEqual(25);
   });
 
-  it("computes the dynamicAttributes with default value computed when required", async () => {
-    const wrapper = await mountForTest();
+  it("computes the dynamicAttributes with default value computed when required", () => {
+    const wrapper = mountComponentWithDefaultSlot();
     expect(wrapper.vm.dynamicAttributes.string).toEqual("");
   });
 
-  it("computes the dynamicAttributes with default value undefined when required", async () => {
-    const wrapper = await mountForTest();
+  it("computes the dynamicAttributes with default value undefined when required", () => {
+    const wrapper = mountComponentWithDefaultSlot();
     expect(wrapper.vm.dynamicAttributes.hasOwnProperty("undefinedString")).toBe(
       true
     );
     expect(wrapper.vm.dynamicAttributes.undefinedString).toBe(undefined);
   });
 
-  it("computes the dynamicAttributes with default value computed from factory", async () => {
-    const wrapper = await mountForTest();
+  it("computes the dynamicAttributes with default value computed from factory", () => {
+    const wrapper = mountComponentWithDefaultSlot();
     expect(wrapper.vm.dynamicAttributes.objectWithFactory).toEqual({
       createdByFactory: true
     });
