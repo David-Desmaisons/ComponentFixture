@@ -49,33 +49,38 @@ describe("ComponentFixture.vue", () => {
     expect(render).not.toThrow();
   });
 
-  it("sets the component name", () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    expect(wrapper.vm.componentName).toEqual("fake-component");
-  });
+  describe("when correctly initialized", () => {
+    let wrapper = null;
+    let vm = null;
+    let dynamicAttributes = null;
 
-  it("computes the dynamicAttributes number with default value", () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    expect(wrapper.vm.dynamicAttributes.number).toEqual(25);
-  });
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot();
+      vm = wrapper.vm;
+      dynamicAttributes = wrapper.vm.dynamicAttributes;
+    });
 
-  it("computes the dynamicAttributes with default value computed when required", () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    expect(wrapper.vm.dynamicAttributes.string).toEqual("");
-  });
+    it("sets the component name", () => {
+      expect(vm.componentName).toEqual("fake-component");
+    });
 
-  it("computes the dynamicAttributes with default value undefined when required", () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    expect(wrapper.vm.dynamicAttributes.hasOwnProperty("undefinedString")).toBe(
-      true
-    );
-    expect(wrapper.vm.dynamicAttributes.undefinedString).toBe(undefined);
-  });
+    it("computes the dynamicAttributes number with default value", () => {
+      expect(dynamicAttributes.number).toEqual(25);
+    });
 
-  it("computes the dynamicAttributes with default value computed from factory", () => {
-    const wrapper = mountComponentWithDefaultSlot();
-    expect(wrapper.vm.dynamicAttributes.objectWithFactory).toEqual({
-      createdByFactory: true
+    it("computes the dynamicAttributes with default value computed when required", () => {
+      expect(dynamicAttributes.string).toEqual("");
+    });
+
+    it("computes the dynamicAttributes with default value undefined when required", () => {
+      expect(dynamicAttributes.hasOwnProperty("undefinedString")).toBe(true);
+      expect(dynamicAttributes.undefinedString).toBe(undefined);
+    });
+
+    it("computes the dynamicAttributes with default value computed from factory", () => {
+      expect(dynamicAttributes.objectWithFactory).toEqual({
+        createdByFactory: true
+      });
     });
   });
 });
