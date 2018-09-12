@@ -1,6 +1,8 @@
 import { shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
 import FakeComponent from "../../mock/FakeComponent.vue";
+import FakeEditor from "../../mock/FakeEditor.vue";
+
 
 const { console } = window;
 const originalError = console.error;
@@ -14,7 +16,7 @@ const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
-    console.error = () => {};
+    console.error = () => { };
   });
 
   afterEach(() => {
@@ -35,7 +37,7 @@ describe("ComponentFixture.vue", () => {
   ];
 
   test.each(defaultSlotNotUnique)(
-    "throws when there is not exactly than one default slots are passed",
+    "throws when there is not exactly than one default slots are passed: %p",
     args => {
       const render = () => mountComponentWithDefaultSlot(args);
       expect(render).toThrow(
@@ -81,6 +83,31 @@ describe("ComponentFixture.vue", () => {
       expect(dynamicAttributes.objectWithFactory).toEqual({
         createdByFactory: true
       });
+    });
+
+    it("should render component from slot", () => {
+      expect(wrapper.contains(FakeComponent)).toBe(true);
+    });
+  });
+
+  describe("when initialized with a controller slot", () => {
+    const mountComponentWithDefaultSlotAndControllerSlot = (control) =>
+      shallowMount(ComponentFixture, {
+        slots: {
+          default: FakeComponent
+        },
+        scopedSlots: {
+          control
+        }
+      });
+
+    let wrapper = null;
+    let control = null;
+
+    beforeEach(() => {
+      control = jest.fn();
+      control.mockReturnValue(FakeEditor);
+      wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
     });
 
     it("should render component from slot", () => {

@@ -16,7 +16,7 @@ describe("filterFloat", () => {
   ].map(v => [v]);
 
   test.each(notConvertibleToNumber)(
-    "returns NaN when input is not a number",
+    "returns NaN when input is not a number: %p",
     arg => {
       const value = filterFloat(arg);
       expect(isNaN(value)).toBe(true);
@@ -31,7 +31,7 @@ describe("filterFloat", () => {
   ];
 
   test.each(convertibleToNumber)(
-    "returns converted value when input is not a number",
+    "returns converted value when input is a number: %p",
     (arg, expected) => {
       const value = filterFloat(arg);
       expect(value).toEqual(expected);
