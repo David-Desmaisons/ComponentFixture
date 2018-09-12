@@ -1,4 +1,4 @@
-import { extractDefaultValue, getType, getPropDefaultValue, getTypeForProp } from "@/utils/VueHelper";
+import { extractDefaultValue, getTypeForProp } from "@/utils/VueHelper";
 
 describe("getTypeForProp", () => {
   const typesFromDefault = [
@@ -9,7 +9,7 @@ describe("getTypeForProp", () => {
     [() => 26, "Function"],
     [{}, "Object"],
     [null, "Object"],
-    [undefined, "Object"],
+    [undefined, "Object"]
   ];
 
   test.each(typesFromDefault)(
@@ -25,7 +25,7 @@ describe("getTypeForProp", () => {
     [Boolean, "Boolean"],
     [Function, "Function"],
     [Number, "Number"],
-    [Object, "Object"],
+    [Object, "Object"]
   ];
 
   test.each(typesFromPropType)(
@@ -38,6 +38,26 @@ describe("getTypeForProp", () => {
 });
 
 describe("extractDefaultValue", () => {
+  const defaults = [
+    ["ab", "ab"],
+    [false, false],
+    [true, true],
+    [() => 56, 56],
+    [() => ({ fromFactory: true }), { fromFactory: true }]
+  ];
+
+  test.each(defaults)(
+    "returns default from prop, received: %p should return: %p",
+    (defaultValue, expected) => {
+      const value = extractDefaultValue(
+        { $options: {} },
+        { default: defaultValue },
+        "key"
+      );
+      expect(value).toEqual(expected);
+    }
+  );
+
   const typesFromProp = [
     [String, ""],
     [Boolean, false],
@@ -49,7 +69,7 @@ describe("extractDefaultValue", () => {
   test.each(typesFromProp)(
     "returns default from type if there is no default defined in prop and prop is required, received: %p should return: %p",
     (type, expected) => {
-      const value = extractDefaultValue({}, {required: true, type}, 'key');
+      const value = extractDefaultValue({}, { required: true, type }, "key");
       expect(value).toEqual(expected);
     }
   );
@@ -57,10 +77,8 @@ describe("extractDefaultValue", () => {
   test.each(typesFromProp)(
     "returns undefined if there is no default defined in prop and prop is not required, received: %p should return: undefined",
     type => {
-      const value = extractDefaultValue({}, {required: false, type}, 'key');
+      const value = extractDefaultValue({}, { required: false, type }, "key");
       expect(value).toBe(undefined);
     }
   );
 });
-
-

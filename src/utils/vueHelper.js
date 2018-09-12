@@ -33,7 +33,7 @@ function getPropDefaultValue(vm, prop, key) {
 }
 
 function returnTypeFromValue(value) {
-  if (value === null){
+  if (value === null) {
     return "Object";
   }
   if (typeof value === "boolean") {
@@ -51,13 +51,6 @@ function returnTypeFromValue(value) {
   return "Object";
 }
 
-function getTypeForProp(prop, defaultValue) {
-  if (prop.type) {
-    return getType(prop.type);
-  }
-  return returnTypeFromValue(defaultValue);
-}
-
 function extractDefaultValue(vm, prop, key) {
   const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
@@ -69,4 +62,11 @@ function extractDefaultValue(vm, prop, key) {
   return prop.type ? prop.type() : {};
 }
 
-export { extractDefaultValue, getType, getPropDefaultValue, getTypeForProp };
+function getTypeForProp(prop, defaultValue) {
+  if (prop.type) {
+    return getType(prop.type);
+  }
+  return returnTypeFromValue(defaultValue);
+}
+
+export { extractDefaultValue, getTypeForProp };

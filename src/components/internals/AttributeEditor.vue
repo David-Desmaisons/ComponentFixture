@@ -14,7 +14,6 @@
 import jsonAttributeEditor from "./JsonAttributeEditor";
 import functionAttributeEditor from "./FunctionAttributeEditor";
 import numberAttributeEditor from "./NumberAttributeEditor";
-import { getTypeForProp } from "@/utils/VueHelper";
 
 export default {
   components: {
@@ -35,14 +34,11 @@ export default {
     attribute: {
       required: true,
       type: String
+    },
+    type: {
+      required: true,
+      type: String
     }
-  },
-
-  data() {
-    const type = getTypeForProp(this.metaData, this.object[this.attribute]);
-    return {
-      type
-    };
   }
 };
 </script>
