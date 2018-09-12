@@ -1,14 +1,18 @@
-import { filterFloat, parseFunction, parseObject, stringifyObject } from "@/utils/TypeHelper";
-
+import {
+  filterFloat,
+  parseFunction,
+  parseObject,
+  stringifyObject
+} from "@/utils/TypeHelper";
 
 describe("filterFloat", () => {
   const notConvertibleToNumber = [
-    '',
-    'notANumber',
-    '15a',
-    'b289',
-    '16767.u898',
-    '16.767.898'
+    "",
+    "notANumber",
+    "15a",
+    "b289",
+    "16767.u898",
+    "16.767.898"
   ].map(v => [v]);
 
   test.each(notConvertibleToNumber)(
@@ -20,10 +24,10 @@ describe("filterFloat", () => {
   );
 
   const convertibleToNumber = [
-    ['25', 25],
-    ['-35', -35],
-    ['-0.98', -0.98],
-    ['1000.788898', 1000.788898],
+    ["25", 25],
+    ["-35", -35],
+    ["-0.98", -0.98],
+    ["1000.788898", 1000.788898]
   ];
 
   test.each(convertibleToNumber)(
@@ -37,10 +41,10 @@ describe("filterFloat", () => {
 
 describe("parseObject", () => {
   const valuesForParse = [
-    ['undefined', undefined],
-    ['null', null],
-    ['{}', {}],
-    ['{"value":25}', { value: 25 }],
+    ["undefined", undefined],
+    ["null", null],
+    ["{}", {}],
+    ['{"value":25}', { value: 25 }]
   ];
 
   test.each(valuesForParse)(
@@ -54,10 +58,10 @@ describe("parseObject", () => {
 
 describe("stringifyObject", () => {
   const valuesForStringify = [
-    [undefined, 'undefined'],
-    [null, 'null'],
-    [{}, '{}'],
-    [{ value: 25 }, '{"value":25}'],
+    [undefined, "undefined"],
+    [null, "null"],
+    [{}, "{}"],
+    [{ value: 25 }, '{"value":25}']
   ];
 
   test.each(valuesForStringify)(
@@ -69,13 +73,18 @@ describe("stringifyObject", () => {
   );
 });
 
-
 describe("parseFunction", () => {
   const valuesForParseFunction = [
-    ['() => 24', () => 24, [null, undefined, 66]],
-    ['v => v', v => v, [null, undefined, 66, 'id']],
-    ['function(v) {return v + 12;}', v => v + 12, [0, 1, 66, -100]],
-    ['({value}) => value', function (v) { return v.value; }, [{ value: null }, { value: 33 }, { value: undefined }]],
+    ["() => 24", () => 24, [null, undefined, 66]],
+    ["v => v", v => v, [null, undefined, 66, "id"]],
+    ["function(v) {return v + 12;}", v => v + 12, [0, 1, 66, -100]],
+    [
+      "({value}) => value",
+      function(v) {
+        return v.value;
+      },
+      [{ value: null }, { value: 33 }, { value: undefined }]
+    ]
   ];
 
   test.each(valuesForParseFunction)(
@@ -87,8 +96,18 @@ describe("parseFunction", () => {
         const actualResult = actualFunction(v);
         const expectedResult = expected(v);
         expect(actualResult).toEqual(expectedResult);
-      })
+      });
     }
   );
-});
 
+  const invalidValuesForParseFunction = [
+    ["{}"],
+    ["23 * 55"],
+    ["34"],
+  ];
+
+  test.each(invalidValuesForParseFunction)("returns parsed values %p", arg => {
+    const parse = () => parseFunction(arg);
+    expect(parse).toThrow("unable to convert string into function");
+  });
+});
