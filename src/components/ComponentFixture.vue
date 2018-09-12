@@ -42,9 +42,6 @@ export default {
   },
 
   mounted() {
-    if (this.stage !== 0) {
-      return;
-    }
     if (this.$children.length !== 1) {
       return;
     }

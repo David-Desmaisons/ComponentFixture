@@ -66,6 +66,10 @@ describe("ComponentFixture.vue", () => {
       expect(vm.componentName).toEqual("fake-component");
     });
 
+    it("computes the dynamicAttributes number with all props", () => {
+      expect(Object.keys(dynamicAttributes).length).toEqual(4);
+    });
+
     it("computes the dynamicAttributes number with default value", () => {
       expect(dynamicAttributes.number).toEqual(25);
     });
@@ -85,7 +89,7 @@ describe("ComponentFixture.vue", () => {
       });
     });
 
-    it("should render component from slot", () => {
+    it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
   });
