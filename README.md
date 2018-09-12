@@ -22,7 +22,7 @@
 ```
 
 ```javascript
-import { ComponentFixture, Editor } from 'ComponentFixture'
+import { ComponentFixture, Editor } from 'component-fixture'
 import { componentUnderTest } from 'componentUnderTest'
 
 export default {
@@ -40,18 +40,30 @@ export default {
 
 #### data 
 
+- `stage` 
+
+  The fixture stage: 0 not ready, 1: ready. 
+
+**initial value:** `0` 
+
 - `componentName` 
 
   The component under test name. 
+
+**initial value:** `null` 
 
 - `dynamicAttributes` 
 
   This object will contain all the props to be bound with the component under test.
   after initialization. 
 
+**initial value:** `[object Object]` 
+
 - `propsDefinition` 
 
   This object will contain the props definition as declared in the component under test. 
+
+**initial value:** `[object Object]` 
 
 ## Installation
 
