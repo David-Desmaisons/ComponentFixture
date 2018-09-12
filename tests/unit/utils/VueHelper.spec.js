@@ -36,3 +36,30 @@ describe("getTypeForProp", () => {
     }
   );
 });
+
+describe("extractDefaultValue", () => {
+  const typesFromProp = [
+    [String, ""],
+    [Boolean, false],
+    [Number, 0],
+    [Object, {}]
+  ];
+
+  test.each(typesFromProp)(
+    "returns default from type if there is no default defined in prop and prop is required, received: %p should return: %p",
+    (type, expected) => {
+      const value = extractDefaultValue({}, {required: true, type}, 'key');
+      expect(value).toEqual(expected);
+    }
+  );
+
+  test.each(typesFromProp)(
+    "returns undefined if there is no default defined in prop and prop is not required, received: %p should return: undefined",
+    type => {
+      const value = extractDefaultValue({}, {required: false, type}, 'key');
+      expect(value).toBe(undefined);
+    }
+  );
+});
+
+
