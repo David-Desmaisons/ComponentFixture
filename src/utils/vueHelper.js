@@ -33,6 +33,9 @@ function getPropDefaultValue(vm, prop, key) {
 }
 
 function returnTypeFromValue(value) {
+  if (value === null){
+    return "Object";
+  }
   if (typeof value === "boolean") {
     return "Boolean";
   }

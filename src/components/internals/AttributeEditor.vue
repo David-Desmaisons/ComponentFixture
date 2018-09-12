@@ -14,7 +14,7 @@
 import jsonAttributeEditor from "./JsonAttributeEditor";
 import functionAttributeEditor from "./FunctionAttributeEditor";
 import numberAttributeEditor from "./NumberAttributeEditor";
-import { getTypeForProp } from "@/utils/vueHelper";
+import { getTypeForProp } from "@/utils/VueHelper";
 
 export default {
   components: {

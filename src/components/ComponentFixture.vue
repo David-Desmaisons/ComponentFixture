@@ -1,6 +1,6 @@
 <script>
 import Vue from "vue";
-import { extractDefaultValue } from "@/utils/vueHelper";
+import { extractDefaultValue } from "@/utils/VueHelper";
 
 export default {
   name: "ComponentFixture",
