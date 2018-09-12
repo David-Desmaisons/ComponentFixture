@@ -105,13 +105,40 @@ describe("ComponentFixture.vue", () => {
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn();
-      control.mockReturnValue(FakeEditor);
+      control = jest.fn(function (props) {
+        return this.$createElement(FakeEditor, { props })
+      });
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
     });
 
-    it("should render component from slot", () => {
+    it("renders component from default slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
+    });
+
+    it("calls the control scoped slot", () => {
+      expect(control.mock.calls.length).toBe(1);
+    });
+
+
+    it("call the control scoped slot with attributes", () => {
+      const expectedAttributes = {
+        number: 25,
+        string: "",
+        undefinedString: undefined,
+        objectWithFactory: {
+          createdByFactory: true
+        }
+      };
+
+      expect(control.mock.calls[0][0].attributes).toEqual(expectedAttributes);
+    });
+
+    it("call the control scoped slot with componentName", () => {
+      expect(control.mock.calls[0][0].componentName).toEqual("fake-component");
+    });
+
+    it("renders the control slot", () => {
+      expect(wrapper.contains(FakeEditor)).toBe(true);
     });
   });
 });
