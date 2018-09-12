@@ -28,7 +28,8 @@ import { componentUnderTest } from 'componentUnderTest'
 export default {
   components: {
     ComponentFixture,
-    componentUnderTest
+    componentUnderTest,
+    Editor
   }
 }
 ```
