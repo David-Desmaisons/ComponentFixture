@@ -19,4 +19,20 @@ describe("getTypeForProp", () => {
       expect(value).toBe(expected);
     }
   );
+
+  const typesFromPropType = [
+    [String, "String"],
+    [Boolean, "Boolean"],
+    [Function, "Function"],
+    [Number, "Number"],
+    [Object, "Object"],
+  ];
+
+  test.each(typesFromPropType)(
+    "returns type from prop type value: %p should return: %p",
+    (arg, expected) => {
+      const value = getTypeForProp({ type: arg }, {});
+      expect(value).toBe(expected);
+    }
+  );
 });
