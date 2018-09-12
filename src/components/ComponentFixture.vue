@@ -1,6 +1,6 @@
 <script>
 import Vue from "vue";
-import { extractDefaultValue } from "@/utils/VueHelper";
+import { extractDefaultValue, getTypeForProp } from "@/utils/VueHelper";
 
 export default {
   name: "ComponentFixture",
@@ -56,12 +56,12 @@ export default {
     const propsDefinition = this.propsDefinition;
     Object.keys(props).forEach(key => {
       const propsValue = props[key];
-      Vue.set(
-        dynamicAttributes,
-        key,
-        extractDefaultValue(child, propsValue, key)
-      );
-      Vue.set(propsDefinition, key, propsValue);
+      const defaultValue = extractDefaultValue(child, propsValue, key);
+      Vue.set(dynamicAttributes, key, defaultValue);
+      Vue.set(propsDefinition, key, {
+        definition: propsValue,
+        type: getTypeForProp(propsValue, defaultValue)
+      });
     });
     Vue.nextTick(() => {
       this.$forceUpdate();

@@ -2,7 +2,7 @@
   <div class="control">
     <h1>{{componentName}}</h1>
     <form>
-      <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key]" :type="getTypeForProp(propsDefinition[key], value)">
+      <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key].definition" :type="propsDefinition[key].type">
       </attributeEditor>
     </form>
   </div>
@@ -10,7 +10,6 @@
 <script>
 import "bootstrap/dist/css/bootstrap.css";
 import attributeEditor from "./internals/AttributeEditor";
-import { getTypeForProp } from "@/utils/VueHelper";
 
 export default {
   components: {
@@ -28,11 +27,6 @@ export default {
     propsDefinition: {
       required: true,
       type: Object
-    }
-  },
-  methods: {
-    getTypeForProp(prop, defaultValue) {
-      return getTypeForProp(prop, defaultValue);
     }
   }
 };
