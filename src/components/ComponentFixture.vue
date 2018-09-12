@@ -2,8 +2,6 @@
 import Vue from "vue";
 import { extractDefaultValue } from "@/utils/vueHelper";
 
-let componentCount = 0;
-
 export default {
   name: "ComponentFixture",
 
@@ -23,16 +21,9 @@ export default {
     }
 
     const { control } = this.$scopedSlots;
-    const { componentOptions } = slot;
-    const {
-      tag = `globalComponent${componentCount++}`,
-      Ctor: ctor
-    } = componentOptions;
+    const { tag = slot.tag, Ctor: ctor } = slot.componentOptions;
 
     if (this._stage === 1) {
-      if (!componentOptions.tag) {
-        componentOptions.tag = tag;
-      }
       Vue.component(tag, ctor);
       this._stage = 2;
     }
