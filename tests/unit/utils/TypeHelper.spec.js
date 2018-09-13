@@ -102,7 +102,7 @@ describe("parseFunction", () => {
 
   const invalidValuesForParseFunction = [["{}"], ["23 * 55"], ["34"]];
 
-  test.each(invalidValuesForParseFunction)("returns parsed values %p", arg => {
+  test.each(invalidValuesForParseFunction)("throws when expression is not a function %p", arg => {
     const parse = () => parseFunction(arg);
     expect(parse).toThrow("unable to convert string into function");
   });
