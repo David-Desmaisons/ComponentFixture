@@ -3,7 +3,6 @@ import ComponentFixture from "@/components/ComponentFixture.vue";
 import FakeComponent from "../../mock/FakeComponent.vue";
 import FakeEditor from "../../mock/FakeEditor.vue";
 
-
 const { console } = window;
 const originalError = console.error;
 
@@ -89,6 +88,29 @@ describe("ComponentFixture.vue", () => {
       });
     });
 
+    const propDefinition = [
+      ["number", {
+        type: Number,
+        default: 25
+      }],
+      ["string", {
+        type: String,
+        required: true
+      }],
+      ["undefinedString", {
+        type: String,
+        required: false
+      }]
+    ];
+
+    test.each(propDefinition)(
+      "propsDefinition contains props definition: key: %p value: %p",
+      (key, expected) => {
+        const { propsDefinition } = vm;
+        expect(propsDefinition[key].definition).toEqual(expected);
+      }
+    );
+
     it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
@@ -122,7 +144,6 @@ describe("ComponentFixture.vue", () => {
     it("calls the control scoped slot", () => {
       expect(control.mock.calls.length).toBe(1);
     });
-
 
     it("call the control scoped slot with attributes", () => {
       const expectedAttributes = {
