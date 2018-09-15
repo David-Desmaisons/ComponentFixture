@@ -111,6 +111,20 @@ describe("ComponentFixture.vue", () => {
       }
     );
 
+    it("propsDefinition contains props types", () => {
+      const expectedTypes = {
+        number: "Number",
+        string: "String",
+        undefinedString: "String",
+        objectWithFactory: "Object"
+      };
+
+      const { propsDefinition } = vm;
+      Object.keys(propsDefinition).forEach(key => {
+        expect(propsDefinition[key].type).toEqual(expectedTypes[key]);
+      });
+    });
+
     it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
