@@ -5,6 +5,7 @@ import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const originalError = console.error;
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
   shallowMount(ComponentFixture, {
@@ -15,7 +16,7 @@ const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
-    console.error = () => { };
+    console.error = nullFunction;
   });
 
   afterEach(() => {
