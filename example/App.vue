@@ -8,6 +8,9 @@
       <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#tree-tab" role="tab" aria-controls="profile" aria-selected="false">Vued3tree</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#vue-slider-tab" role="tab" aria-controls="profile" aria-selected="false">Vue Slider</a>
+      </li>
     </ul>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="sunburst-tab" role="tabpanel" aria-labelledby="home-tab">
@@ -34,6 +37,19 @@
 
         </component-fixture>
       </div>
+
+      <div class="tab-pane fade" id="vue-slider-tab" role="tabpanel" aria-labelledby="profile-tab">
+        <component-fixture>
+
+          <!-- Use the default slot to create the component under test -->
+          <vue-slider></vue-slider>
+
+          <!-- Use this slot to enable edition of props values -->
+          <Editor slot="control" slot-scope="scope" v-bind="scope">
+          </Editor>
+
+        </component-fixture>
+      </div>
     </div>
 
   </div>
@@ -45,6 +61,7 @@ import Editor from "@/components/Editor";
 
 import { tree } from "vued3tree";
 import { sunburst } from "vue-d3-sunburst";
+import vueSlider from "vue-slider-component";
 import "vue-d3-sunburst/dist/vue-d3-sunburst.css";
 
 export default {
@@ -53,7 +70,8 @@ export default {
     ComponentFixture,
     Editor,
     sunburst,
-    tree
+    tree,
+    vueSlider
   }
 };
 </script>

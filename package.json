@@ -33,6 +33,7 @@
     "less-loader": "^4.1.0",
     "popper.js": "^1.14.4",
     "vue-cli-plugin-component": "^1.7.1",
+    "vue-slider-component": "^2.7.7",
     "vue-template-compiler": "^2.5.17"
   },
   "eslintConfig": {
