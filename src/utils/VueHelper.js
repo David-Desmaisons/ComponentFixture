@@ -33,22 +33,22 @@ function getPropDefaultValue(vm, prop, key) {
 }
 
 function returnTypeFromValue(value) {
-  if (value === null) {
-    return "Object";
+  if ((value === null) || (value === undefined)) {
+    return ["Object", "String", "Number", "Boolean"];
   }
   if (typeof value === "boolean") {
-    return "Boolean";
+    return ["Boolean"];
   }
   if (typeof value === "string") {
-    return "String";
+    return ["String"];
   }
   if (typeof value === "function") {
-    return "Function";
+    return ["Function"];
   }
   if (!isNaN(value)) {
-    return "Number";
+    return ["Number"];
   }
-  return "Object";
+  return ["Object"];
 }
 
 function extractDefaultValue(vm, prop, key) {
@@ -64,7 +64,8 @@ function extractDefaultValue(vm, prop, key) {
 
 function getTypeForProp(prop, defaultValue) {
   if (prop.type) {
-    return getType(prop.type);
+    const types = Array.isArray(prop.type) ? prop.type : [prop.type];
+    return types.map(getType);
   }
   return returnTypeFromValue(defaultValue);
 }

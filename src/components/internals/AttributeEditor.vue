@@ -35,9 +35,15 @@ export default {
       required: true,
       type: String
     },
-    type: {
+    types: {
       required: true,
-      type: String
+      type: Array
+    }
+  },
+
+  computed: {
+    type() {
+      return this.types[0];
     }
   }
 };

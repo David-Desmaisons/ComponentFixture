@@ -2,37 +2,39 @@ import { extractDefaultValue, getTypeForProp } from "@/utils/VueHelper";
 
 describe("getTypeForProp", () => {
   const typesFromDefault = [
-    ["", "String"],
-    [13, "Number"],
-    [true, "Boolean"],
-    [false, "Boolean"],
-    [() => 26, "Function"],
-    [{}, "Object"],
-    [null, "Object"],
-    [undefined, "Object"]
+    ["", ["String"]],
+    [13, ["Number"]],
+    [true, ["Boolean"]],
+    [false, ["Boolean"]],
+    [() => 26, ["Function"]],
+    [{}, ["Object"]],
+    [null, ["Object", "String", "Number", "Boolean"]],
+    [undefined, ["Object", "String", "Number", "Boolean"]]
   ];
 
   test.each(typesFromDefault)(
     "returns type from default value if there is no type received: %p should return: %p",
     (arg, expected) => {
       const value = getTypeForProp({ type: null }, arg);
-      expect(value).toBe(expected);
+      expect(value).toEqual(expected);
     }
   );
 
   const typesFromPropType = [
-    [String, "String"],
-    [Boolean, "Boolean"],
-    [Function, "Function"],
-    [Number, "Number"],
-    [Object, "Object"]
+    [String, ["String"]],
+    [Boolean, ["Boolean"]],
+    [Function, ["Function"]],
+    [Number, ["Number"]],
+    [Object, ["Object"]],
+    [[Object, String], [ "Object", "String"]],
+    [[Object, String, Boolean], [ "Object", "String", "Boolean"]]
   ];
 
   test.each(typesFromPropType)(
     "returns type from prop type value: %p should return: %p",
     (arg, expected) => {
       const value = getTypeForProp({ type: arg }, {});
-      expect(value).toBe(expected);
+      expect(value).toEqual(expected);
     }
   );
 });

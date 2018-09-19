@@ -11,10 +11,10 @@ export default {
       type: Object
     },
     value: {
-      type: Object
+      type: [Object, Array]
     },
     attribute: {
-      required: true,
+      required: false,
       type: String
     }
   },

@@ -57,7 +57,7 @@ export default {
       Vue.set(dynamicAttributes, key, defaultValue);
       Vue.set(propsDefinition, key, {
         definition: propsValue,
-        type: getTypeForProp(propsValue, defaultValue)
+        types: getTypeForProp(propsValue, defaultValue)
       });
     });
   },
