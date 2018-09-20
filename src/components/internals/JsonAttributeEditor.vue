@@ -1,5 +1,10 @@
 <template>
-  <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
+  <div>
+    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
+    <div class="invalid-feedback">
+      {{error}}
+    </div>
+  </div>
 </template>
 <script>
 import {
@@ -30,7 +35,7 @@ export default {
   data() {
     return {
       textValue: "",
-      valid: true
+      error: null
     };
   },
 
@@ -41,25 +46,27 @@ export default {
         const types = getTypeFromValue(newObject);
         const valid = types.find(t => this.types.find(st => st === t));
         if (!valid) {
-          const error = new Error(
-            `types: ${types} not compatible with ${this.types}`
-          );
-          window.console.log(error);
-          throw error;
+          this.error = `types: ${types} not compatible with ${this.types}`;
+          return;
         }
         this.object[this.attribute] = newObject;
-        this.valid = true;
+        this.error = null;
       } catch (e) {
-        this.valid = false;
-        return;
+        this.error = "Unable to convert JSON data";
       }
     },
     value: {
       handler(value) {
         this.textValue = stringifyObject(value);
-        this.valid = true;
+        this.error = null;
       },
       immediate: true
+    }
+  },
+
+  computed: {
+    valid() {
+      return this.error === null;
     }
   }
 };

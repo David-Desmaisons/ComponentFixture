@@ -1,5 +1,10 @@
 <template>
-  <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
+  <div>
+    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
+    <div class="invalid-feedback">
+      Provide a valid number
+    </div>
+  </div>
 </template>
 <script>
 import { filterFloat } from "@/utils/TypeHelper";
