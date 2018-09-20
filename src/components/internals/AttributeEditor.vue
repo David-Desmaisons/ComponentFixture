@@ -3,7 +3,7 @@
     <label :for="'attribute-'+attribute" class="col-sm-4 col-form-label">{{attribute}}</label>
     <div class="col-sm-8">
       <numberAttributeEditor v-if="type === 'Number'" v-bind="{object, attribute, value:object[attribute]}"></numberAttributeEditor>
-      <input v-else-if="type === 'Boolean'" :id="'attribute-'+attribute" v-model="object[attribute]" type="checkbox" class="form-control" />
+      <input v-else-if="type === 'Boolean'" :id="'attribute-'+attribute" v-model="object[attribute]" type="checkbox" class="checkbox control-input" />
       <input v-else-if="type === 'String'" :id="'attribute-'+attribute" v-model="object[attribute]" class="form-control" />
       <functionAttributeEditor v-else-if="type === 'Function'" v-bind="{object, attribute}"></functionAttributeEditor>
       <jsonAttributeEditor v-else v-bind="{object, attribute, types, value:object[attribute]}"></jsonAttributeEditor>
