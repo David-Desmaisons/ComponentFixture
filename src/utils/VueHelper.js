@@ -45,6 +45,9 @@ function returnTypeFromValue(value) {
   if (typeof value === "function") {
     return ["Function"];
   }
+  if (Array.isArray(value)) {
+    return ["Array"];
+  }
   if (!isNaN(value)) {
     return ["Number"];
   }

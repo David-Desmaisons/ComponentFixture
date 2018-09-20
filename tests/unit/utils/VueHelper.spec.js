@@ -8,6 +8,9 @@ describe("getTypeForProp", () => {
     [false, ["Boolean"]],
     [() => 26, ["Function"]],
     [{}, ["Object"]],
+    [{ value: 33 }, ["Object"]],
+    [[], ["Array"]],
+    [[2, 7], ["Array"]],
     [null, ["Object", "String", "Number", "Boolean"]],
     [undefined, ["Object", "String", "Number", "Boolean"]]
   ];
@@ -26,8 +29,9 @@ describe("getTypeForProp", () => {
     [Function, ["Function"]],
     [Number, ["Number"]],
     [Object, ["Object"]],
-    [[Object, String], [ "Object", "String"]],
-    [[Object, String, Boolean], [ "Object", "String", "Boolean"]]
+    [Array, ["Array"]],
+    [[Object, String], ["Object", "String"]],
+    [[Object, String, Boolean], ["Object", "String", "Boolean"]]
   ];
 
   test.each(typesFromPropType)(
