@@ -1,7 +1,7 @@
 import { extractDefaultValue, getTypeForProp } from "@/utils/VueHelper";
 
 describe("getTypeForProp", () => {
-  const typesFromDefault = [
+  const typesFromValue = [
     ["", ["String"]],
     [13, ["Number"]],
     [true, ["Boolean"]],
@@ -11,11 +11,11 @@ describe("getTypeForProp", () => {
     [{ value: 33 }, ["Object"]],
     [[], ["Array"]],
     [[2, 7], ["Array"]],
-    [null, ["Object", "String", "Number", "Boolean"]],
-    [undefined, ["Object", "String", "Number", "Boolean"]]
+    [null, ["Object", "Array", "String", "Number", "Boolean"]],
+    [undefined, ["Object", "Array", "String", "Number", "Boolean"]]
   ];
 
-  test.each(typesFromDefault)(
+  test.each(typesFromValue)(
     "returns type from default value if there is no type received: %p should return: %p",
     (arg, expected) => {
       const value = getTypeForProp({ type: null }, arg);

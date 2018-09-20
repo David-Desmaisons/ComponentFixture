@@ -6,10 +6,10 @@
         <a class="nav-link active" data-toggle="tab" href="#sunburst-tab" role="tab" aria-controls="home" aria-selected="true">Sunburst</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#tree-tab" role="tab" aria-controls="profile" aria-selected="false">Vued3tree</a>
+        <a class="nav-link" data-toggle="tab" href="#tree-tab" role="tab" aria-controls="profile" aria-selected="false">D3tree</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#vue-slider-tab" role="tab" aria-controls="profile" aria-selected="false">Vue Slider</a>
+        <a class="nav-link" data-toggle="tab" href="#vue-slider-tab" role="tab" aria-controls="profile" aria-selected="false">Vue Slider Component</a>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">

@@ -5,7 +5,7 @@ import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const originalError = console.error;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
   shallowMount(ComponentFixture, {
@@ -90,18 +90,27 @@ describe("ComponentFixture.vue", () => {
     });
 
     const propDefinition = [
-      ["number", {
-        type: Number,
-        default: 25
-      }],
-      ["string", {
-        type: String,
-        required: true
-      }],
-      ["undefinedString", {
-        type: String,
-        required: false
-      }]
+      [
+        "number",
+        {
+          type: Number,
+          default: 25
+        }
+      ],
+      [
+        "string",
+        {
+          type: String,
+          required: true
+        }
+      ],
+      [
+        "undefinedString",
+        {
+          type: String,
+          required: false
+        }
+      ]
     ];
 
     test.each(propDefinition)(
@@ -132,7 +141,7 @@ describe("ComponentFixture.vue", () => {
   });
 
   describe("when initialized with a controller slot", () => {
-    const mountComponentWithDefaultSlotAndControllerSlot = (control) =>
+    const mountComponentWithDefaultSlotAndControllerSlot = control =>
       shallowMount(ComponentFixture, {
         slots: {
           default: FakeComponent
@@ -146,8 +155,8 @@ describe("ComponentFixture.vue", () => {
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn(function (props) {
-        return this.$createElement(FakeEditor, { props })
+      control = jest.fn(function(props) {
+        return this.$createElement(FakeEditor, { props });
       });
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
     });

@@ -2,7 +2,11 @@
   <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
 </template>
 <script>
-import { parseObject, stringifyObject } from "@/utils/TypeHelper";
+import {
+  getTypeFromValue,
+  parseObject,
+  stringifyObject
+} from "@/utils/TypeHelper";
 
 export default {
   props: {
@@ -34,6 +38,15 @@ export default {
     textValue(value) {
       try {
         const newObject = parseObject(value);
+        const types = getTypeFromValue(newObject);
+        const valid = types.find(t => this.types.find(st => st === t));
+        if (!valid) {
+          const error = new Error(
+            `types: ${types} not compatible with ${this.types}`
+          );
+          window.console.log(error);
+          throw error;
+        }
         this.object[this.attribute] = newObject;
         this.valid = true;
       } catch (e) {

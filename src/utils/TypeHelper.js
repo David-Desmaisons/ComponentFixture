@@ -33,4 +33,32 @@ function parseFunction(value) {
   return functionValue;
 }
 
-export { filterFloat, parseFunction, parseObject, stringifyObject };
+function getTypeFromValue(value) {
+  if (value === null || value === undefined) {
+    return ["Object", "Array", "String", "Number", "Boolean"];
+  }
+  if (typeof value === "boolean") {
+    return ["Boolean"];
+  }
+  if (typeof value === "string") {
+    return ["String"];
+  }
+  if (typeof value === "function") {
+    return ["Function"];
+  }
+  if (Array.isArray(value)) {
+    return ["Array"];
+  }
+  if (!isNaN(value)) {
+    return ["Number"];
+  }
+  return ["Object"];
+}
+
+export {
+  filterFloat,
+  getTypeFromValue,
+  parseFunction,
+  parseObject,
+  stringifyObject
+};

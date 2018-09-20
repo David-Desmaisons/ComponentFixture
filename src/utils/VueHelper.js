@@ -1,3 +1,5 @@
+import { getTypeFromValue } from "./TypeHelper";
+
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 function hasOwn(obj, key) {
   return hasOwnProperty.call(obj, key);
@@ -32,28 +34,6 @@ function getPropDefaultValue(vm, prop, key) {
     : def;
 }
 
-function returnTypeFromValue(value) {
-  if ((value === null) || (value === undefined)) {
-    return ["Object", "String", "Number", "Boolean"];
-  }
-  if (typeof value === "boolean") {
-    return ["Boolean"];
-  }
-  if (typeof value === "string") {
-    return ["String"];
-  }
-  if (typeof value === "function") {
-    return ["Function"];
-  }
-  if (Array.isArray(value)) {
-    return ["Array"];
-  }
-  if (!isNaN(value)) {
-    return ["Number"];
-  }
-  return ["Object"];
-}
-
 function extractDefaultValue(vm, prop, key) {
   const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
@@ -70,7 +50,7 @@ function getTypeForProp(prop, defaultValue) {
     const types = Array.isArray(prop.type) ? prop.type : [prop.type];
     return types.map(getType);
   }
-  return returnTypeFromValue(defaultValue);
+  return getTypeFromValue(defaultValue);
 }
 
 export { extractDefaultValue, getTypeForProp };

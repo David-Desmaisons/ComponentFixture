@@ -1,9 +1,34 @@
 import {
   filterFloat,
+  getTypeFromValue,
   parseFunction,
   parseObject,
   stringifyObject
 } from "@/utils/TypeHelper";
+
+describe("getTypeFromValue", () => {
+  const typesFromValue = [
+    ["", ["String"]],
+    [13, ["Number"]],
+    [true, ["Boolean"]],
+    [false, ["Boolean"]],
+    [() => 26, ["Function"]],
+    [{}, ["Object"]],
+    [{ value: 33 }, ["Object"]],
+    [[], ["Array"]],
+    [[2, 7], ["Array"]],
+    [null, ["Object", "Array", "String", "Number", "Boolean"]],
+    [undefined, ["Object", "Array", "String", "Number", "Boolean"]]
+  ];
+
+  test.each(typesFromValue)(
+    "returns type from value: %p should return: %p",
+    (arg, expected) => {
+      const value = getTypeFromValue(arg);
+      expect(value).toEqual(expected);
+    }
+  );
+});
 
 describe("filterFloat", () => {
   const notConvertibleToNumber = [
@@ -102,8 +127,11 @@ describe("parseFunction", () => {
 
   const invalidValuesForParseFunction = [["{}"], ["23 * 55"], ["34"]];
 
-  test.each(invalidValuesForParseFunction)("throws when expression is not a function %p", arg => {
-    const parse = () => parseFunction(arg);
-    expect(parse).toThrow("unable to convert string into function");
-  });
+  test.each(invalidValuesForParseFunction)(
+    "throws when expression is not a function %p",
+    arg => {
+      const parse = () => parseFunction(arg);
+      expect(parse).toThrow("unable to convert string into function");
+    }
+  );
 });
