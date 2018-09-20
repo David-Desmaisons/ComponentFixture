@@ -32,7 +32,6 @@ describe("getTypeFromValue", () => {
 
 describe("filterFloat", () => {
   const notConvertibleToNumber = [
-    "",
     "notANumber",
     "15a",
     "b289",
@@ -49,6 +48,7 @@ describe("filterFloat", () => {
   );
 
   const convertibleToNumber = [
+    ["", null],
     ["25", 25],
     ["-35", -35],
     ["-0.98", -0.98],

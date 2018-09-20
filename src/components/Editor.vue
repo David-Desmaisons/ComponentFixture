@@ -34,7 +34,7 @@ export default {
 <style lang="less">
 .control {
   background-color: lightgrey;
-  width: 400px;
+  width: 500px;
 
   form {
     margin: 10px;
