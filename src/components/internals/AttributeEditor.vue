@@ -6,7 +6,7 @@
       <input v-else-if="type === 'Boolean'" :id="'attribute-'+attribute" v-model="object[attribute]" type="checkbox" class="form-control" />
       <input v-else-if="type === 'String'" :id="'attribute-'+attribute" v-model="object[attribute]" class="form-control" />
       <functionAttributeEditor v-else-if="type === 'Function'" v-bind="{object, attribute}"></functionAttributeEditor>
-      <jsonAttributeEditor v-else v-bind="{object, attribute, value:object[attribute]}"></jsonAttributeEditor>
+      <jsonAttributeEditor v-else v-bind="{object, attribute, types, value:object[attribute]}"></jsonAttributeEditor>
     </div>
   </div>
 </template> 

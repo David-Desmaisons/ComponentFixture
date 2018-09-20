@@ -10,6 +10,10 @@ export default {
       required: true,
       type: Object
     },
+    types: {
+      required: true,
+      type: Array
+    },
     value: {
       type: [Object, Array]
     },
