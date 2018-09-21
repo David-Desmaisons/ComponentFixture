@@ -2,7 +2,7 @@
   <div>
     <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
     <div class="invalid-feedback">
-      Provide a valid function
+      {{error}}
     </div>
   </div>
 </template>
@@ -11,13 +11,17 @@ import { parseFunction } from "@/utils/TypeHelper";
 
 export default {
   props: {
-    object: {
-      required: true,
-      type: Object
-    },
     attribute: {
       required: true,
       type: String
+    },
+    metaData: {
+      required: true,
+      type: Object
+    },
+    object: {
+      required: true,
+      type: Object
     }
   },
 
@@ -25,7 +29,7 @@ export default {
     const textValue = this.object[this.attribute];
     return {
       textValue,
-      valid: true,
+      error: null,
       functionValue: this.object[this.attribute]
     };
   },
@@ -34,12 +38,23 @@ export default {
     textValue(value) {
       try {
         const functionValue = parseFunction(value);
+        const validated = this.metaData.validate(functionValue);
+        if (!validated.ok) {
+          this.error = validated.message;
+          return;
+        }
         this.functionValue = functionValue;
         this.object[this.attribute] = functionValue;
-        this.valid = true;
+        this.error = null;
       } catch (e) {
-        this.valid = false;
+        this.error = "Provide a valid function";
       }
+    }
+  },
+
+  computed: {
+    valid() {
+      return this.error === null;
     }
   }
 };
