@@ -1,6 +1,10 @@
 <script>
 import Vue from "vue";
-import { extractDefaultValue, getTypeForProp } from "@/utils/VueHelper";
+import {
+  extractDefaultValue,
+  getTypeForProp,
+  validateProp
+} from "@/utils/VueHelper";
 
 export default {
   name: "ComponentFixture",
@@ -57,7 +61,8 @@ export default {
       Vue.set(dynamicAttributes, key, defaultValue);
       Vue.set(propsDefinition, key, {
         definition: propsValue,
-        types: getTypeForProp(propsValue, defaultValue)
+        types: getTypeForProp(propsValue, defaultValue),
+        validate: validateProp.bind(null, propsValue)
       });
     });
   },

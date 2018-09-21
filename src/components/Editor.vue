@@ -2,7 +2,7 @@
   <div class="control">
     <h1>{{componentName}}</h1>
     <form>
-      <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key].definition" :types="propsDefinition[key].types">
+      <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key]">
       </attributeEditor>
     </form>
   </div>

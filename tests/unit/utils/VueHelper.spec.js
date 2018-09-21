@@ -96,7 +96,10 @@ describe("extractDefaultValue", () => {
 describe("validateProp", () => {
   const ok = { ok: true };
   const required = { ok: false, message: "Prop is required" };
-  const notValidated = { ok: false, message: "Invalid prop: custom validator check failed" };
+  const notValidated = {
+    ok: false,
+    message: "Invalid prop: custom validator check failed"
+  };
 
   const propsData = [
     [{ required: true }, undefined, required],
