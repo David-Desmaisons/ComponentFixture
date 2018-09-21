@@ -53,4 +53,16 @@ function getTypeForProp(prop, defaultValue) {
   return getTypeFromValue(defaultValue);
 }
 
-export { extractDefaultValue, getTypeForProp };
+function validateProp(prop, value) {
+  const absent = value === undefined || value === null;
+  if (prop.required && absent) {
+    return false;
+  }
+  if (value === null && !prop.required) {
+    return true;
+  }
+  const { validator } = prop;
+  return validator ? validator(value) : true;
+}
+
+export { extractDefaultValue, getTypeForProp, validateProp };

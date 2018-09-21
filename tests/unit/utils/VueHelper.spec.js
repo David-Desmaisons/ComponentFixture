@@ -1,4 +1,8 @@
-import { extractDefaultValue, getTypeForProp } from "@/utils/VueHelper";
+import {
+  extractDefaultValue,
+  getTypeForProp,
+  validateProp
+} from "@/utils/VueHelper";
 
 describe("getTypeForProp", () => {
   const typesFromValue = [
@@ -35,7 +39,7 @@ describe("getTypeForProp", () => {
   ];
 
   test.each(typesFromPropType)(
-    "returns type from prop type value: %p should return: %p",
+    "returns type from prop when prop as type attribute: %p should return: %p",
     (arg, expected) => {
       const value = getTypeForProp({ type: arg }, {});
       expect(value).toEqual(expected);
@@ -85,6 +89,36 @@ describe("extractDefaultValue", () => {
     type => {
       const value = extractDefaultValue({}, { required: false, type }, "key");
       expect(value).toBe(undefined);
+    }
+  );
+});
+
+describe("validateProp", () => {
+  const propsData = [
+    [{ required: true }, undefined, false],
+    [{ required: true }, null, false],
+    [{ required: false }, null, true],
+    [{ required: true, validator: () => true }, {}, true],
+    [{ required: true, validator: () => false }, {}, false],
+    [{ required: true, validator: (v) => v === 1 }, 0, false],
+    [{ required: true, validator: (v) => v === 1 }, 2, false],
+    [{ required: true, validator: (v) => v === 1 }, 23, false],
+    [{ required: true, validator: (v) => v === 1 }, "uuu", false],
+    [{ required: true, validator: (v) => v === 1 }, 1, true],
+    [{ validator: () => true }, {}, true],
+    [{ validator: () => false }, {}, false],
+    [{ validator: (v) => v === 1 }, 0, false],
+    [{ validator: (v) => v === 1 }, 2, false],
+    [{ validator: (v) => v === 1 }, 23, false],
+    [{ validator: (v) => v === 1 }, "uuu", false],
+    [{ validator: (v) => v === 1 }, 1, true],
+  ];
+
+  test.each(propsData)(
+    "returns validation based on prop validator and required: prop:%p value:%p should return: %p",
+    (prop, value, expected) => {
+      const validated = validateProp(prop, value);
+      expect(validated).toEqual(expected);
     }
   );
 });
