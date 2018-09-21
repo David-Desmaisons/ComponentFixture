@@ -2,7 +2,7 @@
   <div>
     <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
     <div class="invalid-feedback">
-      Provide a valid number
+      {{error}}
     </div>
   </div>
 </template>
@@ -19,6 +19,10 @@ export default {
       required: true,
       type: String
     },
+    metaData: {
+      required: true,
+      type: Object
+    },
     value: {
       required: false,
       type: Number
@@ -29,7 +33,7 @@ export default {
     const textValue = this.object[this.attribute];
     return {
       textValue,
-      valid: true,
+      error: null,
       NumberValue: textValue
     };
   },
@@ -38,21 +42,32 @@ export default {
     textValue(value) {
       const numberValue = filterFloat(value);
       if (isNaN(numberValue)) {
-        this.valid = false;
+        this.error = "Provide a valid number";
+        return;
+      }
+      const validated = this.metaData.validate(numberValue);
+      if (!validated.ok) {
+        this.error = validated.message;
         return;
       }
       this.NumberValue = numberValue;
       this.object[this.attribute] = numberValue;
-      this.valid = true;
+      this.error = null;
     },
     value: {
       handler(value) {
         this.NumberValue = value;
-        this.valid = true;
+        this.error = null;
         if (filterFloat(this.textValue) != value) {
           this.textValue = value;
         }
       }
+    }
+  },
+
+  computed: {
+    valid() {
+      return this.error === null;
     }
   }
 };
