@@ -94,24 +94,30 @@ describe("extractDefaultValue", () => {
 });
 
 describe("validateProp", () => {
+  const ok = { ok: true };
+  const required = { ok: false, message: "Prop is required" };
+  const notValidated = { ok: false, message: "Invalid prop: custom validator check failed" };
+
   const propsData = [
-    [{ required: true }, undefined, false],
-    [{ required: true }, null, false],
-    [{ required: false }, null, true],
-    [{ required: true, validator: () => true }, {}, true],
-    [{ required: true, validator: () => false }, {}, false],
-    [{ required: true, validator: (v) => v === 1 }, 0, false],
-    [{ required: true, validator: (v) => v === 1 }, 2, false],
-    [{ required: true, validator: (v) => v === 1 }, 23, false],
-    [{ required: true, validator: (v) => v === 1 }, "uuu", false],
-    [{ required: true, validator: (v) => v === 1 }, 1, true],
-    [{ validator: () => true }, {}, true],
-    [{ validator: () => false }, {}, false],
-    [{ validator: (v) => v === 1 }, 0, false],
-    [{ validator: (v) => v === 1 }, 2, false],
-    [{ validator: (v) => v === 1 }, 23, false],
-    [{ validator: (v) => v === 1 }, "uuu", false],
-    [{ validator: (v) => v === 1 }, 1, true],
+    [{ required: true }, undefined, required],
+    [{ required: true }, null, required],
+    [{ required: false }, null, ok],
+    [{ required: true, validator: () => true }, {}, ok],
+    [{ required: true }, {}, ok],
+    [{ required: true, validator: () => false }, {}, notValidated],
+    [{ required: true, validator: v => v === 1 }, 0, notValidated],
+    [{ required: true, validator: v => v === 1 }, 2, notValidated],
+    [{ required: true, validator: v => v === 1 }, 23, notValidated],
+    [{ required: true, validator: v => v === 1 }, "uuu", notValidated],
+    [{ required: true, validator: v => v === 1 }, 1, ok],
+    [{ validator: () => true }, {}, ok],
+    [{}, {}, ok],
+    [{ validator: () => false }, {}, notValidated],
+    [{ validator: v => v === 1 }, 0, notValidated],
+    [{ validator: v => v === 1 }, 2, notValidated],
+    [{ validator: v => v === 1 }, 23, notValidated],
+    [{ validator: v => v === 1 }, "uuu", notValidated],
+    [{ validator: v => v === 1 }, 1, ok]
   ];
 
   test.each(propsData)(

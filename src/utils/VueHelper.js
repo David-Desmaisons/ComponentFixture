@@ -56,13 +56,16 @@ function getTypeForProp(prop, defaultValue) {
 function validateProp(prop, value) {
   const absent = value === undefined || value === null;
   if (prop.required && absent) {
-    return false;
+    return { ok: false, message: "Prop is required" };
   }
   if (value === null && !prop.required) {
-    return true;
+    return { ok: true };
   }
   const { validator } = prop;
-  return validator ? validator(value) : true;
+  if (!validator || validator(value)) {
+    return { ok: true };
+  }
+  return { ok: false, message: "Invalid prop: custom validator check failed" };
 }
 
 export { extractDefaultValue, getTypeForProp, validateProp };
