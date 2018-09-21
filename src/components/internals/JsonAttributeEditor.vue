@@ -15,6 +15,14 @@ import {
 
 export default {
   props: {
+    attribute: {
+      required: false,
+      type: String
+    },
+    metaData: {
+      required: true,
+      type: Object
+    },
     object: {
       required: true,
       type: Object
@@ -25,10 +33,6 @@ export default {
     },
     value: {
       type: [Object, Array]
-    },
-    attribute: {
-      required: false,
-      type: String
     }
   },
 
@@ -47,6 +51,11 @@ export default {
         const valid = types.find(t => this.types.find(st => st === t));
         if (!valid) {
           this.error = `types: ${types} not compatible with ${this.types}`;
+          return;
+        }
+        const validated = this.metaData.validate(newObject);
+        if (!validated.ok) {
+          this.error = validated.message;
           return;
         }
         this.object[this.attribute] = newObject;
