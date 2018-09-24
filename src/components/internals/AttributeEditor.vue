@@ -3,7 +3,7 @@
     <label :for="'attribute-'+attribute" class="col-sm-4 col-form-label">{{attribute}}</label>
 
     <select class="col-sm-2 col-form-label form-control form-control-sm" :disabled="types.length === 1" v-model="type">
-      <option v-for="typeDescription in avalaibleTypes" :value="typeDescription.value" :key="typeDescription">{{typeDescription.display}}</option>
+      <option v-for="typeDescription in avalaibleTypes" :value="typeDescription.value" :key="typeDescription.value">{{typeDescription.display}}</option>
     </select>
 
     <div class="col-sm-6">
@@ -22,6 +22,8 @@ import functionAttributeEditor from "./FunctionAttributeEditor";
 import numberAttributeEditor from "./NumberAttributeEditor";
 import stringAttributeEditor from "./StringAttributeEditor";
 
+import { getTypeFromValue } from "@/utils/TypeHelper";
+
 const typesDescription = [
   { display: "{}", value: "Object" },
   { display: "[]", value: "Array" },
@@ -30,6 +32,14 @@ const typesDescription = [
   { display: "&&", value: "Boolean" },
   { display: "=>", value: "Function" }
 ];
+
+function getDefaultType(types, defaultValue) {
+  if (types.length === 1) {
+    return types[0];
+  }
+  const fromDefault = getTypeFromValue(defaultValue);
+  return fromDefault[0];
+}
 
 export default {
   components: {
@@ -55,16 +65,14 @@ export default {
   },
 
   data() {
-    const type = this.metaData.types[0];
+    const { types } = this.metaData;
+    const type = getDefaultType(types, this.object[this.attribute]);
     return {
       type
     };
   },
 
   computed: {
-    // type() {
-    //   return this.metaData.types[0];
-    // },
     types() {
       return this.metaData.types;
     },
