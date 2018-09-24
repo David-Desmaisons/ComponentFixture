@@ -2,8 +2,8 @@
   <div class="form-group row">
     <label :for="'attribute-'+attribute" class="col-sm-4 col-form-label">{{attribute}}</label>
 
-    <select class="col-sm-2 col-form-label form-control form-control-sm" :disabled="types.length === 1">
-      <option v-for="typeDescription in avalaibleTypes" value="typeDescription.Value" :key="typeDescription">{{typeDescription.display}}</option>
+    <select class="col-sm-2 col-form-label form-control form-control-sm" :disabled="types.length === 1" v-model="type">
+      <option v-for="typeDescription in avalaibleTypes" :value="typeDescription.value" :key="typeDescription">{{typeDescription.display}}</option>
     </select>
 
     <div class="col-sm-6">
@@ -54,10 +54,17 @@ export default {
     }
   },
 
+  data() {
+    const type = this.metaData.types[0];
+    return {
+      type
+    };
+  },
+
   computed: {
-    type() {
-      return this.metaData.types[0];
-    },
+    // type() {
+    //   return this.metaData.types[0];
+    // },
     types() {
       return this.metaData.types;
     },
