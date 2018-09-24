@@ -88,4 +88,7 @@ export default {
 .treeclass {
   height: 300px;
 }
+html, body {
+  height: 100%;
+}
 </style>
