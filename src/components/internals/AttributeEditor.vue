@@ -38,7 +38,7 @@ function getDefaultType(types, defaultValue) {
     return types[0];
   }
   const fromDefault = getTypeFromValue(defaultValue);
-  return fromDefault[0];
+  return types.find(type => fromDefault.indexOf(type) !== -1);
 }
 
 export default {
