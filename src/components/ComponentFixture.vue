@@ -6,6 +6,11 @@ import {
   validateProp
 } from "@/utils/VueHelper";
 
+const defaultModel = {
+  event: "input",
+  prop: "value"
+};
+
 export default {
   name: "ComponentFixture",
 
@@ -32,16 +37,28 @@ export default {
       return h(ctor, { props }, []);
     }
 
-    const { componentName, propsDefinition } = this;
+    const { componentName, componentModel, propsDefinition } = this;
+    const { event, prop } = componentModel;
+
+    const options = { props };
+    if (this.dynamicAttributes.hasOwnProperty(prop)) {
+      options.on = {
+        [event]: evt => {
+          window.console.log(evt);
+          this.dynamicAttributes[prop] = evt;
+        }
+      };
+    }
+
     return h("div", { class: { main: true } }, [
       h("div", { class: { control: true } }, [
         control({
+          attributes: this.dynamicAttributes,
           componentName,
-          propsDefinition,
-          attributes: this.dynamicAttributes
+          propsDefinition
         })
       ]),
-      h("div", { class: { component: true } }, [h(ctor, { props }, [])])
+      h("div", { class: { component: true } }, [h(ctor, options, [])])
     ]);
   },
 
@@ -50,14 +67,15 @@ export default {
       return;
     }
     this.stage = 1;
-    const [child] = this.$children;
-    const { props, name } = child.$options;
+    const [component] = this.$children;
+    const { props, name, model } = component.$options;
     this.componentName = name;
+    this.componentModel = model || defaultModel;
     const dynamicAttributes = this.dynamicAttributes;
     const propsDefinition = this.propsDefinition;
     Object.keys(props).forEach(key => {
       const propsValue = props[key];
-      const defaultValue = extractDefaultValue(child, propsValue, key);
+      const defaultValue = extractDefaultValue(component, propsValue, key);
       Vue.set(dynamicAttributes, key, defaultValue);
       Vue.set(propsDefinition, key, {
         definition: propsValue,
@@ -73,6 +91,7 @@ export default {
        * The fixture stage: 0 not ready, 1: ready.
        */
       stage: 0,
+
       /**
        * The component under test name.
        */

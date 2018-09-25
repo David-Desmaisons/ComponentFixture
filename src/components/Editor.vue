@@ -15,6 +15,7 @@ export default {
   components: {
     attributeEditor
   },
+
   props: {
     attributes: {
       required: true,
