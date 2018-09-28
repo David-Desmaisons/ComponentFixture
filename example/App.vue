@@ -3,17 +3,31 @@
 
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" data-toggle="tab" href="#sunburst-tab" role="tab" aria-controls="home" aria-selected="true">Sunburst</a>
+        <a class="nav-link active" data-toggle="tab" href="#vue-slider-tab" role="tab" aria-controls="profile" aria-selected="true">Vue Slider Component</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#sunburst-tab" role="tab" aria-controls="home" aria-selected="false">Sunburst</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#tree-tab" role="tab" aria-controls="profile" aria-selected="false">D3tree</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#vue-slider-tab" role="tab" aria-controls="profile" aria-selected="false">Vue Slider Component</a>
-      </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="sunburst-tab" role="tabpanel" aria-labelledby="home-tab">
+
+      <div class="tab-pane show active" id="vue-slider-tab" role="tabpanel" aria-labelledby="profile-tab">
+        <component-fixture>
+
+          <!-- Use the default slot to create the component under test -->
+          <vue-slider></vue-slider>
+
+          <!-- Use this slot to enable edition of props values -->
+          <Editor slot="control" slot-scope="scope" v-bind="scope">
+          </Editor>
+
+        </component-fixture>
+      </div>
+
+      <div class="tab-pane fade" id="sunburst-tab" role="tabpanel" aria-labelledby="home-tab">
         <component-fixture>
 
           <!-- Use the default slot to create the component under test -->
@@ -30,19 +44,6 @@
 
           <!-- Use the default slot to create the component under test -->
           <tree></tree>
-
-          <!-- Use this slot to enable edition of props values -->
-          <Editor slot="control" slot-scope="scope" v-bind="scope">
-          </Editor>
-
-        </component-fixture>
-      </div>
-
-      <div class="tab-pane fade" id="vue-slider-tab" role="tabpanel" aria-labelledby="profile-tab">
-        <component-fixture>
-
-          <!-- Use the default slot to create the component under test -->
-          <vue-slider></vue-slider>
 
           <!-- Use this slot to enable edition of props values -->
           <Editor slot="control" slot-scope="scope" v-bind="scope">
@@ -87,8 +88,5 @@ export default {
 }
 .treeclass {
   height: 300px;
-}
-html, body {
-  height: 100%;
 }
 </style>
