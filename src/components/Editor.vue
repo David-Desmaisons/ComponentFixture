@@ -34,8 +34,6 @@ export default {
 </script>
 <style lang="less">
 .editor {
-  background-color: lightgrey;
-
   width: 100%;
 
   form {
