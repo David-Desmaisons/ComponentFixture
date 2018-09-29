@@ -6,6 +6,10 @@
 [![Npm version](https://img.shields.io/npm/v/component-fixture.svg?maxAge=20)](https://www.npmjs.com/package/component-fixture)
 [![MIT License](https://img.shields.io/github/license/David-Desmaisons/ComponentFixture.svg)](https://github.com/David-Desmaisons/ComponentFixture/blob/master/LICENSE)
 
+## Demo
+
+https://david-desmaisons.github.io/ComponentFixture/
+
 ## Usage
 
 ```HTML
