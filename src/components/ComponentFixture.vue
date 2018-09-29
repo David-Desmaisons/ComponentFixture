@@ -114,9 +114,21 @@ export default {
 .main {
   display: flex;
   flex-direction: row;
+  height: 100%;
 
   .component {
-    width: 100%;
+    width: calc(100% - 500px);
+    padding: 40px;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+
+  .control {
+    height: 100%;
+    width: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 40px;
   }
 }
 </style>

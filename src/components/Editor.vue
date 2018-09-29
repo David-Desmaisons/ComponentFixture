@@ -1,5 +1,5 @@
 <template>
-  <div class="control">
+  <div class="editor">
     <h1>{{componentName}}</h1>
     <form>
       <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key]">
@@ -33,9 +33,10 @@ export default {
 };
 </script>
 <style lang="less">
-.control {
+.editor {
   background-color: lightgrey;
-  width: 500px;
+
+  width: 100%;
 
   form {
     margin: 10px;
