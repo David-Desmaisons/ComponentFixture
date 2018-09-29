@@ -44,7 +44,6 @@ export default {
     if (this.dynamicAttributes.hasOwnProperty(prop)) {
       options.on = {
         [event]: evt => {
-          window.console.log(evt);
           this.dynamicAttributes[prop] = evt;
         }
       };
