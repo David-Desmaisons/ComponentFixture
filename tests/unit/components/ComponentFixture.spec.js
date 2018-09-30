@@ -1,18 +1,22 @@
 import { shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
 import FakeComponent from "../../mock/FakeComponent.vue";
+import FakeComponentForVModel from '../../mock/FakeComponentForVModel';
+import FakeComponentForCustomVModel from '../../mock/FakeComponentForCustomVModel';
 import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const originalError = console.error;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
-const mountComponentWithDefaultSlot = (slot = FakeComponent) =>
-  shallowMount(ComponentFixture, {
+const mountComponentWithDefaultSlot = (arg = {}) => {
+  const { slot = FakeComponent } = arg;
+  return shallowMount(ComponentFixture, {
     slots: {
       default: slot
     }
   });
+}
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
@@ -39,7 +43,7 @@ describe("ComponentFixture.vue", () => {
   test.each(defaultSlotNotUnique)(
     "throws when there is not exactly than one default slots are passed: %p",
     args => {
-      const render = () => mountComponentWithDefaultSlot(args);
+      const render = () => mountComponentWithDefaultSlot({ slot: args });
       expect(render).toThrow(
         "ComponentFixture should have one unique default slot"
       );
@@ -47,7 +51,7 @@ describe("ComponentFixture.vue", () => {
   );
 
   it("does not throw when one default slot is passed", () => {
-    const render = () => mountComponentWithDefaultSlot("<component/>");
+    const render = () => mountComponentWithDefaultSlot({ slot: "<component/>" });
     expect(render).not.toThrow();
   });
 
@@ -140,6 +144,50 @@ describe("ComponentFixture.vue", () => {
     });
   });
 
+  describe("when initialized with a component supporting standard v-model API", () => {
+    let wrapper = null;
+    let vm = null;
+    let dynamicAttributes = null;
+
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForVModel });
+      vm = wrapper.vm;
+      dynamicAttributes = wrapper.vm.dynamicAttributes;
+    });
+
+    it("computes the dynamicAttributes with default value computed when required", () => {
+      expect(dynamicAttributes.value).toEqual([]);
+    });
+
+    it("listens to event tracked by v-model and update prop", () => {
+      const testComponentVm = vm.$children[0];
+      testComponentVm.$emit('input', [1, 2, 3]);
+      expect(dynamicAttributes.value).toEqual([1, 2, 3]);
+    });
+  });
+
+  describe("when initialized with a component supporting custom v-model API", () => {
+    let wrapper = null;
+    let vm = null;
+    let dynamicAttributes = null;
+
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForCustomVModel });
+      vm = wrapper.vm;
+      dynamicAttributes = wrapper.vm.dynamicAttributes;
+    });
+
+    it("computes the dynamicAttributes with default value", () => {
+      expect(dynamicAttributes.customValue).toEqual("string");
+    });
+
+    it("listens to event tracked by v-model ans update prop", () => {
+      const testComponentVm = vm.$children[0];
+      testComponentVm.$emit('customInput', "new value");
+      expect(dynamicAttributes.customValue).toEqual("new value");
+    });
+  });
+
   describe("when initialized with a controller slot", () => {
     const mountComponentWithDefaultSlotAndControllerSlot = control =>
       shallowMount(ComponentFixture, {
@@ -155,7 +203,7 @@ describe("ComponentFixture.vue", () => {
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn(function(props) {
+      control = jest.fn(function (props) {
         return this.$createElement(FakeEditor, { props });
       });
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);

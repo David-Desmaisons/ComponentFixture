@@ -31,22 +31,21 @@ export default {
 
     const { control } = this.$scopedSlots;
     const { Ctor: ctor } = slot.componentOptions;
-
     const props = this.dynamicAttributes;
-    if (!control) {
-      return h(ctor, { props }, []);
-    }
-
     const { componentName, componentModel, propsDefinition } = this;
     const { event, prop } = componentModel;
-
     const options = { props };
-    if (this.dynamicAttributes.hasOwnProperty(prop)) {
+
+    if (props.hasOwnProperty(prop)) {
       options.on = {
         [event]: evt => {
-          this.dynamicAttributes[prop] = evt;
+          props[prop] = evt;
         }
       };
+    }
+
+    if (!control) {
+      return h(ctor, options, []);
     }
 
     return h("div", { class: { main: true } }, [

@@ -6,6 +6,12 @@
 export default {
   name: "fake-component",
   props: {
+    objectWithFactory: {
+      type: Object,
+      default: () => ({
+        createdByFactory: true
+      })
+    },
     number: {
       type: Number,
       default: 25
@@ -17,12 +23,6 @@ export default {
     undefinedString: {
       type: String,
       required: false
-    },
-    objectWithFactory: {
-      type: Object,
-      default: () => ({
-        createdByFactory: true
-      })
     }
   }
 };
