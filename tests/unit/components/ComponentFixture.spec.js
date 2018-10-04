@@ -70,6 +70,10 @@ describe("ComponentFixture.vue", () => {
       expect(vm.componentName).toEqual("fake-component");
     });
 
+    it("has an empty data property events", () => {
+      expect(vm.events).toEqual([]);
+    });
+
     it("computes the dynamicAttributes number with all props", () => {
       expect(Object.keys(dynamicAttributes).length).toEqual(4);
     });

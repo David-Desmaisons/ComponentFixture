@@ -25,7 +25,7 @@ export default {
     }
 
     const [slot] = defaultSlot;
-    if (this.stage === 0) {
+    if (this.__stage === 0) {
       return h("div", {}, [slot]);
     }
 
@@ -34,7 +34,7 @@ export default {
     const props = this.dynamicAttributes;
     const { componentName, componentModel, propsDefinition } = this;
     const { event, prop } = componentModel;
-    const options = { props };
+    const options = { props, ref: "cut" };
 
     if (props.hasOwnProperty(prop)) {
       options.on = {
@@ -64,7 +64,7 @@ export default {
     if (this.$children.length !== 1) {
       return;
     }
-    this.stage = 1;
+    this.__stage = 1;
     const [component] = this.$children;
     const { props, name, model } = component.$options;
     this.componentName = name;
@@ -81,15 +81,22 @@ export default {
         validate: validateProp.bind(null, propsValue)
       });
     });
+    this.$forceUpdate();
+  },
+
+  updated() {
+    if (this.__stage !== 1) {
+      return;
+    }
+    this.__stage = 2;
+    this.$nextTick(() => {
+      window.console.log(this.$refs.cut);
+    });
   },
 
   data() {
+    this.__stage = 0;
     return {
-      /**
-       * The fixture stage: 0 not ready, 1: ready.
-       */
-      stage: 0,
-
       /**
        * The component under test name.
        */
@@ -104,7 +111,12 @@ export default {
       /**
        * This object will contain the props definition as declared in the component under test.
        */
-      propsDefinition: {}
+      propsDefinition: {},
+
+      /**
+       * Array of events emitted by the component under test.
+       */
+      events: []
     };
   }
 };
@@ -118,6 +130,7 @@ export default {
   .component {
     width: calc(100% - 500px);
     padding: 40px;
+    margin-bottom: 40px;
     border: 1px solid black;
     border-radius: 5px;
   }
