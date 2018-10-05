@@ -11,7 +11,7 @@ export default {
   },
   props: {
     customValue: {
-      type: Array,
+      type: String,
       default: "string",
       required: true
     }

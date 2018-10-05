@@ -90,7 +90,12 @@ export default {
     }
     this.__stage = 2;
     this.$nextTick(() => {
-      window.console.log(this.$refs.cut);
+      const emit = this.$refs.cut.$emit;
+      const newEmit = (eventName, ...args) => {
+        this.events.push({ name: eventName, args: args });
+        emit.call(this.$refs.cut, eventName, ...args);
+      };
+      this.$refs.cut.$emit = newEmit;
     });
   },
 

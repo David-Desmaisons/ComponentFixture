@@ -1,13 +1,13 @@
 import { shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
 import FakeComponent from "../../mock/FakeComponent.vue";
-import FakeComponentForVModel from '../../mock/FakeComponentForVModel';
-import FakeComponentForCustomVModel from '../../mock/FakeComponentForCustomVModel';
+import FakeComponentForVModel from "../../mock/FakeComponentForVModel";
+import FakeComponentForCustomVModel from "../../mock/FakeComponentForCustomVModel";
 import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const originalError = console.error;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -16,7 +16,7 @@ const mountComponentWithDefaultSlot = (arg = {}) => {
       default: slot
     }
   });
-}
+};
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
@@ -51,7 +51,8 @@ describe("ComponentFixture.vue", () => {
   );
 
   it("does not throw when one default slot is passed", () => {
-    const render = () => mountComponentWithDefaultSlot({ slot: "<component/>" });
+    const render = () =>
+      mountComponentWithDefaultSlot({ slot: "<component/>" });
     expect(render).not.toThrow();
   });
 
@@ -68,10 +69,6 @@ describe("ComponentFixture.vue", () => {
 
     it("sets the component name", () => {
       expect(vm.componentName).toEqual("fake-component");
-    });
-
-    it("has an empty data property events", () => {
-      expect(vm.events).toEqual([]);
     });
 
     it("computes the dynamicAttributes number with all props", () => {
@@ -95,6 +92,10 @@ describe("ComponentFixture.vue", () => {
       expect(dynamicAttributes.objectWithFactory).toEqual({
         createdByFactory: true
       });
+    });
+
+    it("has an empty data property events", () => {
+      expect(vm.events).toEqual([]);
     });
 
     const propDefinition = [
@@ -143,6 +144,22 @@ describe("ComponentFixture.vue", () => {
       });
     });
 
+    it("tracks events on component under fixtures", () => {
+      const testComponentVm = vm.$children[0];
+      testComponentVm.$emit("event1", 0);
+      testComponentVm.$emit("event2", "a", "b", true);
+      expect(vm.events).toEqual([
+        {
+          name: "event1",
+          args: [0]
+        },
+        {
+          name: "event2",
+          args: ["a", "b", true]
+        }
+      ]);
+    });
+
     it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
@@ -165,7 +182,7 @@ describe("ComponentFixture.vue", () => {
 
     it("listens to event tracked by v-model and update prop", () => {
       const testComponentVm = vm.$children[0];
-      testComponentVm.$emit('input', [1, 2, 3]);
+      testComponentVm.$emit("input", [1, 2, 3]);
       expect(dynamicAttributes.value).toEqual([1, 2, 3]);
     });
   });
@@ -176,7 +193,9 @@ describe("ComponentFixture.vue", () => {
     let dynamicAttributes = null;
 
     beforeEach(() => {
-      wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForCustomVModel });
+      wrapper = mountComponentWithDefaultSlot({
+        slot: FakeComponentForCustomVModel
+      });
       vm = wrapper.vm;
       dynamicAttributes = wrapper.vm.dynamicAttributes;
     });
@@ -187,7 +206,7 @@ describe("ComponentFixture.vue", () => {
 
     it("listens to event tracked by v-model ans update prop", () => {
       const testComponentVm = vm.$children[0];
-      testComponentVm.$emit('customInput', "new value");
+      testComponentVm.$emit("customInput", "new value");
       expect(dynamicAttributes.customValue).toEqual("new value");
     });
   });
@@ -207,7 +226,7 @@ describe("ComponentFixture.vue", () => {
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn(function (props) {
+      control = jest.fn(function(props) {
         return this.$createElement(FakeEditor, { props });
       });
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
