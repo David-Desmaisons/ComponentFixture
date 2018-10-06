@@ -135,7 +135,6 @@ export default {
   .component {
     width: calc(100% - 500px);
     padding: 40px;
-    margin-bottom: 40px;
     border: 1px solid black;
     border-radius: 5px;
   }
@@ -145,7 +144,6 @@ export default {
     width: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 40px;
   }
 }
 </style>

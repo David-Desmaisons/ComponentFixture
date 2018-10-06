@@ -103,6 +103,7 @@ body {
 
 #myTabContent {
   height: calc(100% - 55px);
+  padding-bottom: 40px;
 }
 
 .tab-pane {
