@@ -44,12 +44,6 @@ export default {
 
 #### data 
 
-- `stage` 
-
-  The fixture stage: 0 not ready, 1: ready. 
-
-**initial value:** `0` 
-
 - `componentName` 
 
   The component under test name. 
