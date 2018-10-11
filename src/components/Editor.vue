@@ -2,7 +2,7 @@
   <div class="editor">
     <h1>{{componentName}}</h1>
     <form>
-      <attributeEditor v-for="(value, key) in attributes" :key="key" :object="attributes" :attribute="key" :metaData="propsDefinition[key]">
+      <attributeEditor v-for="prop in props" :key="prop.key" :object="attributes" :attribute="prop.key" :metaData="prop.metaData">
       </attributeEditor>
     </form>
   </div>
@@ -29,6 +29,17 @@ export default {
       required: true,
       type: Object
     }
+  },
+
+  computed: {
+    props() {
+      return Object.keys(this.propsDefinition)
+        .sort()
+        .map(p => ({
+          key: p,
+          metaData: this.propsDefinition[p]
+        }));
+    }
   }
 };
 </script>
@@ -36,8 +47,13 @@ export default {
 .editor {
   width: 100%;
 
+  height: 100%;
+
   form {
     margin: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: calc(100% - 60px);
   }
 }
 </style>

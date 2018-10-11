@@ -142,8 +142,6 @@ export default {
   .control {
     height: 100%;
     width: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
   }
 }
 </style>
