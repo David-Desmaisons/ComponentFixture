@@ -18,7 +18,11 @@
         <component-fixture>
 
           <!-- Use the default slot to create the component under test -->
-          <vue-slider></vue-slider>
+          <vue-slider>
+            <div class="diy-tooltip" slot="tooltip" slot-scope="{ value }">
+            {{ value }}
+            </div>
+          </vue-slider>
 
           <!-- Use this slot to enable edition of props values -->
           <Editor slot="control" slot-scope="scope" v-bind="scope">

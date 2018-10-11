@@ -31,10 +31,11 @@ export default {
 
     const { control } = this.$scopedSlots;
     const { Ctor: ctor } = slot.componentOptions;
+    const { scopedSlots, slot: childSlot } = slot.data;
     const props = this.dynamicAttributes;
     const { componentName, componentModel, propsDefinition } = this;
     const { event, prop } = componentModel;
-    const options = { props, ref: "cut" };
+    const options = { props, scopedSlots, slot: childSlot, ref: "cut" };
 
     if (props.hasOwnProperty(prop)) {
       options.on = {
