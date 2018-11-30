@@ -10,7 +10,62 @@
 
 https://david-desmaisons.github.io/ComponentFixture/
 
-## Usage
+## Description
+
+Component is designed to receive any component you want to test as a default slot
+
+```HTML
+<component-fixture>
+
+  <!-- Use the default slot to create the component under test -->
+  <component-under-test/>
+
+  <!-- Use this slot to enable edition of props values, Editor is provided by this lib-->
+  <Editor slot="control" slot-scope="scope" v-bind="scope"/>
+
+</component-fixture>
+```
+Component-fixture will automatically:
+  - Mirror all the props of the tested component
+  - Bind this data to the component under-test
+  - Display all the props in a form so that it is possible to edit them
+
+Features:
+  - Respect props type and use custom input for each type
+  - Provide input for objects and function
+  - Create `v-model` binding if needed
+  - Custom props validation when available
+  - Support component with slots
+
+
+Example using [vue-slider-component](https://github.com/NightCatSama/vue-slider-component):
+
+![demo](./doc-images/example.png)
+
+
+## Uses cases
+
+Why would you need such a component?
+
+`ComponentFixture` is intended to be used only in a test/dev context with two main applications.
+
+### Discovering third party component
+  - Explore Interactively a component you are willing to use in your application.
+  - Understand by example what the props role.
+  - Quickly identify bugs and limitation on the component. 
+
+
+### Testing a component you creates 
+  - Explore Interactively a component you are willing to use in your application.
+  - Understand by example what the props role.
+
+## Next steps
+
+- Monkey testing: use randomly generated updates on component props.
+
+This will be provided on next major version.
+
+## Example usage
 
 ```HTML
 <component-fixture>
@@ -37,31 +92,6 @@ export default {
   }
 }
 ```
-
-## API
-
-### component-fixture 
-
-#### data 
-
-- `componentName` 
-
-  The component under test name. 
-
-**initial value:** `null` 
-
-- `dynamicAttributes` 
-
-  This object will contain all the props to be bound with the component under test.
-  after initialization. 
-
-**initial value:** `[object Object]` 
-
-- `propsDefinition` 
-
-  This object will contain the props definition as declared in the component under test. 
-
-**initial value:** `[object Object]` 
 
 ## Installation
 

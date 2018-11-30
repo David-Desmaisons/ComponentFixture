@@ -1,6 +1,6 @@
 {
   "name": "component-fixture",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve ./example/main.js --open",
@@ -9,7 +9,7 @@
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit --coverage",
     "test:coverage": "vue-cli-service test:unit --coverage --verbose && codecov",
-    "prepublishOnly": "npm run lint && npm run test:unit && npm run example:build && npm run build && npm run doc:build",
+    "prepublishOnly": "npm run lint && npm run test:unit && npm run example:build && npm run build",
     "doc:build": "npx vuedoc.md --section API --output ./README.md ./src/components/ComponentFixture.vue"
   },
   "dependencies": {
@@ -24,7 +24,7 @@
     "@vue/cli-service": "^3.0.0",
     "@vue/eslint-config-prettier": "^3.0.1",
     "@vue/test-utils": "^1.0.0-beta.20",
-    "@vuedoc/md": "^1.3.3",
+    "@vuedoc/md": "^1.5.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
     "codecov": "^3.1.0",
