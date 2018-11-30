@@ -56,8 +56,9 @@ Why would you need such a component?
 
 
 ### Testing a component you creates 
-  - Explore Interactively a component you are willing to use in your application.
-  - Understand by example what the props role.
+  - Create an example usage of your component that will update automatically
+  - Interact with the component while you create it.
+  - Easily identify bugs
 
 ## Next steps
 
