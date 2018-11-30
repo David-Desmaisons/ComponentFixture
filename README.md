@@ -25,12 +25,12 @@ Component is designed to receive any component you want to test as a default slo
 
 </component-fixture>
 ```
-Component-fixture will automatically:
+### Component-fixture will automatically:
   - Mirror all the props of the tested component
   - Bind this data to the component under-test
   - Display all the props in a form so that it is possible to edit them
 
-Features:
+### Features:
   - Respect props type and use custom input for each type
   - Provide input for objects and function
   - Create `v-model` binding if needed
