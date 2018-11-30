@@ -12,6 +12,8 @@ https://david-desmaisons.github.io/ComponentFixture/
 
 ## Description
 
+Interactive test fixture for vue component.
+
 Component is designed to receive any component you want to test as a default slot
 
 ```HTML
