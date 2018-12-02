@@ -85,6 +85,7 @@ This will be provided on next major version.
 
 ```javascript
 import { ComponentFixture, Editor } from 'component-fixture'
+import "component-fixture/dist/ComponentFixture.css"
 import { componentUnderTest } from 'componentUnderTest'
 
 export default {
