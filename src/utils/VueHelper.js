@@ -35,12 +35,16 @@ function getPropDefaultValue(vm, prop, key) {
   }
   // call factory function for non-Function types
   // a value is Function if its prototype is function even across different execution context
-  return resolveFunctionIfNeeded(def, prop, vm)
+  return resolveFunctionIfNeeded(def, prop, vm);
 }
 
 function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
   if (proposedValue !== undefined) {
-    const normalizedProposed = resolveFunctionIfNeeded(proposedValue, prop, fixtureVm);
+    const normalizedProposed = resolveFunctionIfNeeded(
+      proposedValue,
+      prop,
+      fixtureVm
+    );
     if (validateProp(prop, normalizedProposed).ok) {
       const propTypes = getTypeForProp(prop);
       const proposedTypes = getTypeFromValue(normalizedProposed);

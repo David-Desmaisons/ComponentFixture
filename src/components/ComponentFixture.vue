@@ -83,7 +83,13 @@ export default {
     Object.keys(props).forEach(key => {
       const propsValue = props[key];
       const proposedValue = this.defaults[key];
-      const defaultValue = extractDefaultValue(component, propsValue, key, proposedValue, this);
+      const defaultValue = extractDefaultValue(
+        component,
+        propsValue,
+        key,
+        proposedValue,
+        this
+      );
       Vue.set(dynamicAttributes, key, defaultValue);
       Vue.set(propsDefinition, key, {
         definition: propsValue,
