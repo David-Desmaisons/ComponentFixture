@@ -1,4 +1,7 @@
-# ComponentFixture
+
+<p align="center"><img width="150"src="./logo.png"></p>
+
+# Component Fixture
 
 [![CircleCI](https://circleci.com/gh/David-Desmaisons/ComponentFixture.svg?style=shield)](https://circleci.com/gh/David-Desmaisons/ComponentFixture)
 [![Coverage](https://codecov.io/gh/David-Desmaisons/ComponentFixture/branch/master/graph/badge.svg)](https://codecov.io/gh/David-Desmaisons/ComponentFixture)
