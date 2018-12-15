@@ -10,6 +10,12 @@ function getType(fn) {
   return match ? match[1] : "";
 }
 
+function resolveFunctionIfNeeded(def, prop, vm) {
+  return typeof def === "function" && getType(prop.type) !== "Function"
+    ? def.call(vm)
+    : def;
+}
+
 function getPropDefaultValue(vm, prop, key) {
   // no default, return undefined
   if (!hasOwn(prop, "default")) {
@@ -29,12 +35,20 @@ function getPropDefaultValue(vm, prop, key) {
   }
   // call factory function for non-Function types
   // a value is Function if its prototype is function even across different execution context
-  return typeof def === "function" && getType(prop.type) !== "Function"
-    ? def.call(vm)
-    : def;
+  return resolveFunctionIfNeeded(def, prop, vm)
 }
 
-function extractDefaultValue(vm, prop, key) {
+function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
+  if (proposedValue !== undefined) {
+    const normalizedProposed = resolveFunctionIfNeeded(proposedValue, prop, fixtureVm);
+    if (validateProp(prop, normalizedProposed).ok) {
+      const propTypes = getTypeForProp(prop);
+      const proposedTypes = getTypeFromValue(normalizedProposed);
+      if (propTypes.some(t => proposedTypes.includes(t))) {
+        return normalizedProposed;
+      }
+    }
+  }
   const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
     return defaultValue;

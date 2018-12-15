@@ -67,15 +67,15 @@ Why would you need such a component?
 
 ## Next steps
 
-[ ] Provide a way to default component props
-[ ] Monkey testing: use randomly generated updates on component props.
+  - [ ] Provide a way to default component props
+  - [ ] Monkey testing: use randomly generated updates on component props.
 
 This will be provided on next major version.
 
 ## Example usage
 
 ```HTML
-<component-fixture>
+<component-fixture :defaults="{value: 23}">
 
   <!-- Use the default slot to create the component under test -->
   <component-under-test></component-under-test>
@@ -100,6 +100,20 @@ export default {
   }
 }
 ```
+
+### API
+#### slots 
+
+- `control` slot for the form that will edit the props; editor is provided by this library and provide all the faetures.
+
+- `default` Slot for the component under test
+
+#### props 
+
+- `defaults` ***Object*** (*optional*) 
+
+   Object that will be set to default the component under-test props. For example if you want to default the props value with 46, just use:  `:defaults="{value: 46}"`
+
 
 ## Installation
 

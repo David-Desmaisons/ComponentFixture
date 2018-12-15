@@ -53,6 +53,7 @@ describe("extractDefaultValue", () => {
     [false, false],
     [true, true],
     [() => 56, 56],
+    [function () { return this.vmValue; }, 'vmValue'],
     [() => ({ fromFactory: true }), { fromFactory: true }]
   ];
 
@@ -60,13 +61,19 @@ describe("extractDefaultValue", () => {
     "returns default from prop, received: %p should return: %p",
     (defaultValue, expected) => {
       const value = extractDefaultValue(
-        { $options: {} },
+        { $options: {}, vmValue: 'vmValue' },
         { default: defaultValue },
         "key"
       );
       expect(value).toEqual(expected);
     }
   );
+
+  test('returns function when prop type is function', () => {
+    const defaultFunction = () => 67;
+    const value = extractDefaultValue({ $options: {} }, { type: Function, default: defaultFunction }, "key");
+    expect(value).toBe(defaultFunction);
+  });
 
   const typesFromProp = [
     [String, ""],
@@ -89,6 +96,50 @@ describe("extractDefaultValue", () => {
     type => {
       const value = extractDefaultValue({}, { required: false, type }, "key");
       expect(value).toBe(undefined);
+    }
+  );
+
+  const proposedDefaults = [
+    [{ default: "gg", type: String }, "ab", "ab"],
+    [{ default: "gg", type: [String, Number] }, 23, 23],
+    [{ default: true }, false, false],
+    [{ default: false }, true, true],
+    [{ default: () => 22 }, () => 56, 56],
+    [{ default: '' }, function () { return this.vmValue; }, 'fixtureVmValue'],
+    [{ default: () => ({ fromProps: true }) }, () => ({ fromFactory: true }), { fromFactory: true }]
+  ];
+
+  test.each(proposedDefaults)(
+    "returns proposedDefault overriding default from prop, props: %p received: %p should return: %p",
+    (prop, proposedDefaultValue, expected) => {
+      const value = extractDefaultValue(
+        { $options: {} },
+        prop,
+        "key",
+        proposedDefaultValue,
+        { vmValue: 'fixtureVmValue' }
+      );
+      expect(value).toEqual(expected);
+    }
+  );
+
+  const proposedDefaultsWithValidation = [
+    [{ type: Number, default: 26 }, "ab", 26],
+    [{ type: String, default: "tintin" }, false, "tintin"],
+    [{ type: Number, default: 56, validator: (v) => v === 56 }, 33, 56],
+  ];
+
+  test.each(proposedDefaultsWithValidation)(
+    "does not returns proposedDefault if not valid, props: %j proposedDefault: %p should return: %p",
+    (propDefinition, proposedDefaultValue, expected) => {
+      const value = extractDefaultValue(
+        { $options: {} },
+        propDefinition,
+        "key",
+        proposedDefaultValue,
+        {}
+      );
+      expect(value).toEqual(expected);
     }
   );
 });

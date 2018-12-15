@@ -14,6 +14,14 @@ const defaultModel = {
 export default {
   name: "ComponentFixture",
 
+  props: {
+    defaults: {
+      required: false,
+      type: Object,
+      default: () => ({})
+    }
+  },
+
   renderError(h, err) {
     return h("pre", { style: { color: "red" } }, err.stack);
   },
@@ -74,7 +82,8 @@ export default {
     const propsDefinition = this.propsDefinition;
     Object.keys(props).forEach(key => {
       const propsValue = props[key];
-      const defaultValue = extractDefaultValue(component, propsValue, key);
+      const proposedValue = this.defaults[key];
+      const defaultValue = extractDefaultValue(component, propsValue, key, proposedValue, this);
       Vue.set(dynamicAttributes, key, defaultValue);
       Vue.set(propsDefinition, key, {
         definition: propsValue,

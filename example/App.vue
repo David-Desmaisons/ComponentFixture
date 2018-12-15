@@ -15,7 +15,7 @@
     <div class="tab-content" id="myTabContent">
 
       <div class="tab-pane show active" id="vue-slider-tab" role="tabpanel" aria-labelledby="profile-tab">
-        <component-fixture>
+        <component-fixture :defaults="{value: 45}">
 
           <!-- Use the default slot to create the component under test -->
           <vue-slider>
