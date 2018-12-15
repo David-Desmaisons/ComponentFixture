@@ -64,7 +64,8 @@ Why would you need such a component?
 
 ## Next steps
 
-- Monkey testing: use randomly generated updates on component props.
+[ ] Provide a way to default component props
+[ ] Monkey testing: use randomly generated updates on component props.
 
 This will be provided on next major version.
 
