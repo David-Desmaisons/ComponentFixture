@@ -22,7 +22,7 @@ export default {
       type: Object
     },
     componentName: {
-      required: true,
+      required: false,
       type: String
     },
     propsDefinition: {

@@ -26,10 +26,58 @@ export default {
     return h("pre", { style: { color: "red" } }, err.stack);
   },
 
+  methods: {
+    computedValuesFromProps(component, props, photo) {
+      const dynamicAttributes = this.dynamicAttributes;
+      const propsDefinition = this.propsDefinition;
+      Object.keys(props).forEach(key => {
+        const propsValue = props[key];
+        const proposedValue = this.defaults[key];
+        const defaultValue = extractDefaultValue(
+          component,
+          propsValue,
+          key,
+          proposedValue,
+          this
+        );
+        Vue.set(dynamicAttributes, key, defaultValue);
+        Vue.set(propsDefinition, key, {
+          definition: propsValue,
+          types: getTypeForProp(propsValue, defaultValue),
+          validate: validateProp.bind(null, propsValue)
+        });
+      });
+      this.$photo = photo || JSON.stringify(props);
+    }
+  },
+
   render(h) {
     const { default: defaultSlot } = this.$slots;
     if (!defaultSlot || defaultSlot.length !== 1) {
       throw new Error("ComponentFixture should have one unique default slot");
+    }
+    const { control } = this.$scopedSlots;
+
+    if (this.__stage == 2) {
+      //Updates (needed for hot-reload)
+      const testedComponentIndex = control ? 1 : 0;
+      const component = this.$children[testedComponentIndex];
+      const {
+        props: currentProps,
+        name: currentName,
+        model: currentModel
+      } = component.$options;
+
+      this.componentName = currentName;
+      this.componentModel = currentModel || defaultModel;
+      const currentPhoto = JSON.stringify(currentProps);
+      if (currentPhoto != this.$photo) {
+        this.dynamicAttributes = {};
+        this.propsDefinition = {};
+        this.computedValuesFromProps(component, currentProps, currentPhoto);
+        this.$photo = currentPhoto;
+        this.__stage == 1;
+      }
     }
 
     const [slot] = defaultSlot;
@@ -37,7 +85,6 @@ export default {
       return h("div", {}, [slot]);
     }
 
-    const { control } = this.$scopedSlots;
     const { Ctor: ctor } = slot.componentOptions;
     const { scopedSlots, slot: childSlot } = slot.data;
     const props = this.dynamicAttributes;
@@ -78,25 +125,7 @@ export default {
     const { props, name, model } = component.$options;
     this.componentName = name;
     this.componentModel = model || defaultModel;
-    const dynamicAttributes = this.dynamicAttributes;
-    const propsDefinition = this.propsDefinition;
-    Object.keys(props).forEach(key => {
-      const propsValue = props[key];
-      const proposedValue = this.defaults[key];
-      const defaultValue = extractDefaultValue(
-        component,
-        propsValue,
-        key,
-        proposedValue,
-        this
-      );
-      Vue.set(dynamicAttributes, key, defaultValue);
-      Vue.set(propsDefinition, key, {
-        definition: propsValue,
-        types: getTypeForProp(propsValue, defaultValue),
-        validate: validateProp.bind(null, propsValue)
-      });
-    });
+    this.computedValuesFromProps(component, props);
     this.$forceUpdate();
   },
 

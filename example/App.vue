@@ -11,6 +11,10 @@
       <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#tree-tab" role="tab" aria-controls="profile" aria-selected="false">D3tree</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#hello-world-tab" role="tab" aria-controls="profile" aria-selected="false">Hello World</a>
+      </li>
+      
     </ul>
     <div class="tab-content" id="myTabContent">
 
@@ -55,8 +59,22 @@
 
         </component-fixture>
       </div>
-    </div>
 
+      <div class="tab-pane fade" id="hello-world-tab" role="tabpanel" aria-labelledby="profile-tab">
+        <component-fixture>
+
+          <!-- Use the default slot to create the component under test -->
+          <HelloWorld></HelloWorld>
+
+          <!-- Use this slot to enable edition of props values -->
+          <Editor slot="control" slot-scope="scope" v-bind="scope">
+          </Editor>
+
+        </component-fixture>
+      </div>
+
+    </div>
+    
   </div>
 </template>
 
@@ -68,12 +86,14 @@ import { tree } from "vued3tree";
 import { sunburst } from "vue-d3-sunburst";
 import vueSlider from "vue-slider-component";
 import "vue-d3-sunburst/dist/vue-d3-sunburst.css";
+import HelloWorld from "./components/HelloWorld";
 
 export default {
   name: "app",
   components: {
     ComponentFixture,
     Editor,
+    HelloWorld,
     sunburst,
     tree,
     vueSlider
