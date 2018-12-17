@@ -41,6 +41,7 @@ Component is designed to receive any component you want to test as a default slo
   - Create `v-model` binding if needed
   - Custom props validation when available
   - Support component with slots
+  - Compatible with hot-reload: automatic update on changes hapening on the tested component
 
 
 Example using [vue-slider-component](https://github.com/NightCatSama/vue-slider-component):
@@ -67,7 +68,7 @@ Why would you need such a component?
 
 ## Next steps
 
-  - [ ] Provide a way to default component props
+  - [x] Provide a way to default component props
   - [ ] Monkey testing: use randomly generated updates on component props.
 
 This will be provided on next major version.
