@@ -36,7 +36,7 @@
       </div>
 
       <div class="tab-pane fade" id="sunburst-tab" role="tabpanel" aria-labelledby="home-tab">
-        <component-fixture>
+        <component-fixture :defaults="{data: {size:220, children:[{size:45}]}}">
 
           <!-- Use the default slot to create the component under test -->
           <sunburst></sunburst>
@@ -74,7 +74,7 @@
       </div>
 
     </div>
-    
+
   </div>
 </template>
 

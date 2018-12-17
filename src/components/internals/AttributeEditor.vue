@@ -1,19 +1,51 @@
 <template>
   <div class="form-group row">
-    <label :for="'attribute-'+attribute" class="col-sm-4 col-form-label">{{attribute}}</label>
+    <label
+      :for="'attribute-'+attribute"
+      class="col-sm-4 col-form-label"
+    >{{attribute}}</label>
 
-    <div v-tooltip="{content:type, placement: 'top', offset: -5}" class="col-sm-2 col-form-label">
-      <select class="form-control form-control-sm" :disabled="types.length === 1" v-model="type">
-        <option v-for="typeDescription in avalaibleTypes" :value="typeDescription.value" :key="typeDescription.value">{{typeDescription.display}}</option>
+    <div
+      v-tooltip="{content:type, placement: 'top', offset: -5}"
+      class="col-sm-2 col-form-label"
+    >
+      <select
+        class="form-control form-control-sm"
+        :disabled="types.length === 1"
+        v-model="type"
+      >
+        <option
+          v-for="typeDescription in avalaibleTypes"
+          :value="typeDescription.value"
+          :key="typeDescription.value"
+        >{{typeDescription.display}}</option>
       </select>
     </div>
 
     <div class="col-sm-6">
-      <input v-if="type === 'Boolean'" :id="'attribute-'+attribute" v-model="object[attribute]" type="checkbox" class="checkbox control-input" />
-      <numberAttributeEditor v-else-if="type === 'Number'" v-bind="{object, attribute, metaData, value:object[attribute]}"></numberAttributeEditor>
-      <stringAttributeEditor v-else-if="type === 'String'" v-bind="{object, attribute, metaData, value:object[attribute]}" />
-      <functionAttributeEditor v-else-if="type === 'Function'" v-bind="{object, attribute, metaData}"></functionAttributeEditor>
-      <jsonAttributeEditor v-else v-bind="{object, attribute, metaData, types, value:object[attribute]}"></jsonAttributeEditor>
+      <input
+        v-if="type === 'Boolean'"
+        :id="'attribute-'+attribute"
+        v-model="object[attribute]"
+        type="checkbox"
+        class="checkbox control-input"
+      />
+      <numberAttributeEditor
+        v-else-if="type === 'Number'"
+        v-bind="{object, attribute, metaData, value:object[attribute]}"
+      ></numberAttributeEditor>
+      <stringAttributeEditor
+        v-else-if="type === 'String'"
+        v-bind="{object, attribute, metaData, value:object[attribute]}"
+      />
+      <functionAttributeEditor
+        v-else-if="type === 'Function'"
+        v-bind="{object, attribute, metaData}"
+      ></functionAttributeEditor>
+      <jsonAttributeEditor
+        v-else
+        v-bind="{object, attribute, metaData, types, value:object[attribute]}"
+      ></jsonAttributeEditor>
     </div>
 
   </div>
@@ -70,15 +102,11 @@ export default {
     }
   },
 
-  data() {
-    const { types } = this.metaData;
-    const type = getDefaultType(types, this.object[this.attribute]);
-    return {
-      type
-    };
-  },
-
   computed: {
+    type() {
+      const { types } = this.metaData;
+      return getDefaultType(types, this.object[this.attribute]);
+    },
     types() {
       return this.metaData.types;
     },

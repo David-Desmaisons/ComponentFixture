@@ -1,3 +1,6 @@
 module.exports = {
-  baseUrl: "./"
+  baseUrl: "./",
+  chainWebpack: config => {
+    config.devtool("eval-source-map");
+  }
 };

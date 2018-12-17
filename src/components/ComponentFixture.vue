@@ -27,7 +27,20 @@ export default {
   },
 
   methods: {
-    computedValuesFromProps(component, props, photo) {
+    computedValuesFromProps(component) {
+      const { props, name, model } = component.$options;
+      this.componentName = name;
+      this.componentModel = model || defaultModel;
+
+      const photo = JSON.stringify(props);
+
+      if (photo === this.$photo) {
+        return;
+      }
+
+      this.$photo = photo;
+      this.dynamicAttributes = {};
+      this.propsDefinition = {};
       const dynamicAttributes = this.dynamicAttributes;
       const propsDefinition = this.propsDefinition;
       Object.keys(props).forEach(key => {
@@ -47,7 +60,6 @@ export default {
           validate: validateProp.bind(null, propsValue)
         });
       });
-      this.$photo = photo || JSON.stringify(props);
     }
   },
 
@@ -58,30 +70,15 @@ export default {
     }
     const { control } = this.$scopedSlots;
 
-    if (this.__stage == 2) {
+    if (this.$stage == 2) {
       //Updates (needed for hot-reload)
       const testedComponentIndex = control ? 1 : 0;
       const component = this.$children[testedComponentIndex];
-      const {
-        props: currentProps,
-        name: currentName,
-        model: currentModel
-      } = component.$options;
-
-      this.componentName = currentName;
-      this.componentModel = currentModel || defaultModel;
-      const currentPhoto = JSON.stringify(currentProps);
-      if (currentPhoto != this.$photo) {
-        this.dynamicAttributes = {};
-        this.propsDefinition = {};
-        this.computedValuesFromProps(component, currentProps, currentPhoto);
-        this.$photo = currentPhoto;
-        this.__stage == 1;
-      }
+      this.computedValuesFromProps(component);
     }
 
     const [slot] = defaultSlot;
-    if (this.__stage === 0) {
+    if (this.$stage === 0) {
       return h("div", {}, [slot]);
     }
 
@@ -120,20 +117,17 @@ export default {
     if (this.$children.length !== 1) {
       return;
     }
-    this.__stage = 1;
     const [component] = this.$children;
-    const { props, name, model } = component.$options;
-    this.componentName = name;
-    this.componentModel = model || defaultModel;
-    this.computedValuesFromProps(component, props);
+    this.$stage = 1;
+    this.computedValuesFromProps(component);
     this.$forceUpdate();
   },
 
   updated() {
-    if (this.__stage !== 1) {
+    if (this.$stage !== 1) {
       return;
     }
-    this.__stage = 2;
+    this.$stage = 2;
     this.$nextTick(() => {
       const emit = this.$refs.cut.$emit;
       const newEmit = (eventName, ...args) => {
@@ -145,7 +139,8 @@ export default {
   },
 
   data() {
-    this.__stage = 0;
+    this.$stage = 0;
+    this.$photo == null;
     return {
       /**
        * The component under test name.
