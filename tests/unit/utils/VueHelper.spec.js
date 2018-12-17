@@ -4,7 +4,21 @@ import {
   validateProp
 } from "@/utils/VueHelper";
 
+const { console } = window;
+const { error: originalError, warn: originalWarn } = console;
+const nullFunction = () => {};
+
 describe("getTypeForProp", () => {
+  beforeEach(() => {
+    console.error = nullFunction;
+    console.warn = nullFunction;
+  });
+
+  afterEach(() => {
+    console.error = originalError;
+    console.warn = originalWarn;
+  });
+
   const typesFromValue = [
     ["", ["String"]],
     [13, ["Number"]],
@@ -54,7 +68,7 @@ describe("extractDefaultValue", () => {
     [true, true],
     [() => 56, 56],
     [
-      function () {
+      function() {
         return this.vmValue;
       },
       "vmValue"
@@ -116,7 +130,7 @@ describe("extractDefaultValue", () => {
     [{ default: () => 22 }, () => 56, 56],
     [
       { default: "" },
-      function () {
+      function() {
         return this.vmValue;
       },
       "fixtureVmValue"

@@ -49,7 +49,7 @@ function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
     const proposedTypes = getTypeFromValue(normalizedProposed);
     const typeMatch = propTypes.some(t => proposedTypes.includes(t));
     if (!typeMatch) {
-      console.warn(
+      window.console.warn(
         `defaults: ${JSON.stringify(
           normalizedProposed
         )} will be discarded because type is not matching props type`
@@ -57,7 +57,7 @@ function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
     } else {
       const validation = validateProp(prop, normalizedProposed);
       if (!validation.ok) {
-        console.warn(
+        window.console.warn(
           `defaults: ${JSON.stringify(
             normalizedProposed
           )} will be discarded because ${validation.message}.`
