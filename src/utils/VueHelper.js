@@ -45,10 +45,24 @@ function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
       prop,
       fixtureVm
     );
-    if (validateProp(prop, normalizedProposed).ok) {
-      const propTypes = getTypeForProp(prop);
-      const proposedTypes = getTypeFromValue(normalizedProposed);
-      if (propTypes.some(t => proposedTypes.includes(t))) {
+    const propTypes = getTypeForProp(prop);
+    const proposedTypes = getTypeFromValue(normalizedProposed);
+    const typeMatch = propTypes.some(t => proposedTypes.includes(t));
+    if (!typeMatch) {
+      console.warn(
+        `defaults: ${JSON.stringify(
+          normalizedProposed
+        )} will be discarded because type is not matching props type`
+      );
+    } else {
+      const validation = validateProp(prop, normalizedProposed);
+      if (!validation.ok) {
+        console.warn(
+          `defaults: ${JSON.stringify(
+            normalizedProposed
+          )} will be discarded because ${validation.message}.`
+        );
+      } else {
         return normalizedProposed;
       }
     }

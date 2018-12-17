@@ -54,7 +54,7 @@ describe("extractDefaultValue", () => {
     [true, true],
     [() => 56, 56],
     [
-      function() {
+      function () {
         return this.vmValue;
       },
       "vmValue"
@@ -116,7 +116,7 @@ describe("extractDefaultValue", () => {
     [{ default: () => 22 }, () => 56, 56],
     [
       { default: "" },
-      function() {
+      function () {
         return this.vmValue;
       },
       "fixtureVmValue"

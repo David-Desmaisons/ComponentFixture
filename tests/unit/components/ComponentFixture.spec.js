@@ -6,8 +6,8 @@ import FakeComponentForCustomVModel from "../../mock/FakeComponentForCustomVMode
 import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
-const originalError = console.error;
-const nullFunction = () => {};
+const { error: originalError, warn: originalWarn } = console;
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -21,10 +21,12 @@ const mountComponentWithDefaultSlot = (arg = {}) => {
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
     console.error = nullFunction;
+    console.warn = nullFunction;
   });
 
   afterEach(() => {
     console.error = originalError;
+    console.warn = originalWarn;
   });
 
   it("throws when no default slot is passed", () => {
@@ -165,6 +167,40 @@ describe("ComponentFixture.vue", () => {
     });
   });
 
+  describe("when re-render after update", () => {
+    let wrapper = null;
+    let vm = null;
+    let dynamicAttributes = null;
+    let childProps = null;
+
+    beforeEach(async () => {
+      wrapper = mountComponentWithDefaultSlot();
+      vm = wrapper.vm;
+
+      await wrapper.vm.$nextTick();
+
+      childProps = vm.$children[0].$options.props;
+
+      childProps.newProp = {
+        type: String,
+        default: "abc"
+      };
+
+      vm.$forceUpdate();
+      await wrapper.vm.$nextTick();
+
+      dynamicAttributes = vm.dynamicAttributes;
+    });
+
+    afterEach(() => {
+      delete childProps['newProp'];
+    });
+
+    it("updates the dynamicAttributes", () => {
+      expect(dynamicAttributes.newProp).toEqual("abc");
+    });
+  });
+
   describe("when initialized with a component supporting standard v-model API", () => {
     let wrapper = null;
     let vm = null;
@@ -226,7 +262,7 @@ describe("ComponentFixture.vue", () => {
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn(function(props) {
+      control = jest.fn(function (props) {
         return this.$createElement(FakeEditor, { props });
       });
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
