@@ -168,39 +168,39 @@ describe("ComponentFixture.vue", () => {
   });
 
   describe("when re-render after update", () => {
-    let wrapper = null;
-    let vm = null;
-    let childProps = null;
-
+    let wrapper;
+    let options;
+    let currentProps;
     beforeEach(async () => {
       wrapper = mountComponentWithDefaultSlot();
-      vm = wrapper.vm;
+      const { vm } = wrapper;
 
       await wrapper.vm.$nextTick();
-
-      expect(vm.$stage).toBe(2);
-
-      childProps = vm.$children[0].$options.props;
-
-      childProps.newProp = {
-        type: String,
-        default: "abc"
+      const { $options } = vm.$children[0];
+      options = $options;
+      currentProps = options.props;
+      const newProps = {
+        ...currentProps, newProp: {
+          type: String,
+          default: "abc"
+        }
       };
 
-      vm.$forceUpdate();
-      await wrapper.vm.$nextTick();
+      options.props = newProps;
 
+      vm.$forceUpdate();
+      await vm.$nextTick();
     });
 
     afterEach(() => {
-      delete childProps["newProp"];
+      options.props = currentProps;
     });
 
     it("updates the dynamicAttributes", async () => {
-      await wrapper.vm.$nextTick();
+      const { vm } = wrapper;
+      await vm.$nextTick();
       const { dynamicAttributes } = vm;
-      console.log(JSON.stringify(dynamicAttributes));
-      //expect(dynamicAttributes.newProp).toEqual("abc");
+      expect(dynamicAttributes.newProp).toEqual("abc");
     });
   });
 
