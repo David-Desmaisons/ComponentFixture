@@ -196,7 +196,8 @@ describe("ComponentFixture.vue", () => {
       delete childProps["newProp"];
     });
 
-    it("updates the dynamicAttributes", () => {
+    it("updates the dynamicAttributes", async () => {
+      await wrapper.vm.$nextTick();
       expect(dynamicAttributes.newProp).toEqual("abc");
     });
   });
