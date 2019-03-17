@@ -179,6 +179,8 @@ describe("ComponentFixture.vue", () => {
 
       await wrapper.vm.$nextTick();
 
+      expect(vm.$stage).toBe(2);
+
       childProps = vm.$children[0].$options.props;
 
       childProps.newProp = {
