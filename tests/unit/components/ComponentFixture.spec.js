@@ -7,7 +7,7 @@ import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -170,7 +170,6 @@ describe("ComponentFixture.vue", () => {
   describe("when re-render after update", () => {
     let wrapper = null;
     let vm = null;
-    let dynamicAttributes = null;
     let childProps = null;
 
     beforeEach(async () => {
@@ -191,7 +190,6 @@ describe("ComponentFixture.vue", () => {
       vm.$forceUpdate();
       await wrapper.vm.$nextTick();
 
-      dynamicAttributes = vm.dynamicAttributes;
     });
 
     afterEach(() => {
@@ -200,6 +198,8 @@ describe("ComponentFixture.vue", () => {
 
     it("updates the dynamicAttributes", async () => {
       await wrapper.vm.$nextTick();
+      const { dynamicAttributes } = vm;
+      console.log(JSON.stringify(dynamicAttributes));
       //expect(dynamicAttributes.newProp).toEqual("abc");
     });
   });
@@ -265,7 +265,7 @@ describe("ComponentFixture.vue", () => {
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn(function(props) {
+      control = jest.fn(function (props) {
         return this.$createElement(FakeEditor, { props });
       });
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
