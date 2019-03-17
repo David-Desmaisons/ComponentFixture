@@ -32,6 +32,6 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
         
       # run tests!
-      - run: npm test:coverage
+      - run: npm run test:coverage
 
 
