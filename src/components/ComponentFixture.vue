@@ -104,7 +104,7 @@ export default {
     return h("div", { class: { main: true } }, [
       h("div", { class: { control: true } }, [
         control({
-          attributes: this.dynamicAttributes,
+          attributes: props,
           componentName,
           propsDefinition
         })
@@ -166,22 +166,3 @@ export default {
   }
 };
 </script>
-<style lang="less">
-.main {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-
-  .component {
-    width: calc(100% - 500px);
-    padding: 40px;
-    border: 1px solid black;
-    border-radius: 5px;
-  }
-
-  .control {
-    height: 100%;
-    width: 500px;
-  }
-}
-</style>

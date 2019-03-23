@@ -117,10 +117,6 @@ export default {
 };
 </script>
 <style lang="less">
-body {
-  font-family: sans-serif;
-  margin: 42px;
-}
 
 .type-select {
   width: 80px;
