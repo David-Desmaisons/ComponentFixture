@@ -106,7 +106,7 @@ export default {
 ### API
 #### slots 
 
-- `control` slot for the form that will edit the props; editor is provided by this library and provide all the faetures.
+- `control` slot for the form that will edit the props; editor is provided by this library and provide all the features.
 
 - `default` Slot for the component under test
 
