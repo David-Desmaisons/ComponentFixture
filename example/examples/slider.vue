@@ -10,7 +10,7 @@
   </sandbox>
 </template>
 <script>
-import sandbox from "./sandbox";
+import Sandbox from "@/components/Sandbox";
 import vueSlider from "vue-slider-component";
 
 export default {
@@ -25,7 +25,7 @@ export default {
     display: "Vue slider"
   },
   components: {
-    sandbox,
+    Sandbox,
     vueSlider
   }
 };

@@ -5,7 +5,7 @@
 </template>
 <script>
 import HelloWorld from "../components/HelloWorld";
-import sandbox from "./sandbox";
+import Sandbox from "@/components/Sandbox";
 
 export default {
   props: {
@@ -19,7 +19,7 @@ export default {
     display: "Hellow world"
   },
   components: {
-    sandbox,
+    Sandbox,
     HelloWorld
   }
 };

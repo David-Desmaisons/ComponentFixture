@@ -8,7 +8,7 @@
 </template>
 <script>
 import { sunburst } from "vue-d3-sunburst";
-import sandbox from "./sandbox";
+import Sandbox from "@/components/Sandbox";
 
 export default {
   props: {
@@ -22,7 +22,7 @@ export default {
     display: "Vue sunburst"
   },
   components: {
-    sandbox,
+    Sandbox,
     sunburst
   }
 };

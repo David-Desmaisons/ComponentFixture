@@ -65,7 +65,7 @@ export default {
 
   render(h) {
     const { default: defaultSlot } = this.$slots;
-    if (!defaultSlot) {
+    if (!defaultSlot || defaultSlot.length !== 1) {
       throw new Error("ComponentFixture should have one unique default slot");
     }
     const { control } = this.$scopedSlots;

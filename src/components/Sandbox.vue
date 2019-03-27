@@ -3,22 +3,23 @@
     <component-fixture :defaults="defaults">
       <!-- Use the default slot to create the component under test -->
       <template v-slot:default>
-        <slot></slot>>
+        <slot/>
       </template>
 
       <!-- Use this slot to enable edition of props values -->
-      <Editor
-        v-show="showEditor"
-        slot="control"
-        slot-scope="scope"
-        v-bind="scope"
-      ></Editor>
+      <template v-slot:control="scope">
+        <Editor
+          v-bind="scope"
+          v-show="showEditor"
+        />
+      </template>
+
     </component-fixture>
   </div>
 </template>
 <script>
-import ComponentFixture from "@/components/ComponentFixture";
-import Editor from "@/components/Editor";
+import ComponentFixture from "./ComponentFixture";
+import Editor from "./Editor";
 
 export default {
   props: {

@@ -4,7 +4,7 @@
   </sandbox>
 </template>
 <script>
-import sandbox from "./sandbox";
+import Sandbox from "@/components/Sandbox";
 
 export default {
   props: {
@@ -18,7 +18,7 @@ export default {
     display: "Vue Svg Gauge"
   },
   components: {
-    sandbox
+    Sandbox
   }
 };
 </script>

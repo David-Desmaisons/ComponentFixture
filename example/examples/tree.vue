@@ -5,7 +5,7 @@
 </template>
 <script>
 import { tree } from "vued3tree";
-import sandbox from "./sandbox";
+import Sandbox from "@/components/Sandbox";
 
 export default {
   props: {
@@ -19,7 +19,7 @@ export default {
     display: "Vue D3 tree"
   },
   components: {
-    sandbox,
+    Sandbox,
     tree
   }
 };
