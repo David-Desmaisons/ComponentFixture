@@ -13,7 +13,7 @@ export default {
       default: true
     }
   },
-  name: "vue=svg-gauge-example",
+  name: "vue-svg-gauge-example",
   meta: {
     display: "Vue Svg Gauge"
   },

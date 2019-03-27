@@ -15,8 +15,6 @@ const [{ path: redirect }, ...dummy] = componentRoutes;
 const routes = [
   { path: "/", redirect },
   ...componentRoutes
-]
-
-window.console.log(routes)
+];
 
 export default routes;
