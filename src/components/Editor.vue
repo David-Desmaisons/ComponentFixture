@@ -1,10 +1,12 @@
 <template>
   <div class="editor">
-    <h1>{{componentName}}</h1>
-    <form>
-      <attributeEditor v-for="prop in props" :key="prop.key" :object="attributes" :attribute="prop.key" :metaData="prop.metaData">
-      </attributeEditor>
-    </form>
+    <attributeEditor
+      v-for="prop in props"
+      :key="prop.key"
+      :object="attributes"
+      :attribute="prop.key"
+      :metaData="prop.metaData"
+    ></attributeEditor>
   </div>
 </template>
 <script>
@@ -43,17 +45,3 @@ export default {
   }
 };
 </script>
-<style lang="less">
-.editor {
-  width: 100%;
-
-  height: 100%;
-
-  form {
-    margin: 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: calc(100% - 60px);
-  }
-}
-</style>
