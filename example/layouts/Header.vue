@@ -2,12 +2,21 @@
   <header class="app__header">
     <nav class="navbar fixed-top">
       <h1 class="navbar-brand mr-auto">
-        <img src="https://raw.githubusercontent.com/David-Desmaisons/ComponentFixture/master/logo.png" alt="Project Logo" />
+        <img
+          src="https://raw.githubusercontent.com/David-Desmaisons/ComponentFixture/master/logo.png"
+          alt="Project Logo"
+        />
         Component Fixture
       </h1>
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">Github</a>
+          <a
+            class="nav-link"
+            href="https://github.com/David-Desmaisons/ComponentFixture"
+            target="_blank"
+          >
+            <i class="fa fa-github"></i>
+          </a>
         </li>
       </ul>
     </nav>
@@ -26,6 +35,10 @@
     img {
       max-width: 40px;
     }
+  }
+  .nav-link {
+    color: black;
+    font-size: 36px;
   }
 }
 </style>

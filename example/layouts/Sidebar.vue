@@ -4,7 +4,6 @@
       <strong>Components</strong>
     </div>
     <div class="sidebar__items list-group">
-      <!-- :class="{'selected': tabSelected(tab.ref)}" -->
       <router-link
         v-for="route in routes"
         :key="route.path"
