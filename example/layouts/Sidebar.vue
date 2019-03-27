@@ -5,39 +5,38 @@
     </div>
     <div class="sidebar__items list-group">
       <a
-        href="#tab-vue-slider"
+        v-for="tab in tabs"
+        :key="tab.ref"
+        @click.prevent="select(tab.ref)"
         class="list-group-item list-group-item-action"
-        :class="{'selected': tabSelected('#tab-vue-slider')}"
-      >Vue Slider Component</a>
-      <a
-        href="#tab-sunburst"
-        class="list-group-item list-group-item-action"
-        :class="{'selected': tabSelected('#tab-sunburst')}"
-      >Sunburst</a>
-      <a
-        href="#tab-tree"
-        class="list-group-item list-group-item-action"
-        :class="{'selected': tabSelected('#tab-tree')}"
-      >D3tree</a>
-      <a
-        href="#tab-hello-world"
-        class="list-group-item list-group-item-action"
-        :class="{'selected': tabSelected('#tab-hello-world')}"
-      >Hello World</a>
-      <a
-        href="#tab-gauge"
-        class="list-group-item list-group-item-action"
-        :class="{'selected': tabSelected('#tab-gauge')}"
-      >Gauge</a>
+        :class="{'selected': tabSelected(tab.ref)}"
+      >{{tab.name}}</a>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  props: {
+    value: String
+  },
+  data() {
+    return {
+      tabs: [
+        { ref: "tab-vue-slider", name: "Vue Slider Component" },
+        { ref: "tab-tree", name: "D3tree" },
+        { ref: "tab-hello-world", name: "Hello World" },
+        { ref: "tab-sunburst", name: "Sunburst" },
+        { ref: "tab-gauge", name: "Gauge" }
+      ]
+    };
+  },
   methods: {
     tabSelected(tab) {
-      return location.hash === tab;
+      return this.value === tab;
+    },
+    select(tab) {
+      this.$emit("input", tab);
     }
   }
 };

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Header/>
-    <Sidebar/>
-    <Content/>
+    <Header />
+    <Sidebar v-model="tab" />
+    <Content :tab="tab" />
   </div>
 </template>
 
@@ -13,6 +13,11 @@ import Content from "./layouts/Content";
 
 export default {
   name: "app",
+  data() {
+    return {
+      tab: null
+    }
+  },
   components: {
     Sidebar,
     Header,
