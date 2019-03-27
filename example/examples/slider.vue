@@ -1,28 +1,16 @@
 <template>
-  <div>
-    <component-fixture :defaults="{value: 45}">
-      <!-- Use the default slot to create the component under test -->
-      <vue-slider>
-        <div
-          class="diy-tooltip"
-          slot="tooltip"
-          slot-scope="{ value }"
-        >{{ value }}</div>
-      </vue-slider>
-
-      <!-- Use this slot to enable edition of props values -->
-      <Editor
-        v-show="showEditor"
-        slot="control"
-        slot-scope="scope"
-        v-bind="scope"
-      ></Editor>
-    </component-fixture>
-  </div>
+  <sandbox :showEditor="showEditor">
+    <vueSlider>
+      <div
+        class="diy-tooltip"
+        slot="tooltip"
+        slot-scope="{ value }"
+      >{{ value }}</div>
+    </vueSlider>
+  </sandbox>
 </template>
 <script>
-import ComponentFixture from "@/components/ComponentFixture";
-import Editor from "@/components/Editor";
+import sandbox from "./sandbox";
 import vueSlider from "vue-slider-component";
 
 export default {
@@ -37,8 +25,7 @@ export default {
     display: "Vue slider"
   },
   components: {
-    ComponentFixture,
-    Editor,
+    sandbox,
     vueSlider
   }
 };

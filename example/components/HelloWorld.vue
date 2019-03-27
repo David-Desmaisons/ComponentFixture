@@ -1,6 +1,7 @@
 <template>
   <div>
     {{msg}}
+    <pre>{{name}}</pre>
   </div>
 </template>
 <script>
@@ -11,7 +12,7 @@ export default {
       type: String,
       default: "msg"
     },
-    name:{
+    name: {
       default: undefined
     }
   }
