@@ -19,114 +19,13 @@
 
         <div class="component__content">
           <div class="components__list">
-            <template v-if="tab === 'tab-vue-slider'">
-              <div
-                class="component__single"
-                id="vue-slider"
-              >
-                <component-fixture :defaults="{value: 45}">
-                  <!-- Use the default slot to create the component under test -->
-                  <vue-slider>
-                    <div
-                      class="diy-tooltip"
-                      slot="tooltip"
-                      slot-scope="{ value }"
-                    >{{ value }}</div>
-                  </vue-slider>
+            <router-view
+              :showEditor="showEditor"
+              :key="$route.fullPath"
+              class="component__single"
+            >
 
-                  <!-- Use this slot to enable edition of props values -->
-                  <Editor
-                    v-show="showEditor"
-                    slot="control"
-                    slot-scope="scope"
-                    v-bind="scope"
-                  ></Editor>
-                </component-fixture>
-              </div>
-            </template>
-            <!-- .component__single -->
-
-            <template v-if="tab === 'tab-sunburst'">
-              <div
-                class="component__single"
-                id="sunburst"
-              >
-                <component-fixture :defaults="{data: {size:220, children:[{size:45}]}}">
-                  <!-- Use the default slot to create the component under test -->
-                  <sunburst></sunburst>
-
-                  <!-- Use this slot to enable edition of props values -->
-                  <Editor
-                    v-show="showEditor"
-                    slot="control"
-                    slot-scope="scope"
-                    v-bind="scope"
-                  ></Editor>
-                </component-fixture>
-              </div>
-            </template>
-
-            <template v-if="tab === 'tab-tree'">
-              <div
-                class="component__single"
-                id="tree"
-              >
-                <component-fixture>
-                  <!-- Use the default slot to create the component under test -->
-                  <tree></tree>
-
-                  <!-- Use this slot to enable edition of props values -->
-                  <Editor
-                    v-show="showEditor"
-                    slot="control"
-                    slot-scope="scope"
-                    v-bind="scope"
-                  ></Editor>
-                </component-fixture>
-              </div>
-            </template>
-
-            <template v-if="tab === 'tab-hello-world'">
-              <div
-                class="component__single"
-                id="hello-world"
-              >
-                <component-fixture>
-                  <!-- Use the default slot to create the component under test -->
-                  <HelloWorld></HelloWorld>
-
-                  <!-- Use this slot to enable edition of props values -->
-                  <Editor
-                    v-show="showEditor"
-                    slot="control"
-                    slot-scope="scope"
-                    v-bind="scope"
-                  ></Editor>
-                </component-fixture>
-              </div>
-            </template>
-            <!-- .component__single -->
-
-            <template v-if="tab === 'tab-gauge'">
-              <div
-                class="component__single"
-                id="gauge"
-              >
-                <component-fixture>
-                  <!-- Use the default slot to create the component under test -->
-                  <VueSvgGauge></VueSvgGauge>
-
-                  <!-- Use this slot to enable edition of props values -->
-                  <Editor
-                    v-show="showEditor"
-                    slot="control"
-                    slot-scope="scope"
-                    v-bind="scope"
-                  ></Editor>
-                </component-fixture>
-              </div>
-            </template>
-            <!-- .component__single -->
+            </router-view>
           </div>
         </div>
       </div>
@@ -135,27 +34,7 @@
 </template>
 
 <script>
-import ComponentFixture from "@/components/ComponentFixture";
-import Editor from "@/components/Editor";
-
-import { tree } from "vued3tree";
-import { sunburst } from "vue-d3-sunburst";
-import vueSlider from "vue-slider-component";
-import "vue-d3-sunburst/dist/vue-d3-sunburst.css";
-import HelloWorld from "../components/HelloWorld";
-
 export default {
-  props: {
-    tab: String
-  },
-  components: {
-    ComponentFixture,
-    Editor,
-    HelloWorld,
-    sunburst,
-    tree,
-    vueSlider
-  },
   data() {
     return {
       showEditor: true

@@ -117,7 +117,6 @@ export default {
 };
 </script>
 <style lang="less">
-
 .type-select {
   width: 80px;
 }

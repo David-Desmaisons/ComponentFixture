@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <Header />
-    <Sidebar v-model="tab" />
-    <Content :tab="tab" />
+    <Sidebar/>
+    <Content/>
   </div>
 </template>
 

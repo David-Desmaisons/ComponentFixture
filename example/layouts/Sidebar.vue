@@ -4,13 +4,15 @@
       <strong>Components</strong>
     </div>
     <div class="sidebar__items list-group">
-      <a
-        v-for="tab in tabs"
-        :key="tab.ref"
-        @click.prevent="select(tab.ref)"
+      <!-- :class="{'selected': tabSelected(tab.ref)}" -->
+      <router-link
+        v-for="route in routes"
+        :key="route.path"
+        :to="route.path"
         class="list-group-item list-group-item-action"
-        :class="{'selected': tabSelected(tab.ref)}"
-      >{{tab.name}}</a>
+      >{{route.meta.display}}
+      </router-link>
+
     </div>
   </div>
 </template>
@@ -20,23 +22,9 @@ export default {
   props: {
     value: String
   },
-  data() {
-    return {
-      tabs: [
-        { ref: "tab-vue-slider", name: "Vue Slider Component" },
-        { ref: "tab-tree", name: "D3tree" },
-        { ref: "tab-hello-world", name: "Hello World" },
-        { ref: "tab-sunburst", name: "Sunburst" },
-        { ref: "tab-gauge", name: "Gauge" }
-      ]
-    };
-  },
-  methods: {
-    tabSelected(tab) {
-      return this.value === tab;
-    },
-    select(tab) {
-      this.$emit("input", tab);
+  computed: {
+    routes() {
+      return this.$router.options.routes.filter(r => r.meta);
     }
   }
 };
