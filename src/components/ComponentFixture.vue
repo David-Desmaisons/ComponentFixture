@@ -28,8 +28,7 @@ export default {
   },
 
   methods: {
-    computedValuesFromProps(component) {
-      const { props, name, model } = component.$options;
+    computedValuesFromProps(component, { props, name, model }) {
       this.componentName = name;
       this.componentModel = model || defaultModel;
 
@@ -64,12 +63,23 @@ export default {
     },
 
     getUnderTestComponent() {
+      if (this.$stage === 1) {
+        const [component] = this.$children;
+        return component;
+      }
+
       const { control } = this.$scopedSlots;
       const firstChild = this.$children[0];
       if (!control) {
         return firstChild;
       }
-      return firstChild.$slots.paneR[0].children[0].componentInstance;
+      return firstChild.$children[2].$children[0];
+    },
+
+    updateValuesFromProps() {
+      const component =  this.getUnderTestComponent();
+      const options = (this.$stage === 1) ? this.$children[0].$options : this.ctor.options;
+      this.computedValuesFromProps(component, options);
     }
   },
 
@@ -81,8 +91,7 @@ export default {
 
     if (this.$stage == 2) {
       //Updates (needed for hot-reload)
-      const component = this.getUnderTestComponent();
-      this.computedValuesFromProps(component);
+      this.updateValuesFromProps();
     }
 
     const [slot] = defaultSlot;
@@ -91,6 +100,7 @@ export default {
     }
 
     const { Ctor: ctor } = slot.componentOptions;
+    this.ctor = ctor;
     const { scopedSlots, slot: childSlot } = slot.data;
     const props = this.dynamicAttributes;
     const { componentName, componentModel, propsDefinition } = this;
@@ -152,9 +162,9 @@ export default {
     if (this.$children.length !== 1) {
       return;
     }
-    const [component] = this.$children;
+
     this.$stage = 1;
-    this.computedValuesFromProps(component);
+    this.updateValuesFromProps();
     this.$forceUpdate();
   },
 
