@@ -13,7 +13,7 @@
             <label
               class="custom-control-label"
               for="customSwitch1"
-            >Show Atributes</label>
+            >Show Props Editor</label>
           </div>
         </div>
 
@@ -23,9 +23,7 @@
               :showEditor="showEditor"
               :key="$route.fullPath"
               class="component__single"
-            >
-
-            </router-view>
+            />
           </div>
         </div>
       </div>
