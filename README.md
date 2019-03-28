@@ -83,8 +83,9 @@ This will be provided on next major version.
   <component-under-test></component-under-test>
 
   <!-- Use this slot to enable edition of props values -->
-  <editor slot="control" slot-scope="scope" v-bind="scope">
-  </editor>
+  <template v-slot:control="scope">
+    <editor v-bind="scope"/>
+  </template>
 
 </component-fixture>
 ```
