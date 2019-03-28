@@ -3,8 +3,8 @@
     <nav class="navbar fixed-top">
       <h1 class="navbar-brand mr-auto">
         <img
-          src="https://raw.githubusercontent.com/David-Desmaisons/ComponentFixture/master/logo.png"
-          alt="Project Logo"
+          src="../assets/logo.png"
+          alt=""
         />
         Component Fixture
       </h1>
