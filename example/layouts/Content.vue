@@ -48,7 +48,6 @@ export default {
 
   .component {
     padding: 40px;
-    height: 100%;
     background: rgba(0, 0, 0, 0.03);
   }
   .component__container {

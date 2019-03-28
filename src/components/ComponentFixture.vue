@@ -1,5 +1,6 @@
 <script>
 import Vue from "vue";
+import splitPane from "vue-splitpane";
 import {
   extractDefaultValue,
   getTypeForProp,
@@ -60,6 +61,15 @@ export default {
           validate: validateProp.bind(null, propsValue)
         });
       });
+    },
+
+    getUnderTestComponent() {
+      const { control } = this.$scopedSlots;
+      const firstChild = this.$children[0];
+      if (!control) {
+        return firstChild;
+      }
+      return firstChild.$slots.paneR[0].children[0].componentInstance;
     }
   },
 
@@ -68,12 +78,10 @@ export default {
     if (!defaultSlot || defaultSlot.length !== 1) {
       throw new Error("ComponentFixture should have one unique default slot");
     }
-    const { control } = this.$scopedSlots;
 
     if (this.$stage == 2) {
       //Updates (needed for hot-reload)
-      const testedComponentIndex = control ? 1 : 0;
-      const component = this.$children[testedComponentIndex];
+      const component = this.getUnderTestComponent();
       this.computedValuesFromProps(component);
     }
 
@@ -97,20 +105,54 @@ export default {
       };
     }
 
+    const { control } = this.$scopedSlots;
     if (!control) {
       return h(ctor, options, []);
     }
 
-    return h("div", { class: { main: true } }, [
-      h("div", { class: { control: true } }, [
-        control({
-          attributes: props,
-          componentName,
-          propsDefinition
-        })
-      ]),
-      h("div", { class: { component: true } }, [h(ctor, options, [])])
-    ]);
+    // return h("div", { class: { main: true } }, [
+    //   h("div", { class: { control: true } }, [
+    //     control({
+    //       attributes: props,
+    //       componentName,
+    //       propsDefinition
+    //     })
+    //   ]),
+    //   h("div", { class: { component: true } }, [h(ctor, options, [])])
+    // ]);
+
+    return h(
+      splitPane,
+      {
+        props: {
+          split: "vertical"
+        }
+      },
+      [
+        h(
+          "div",
+          {
+            class: { control: true, main: true },
+            slot: "paneL"
+          },
+          [
+            control({
+              attributes: props,
+              componentName,
+              propsDefinition
+            })
+          ]
+        ),
+        h(
+          "div",
+          {
+            class: { component: true},
+            slot: "paneR"
+          },
+          [h(ctor, options, [])]
+        )
+      ]
+    );
   },
 
   mounted() {
