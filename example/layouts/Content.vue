@@ -108,13 +108,16 @@ export default {
     }
   }
 
+  .main-panel {
+    height: calc(100vh - 140px) !important;
+  }
+
   .component__single {
     .main {
       display: flex;
 
       > div {
         flex-grow: 1;
-        width: 50%;
         height: calc(100vh - 186px);
         overflow-x: hidden;
         overflow-y: auto;

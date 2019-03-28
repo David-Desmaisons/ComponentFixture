@@ -110,22 +110,15 @@ export default {
       return h(ctor, options, []);
     }
 
-    // return h("div", { class: { main: true } }, [
-    //   h("div", { class: { control: true } }, [
-    //     control({
-    //       attributes: props,
-    //       componentName,
-    //       propsDefinition
-    //     })
-    //   ]),
-    //   h("div", { class: { component: true } }, [h(ctor, options, [])])
-    // ]);
-
     return h(
       splitPane,
       {
+        class: {
+          "main-panel": true
+        },
         props: {
-          split: "vertical"
+          split: "vertical",
+          defaultPercent: 30
         }
       },
       [
@@ -146,7 +139,7 @@ export default {
         h(
           "div",
           {
-            class: { component: true},
+            class: { component: true },
             slot: "paneR"
           },
           [h(ctor, options, [])]
