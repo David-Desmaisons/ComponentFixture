@@ -1,11 +1,14 @@
 <template>
-  <div class="form-group row">
+  <div class="row">
 
     <div
       v-tooltip="{content:type, placement: 'left', offset: -5}"
       class="col-md-auto"
     >
-      <span class="badge badge-secondary type-decriptor">
+      <span
+        class="badge type-decriptor"
+        :class="badge"
+      >
         <template v-if="types.length === 1">
           <span>
             {{convert(type)}}
@@ -13,10 +16,7 @@
         </template>
 
         <template v-else>
-          <select
-            class="form-control form-control-sm"
-            v-model="type"
-          >
+          <select v-model="type">
             <option
               v-for="typeDescription in avalaibleTypes"
               :value="typeDescription.value"
@@ -111,6 +111,9 @@ export default {
     },
     componentType() {
       return typesDescription[this.type].component;
+    },
+    badge() {
+      return typesDescription[this.type].badge;
     }
   },
 
@@ -174,6 +177,7 @@ export default {
     padding: 0;
     margin-left: 12px;
     margin-top: -10px;
+    outline: transparent;
 
     option {
       background: transparent;
