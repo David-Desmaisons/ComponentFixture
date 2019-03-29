@@ -1,45 +1,37 @@
 <template>
   <div class="row">
+    <div class="col col-md-auto">
+      <div class="description">
+        <div
+          class="badge type-decriptor"
+          v-tooltip="{content:type, placement: 'left'}"
+          :class="badge"
+        >
+          <template v-if="types.length === 1">
+            <span>{{convert(type)}}</span>
+          </template>
 
-    <div
-      v-tooltip="{content:type, placement: 'left', offset: -5}"
-      class="col-md-auto"
-    >
-      <span
-        class="badge type-decriptor"
-        :class="badge"
-      >
-        <template v-if="types.length === 1">
-          <span>
-            {{convert(type)}}
-          </span>
-        </template>
+          <template v-else>
+            <select v-model="type">
+              <option
+                v-for="typeDescription in avalaibleTypes"
+                :value="typeDescription.value"
+                :key="typeDescription.value"
+              >{{typeDescription.display}}</option>
+            </select>
+          </template>
+        </div>
 
-        <template v-else>
-          <select v-model="type">
-            <option
-              v-for="typeDescription in avalaibleTypes"
-              :value="typeDescription.value"
-              :key="typeDescription.value"
-            >{{typeDescription.display}}</option>
-          </select>
-        </template>
-      </span>
-
+        <div :for="'attribute-'+attribute" class="label">{{attribute}}</div>
+      </div>
     </div>
 
-    <label
-      :for="'attribute-'+attribute"
-      class="col-sm-4 col-form-label"
-    >{{attribute}}</label>
-
-    <div class="col-sm-6">
+    <div class="col">
       <component
         :is="componentType"
         v-bind="{object, attribute, metaData, types, value:object[attribute]}"
       />
     </div>
-
   </div>
 </template> 
 <script>
@@ -129,9 +121,20 @@ export default {
   width: 80px;
 }
 
+.description{
+  display: flex;
+  flex-direction: row;
+   align-items: center;
+}
+
+.label {
+  margin-left: 10px;
+}
+
 .tooltip {
   display: block !important;
   z-index: 10000;
+  font-size: 12px;
 }
 
 .tooltip .tooltip-inner {
@@ -166,16 +169,17 @@ export default {
 }
 
 .type-decriptor {
-  width: 50px;
+  width: 30px;
   height: 26px;
   padding-top: 6px;
+  margin-left: 10px;
 
   select {
     background: transparent;
     color: white;
     border: transparent;
     padding: 0;
-    margin-left: 12px;
+    margin-left: -3px;
     margin-top: -10px;
     outline: transparent;
 

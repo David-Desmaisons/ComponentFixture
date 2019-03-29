@@ -1,12 +1,14 @@
 <template>
   <div class="editor">
-    <attributeEditor
-      v-for="prop in props"
-      :key="prop.key"
-      :object="attributes"
-      :attribute="prop.key"
-      :metaData="prop.metaData"
-    ></attributeEditor>
+    <!-- <template > -->
+      <attributeEditor v-for="prop in props"
+        :key="prop.key"
+        :object="attributes"
+        :attribute="prop.key"
+        :metaData="prop.metaData"
+      />
+      <!-- <div class="w-100" :key="prop.key"></div> 
+    </template>-->
   </div>
 </template>
 <script>
@@ -44,4 +46,13 @@ export default {
     }
   }
 };
-</script>
+</script><style lang="less" scoped>
+.editor {
+  font-size: 12px;
+
+  /deep/ input {
+    font-size: 12px;
+  }
+}
+</style>
+
