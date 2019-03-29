@@ -77,8 +77,9 @@ export default {
     },
 
     updateValuesFromProps() {
-      const component =  this.getUnderTestComponent();
-      const options = (this.$stage === 1) ? this.$children[0].$options : this.ctor.options;
+      const component = this.getUnderTestComponent();
+      const options =
+        this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
     }
   },

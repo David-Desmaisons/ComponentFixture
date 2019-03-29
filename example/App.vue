@@ -13,11 +13,6 @@ import Content from "./layouts/Content";
 
 export default {
   name: "app",
-  data() {
-    return {
-      tab: null
-    }
-  },
   components: {
     Sidebar,
     Header,

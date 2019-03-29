@@ -3,18 +3,7 @@
     <div class="component">
       <div class="component__container">
         <div class="component__segment">
-          <div class="custom-control custom-switch">
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="customSwitch1"
-              v-model="showEditor"
-            >
-            <label
-              class="custom-control-label"
-              for="customSwitch1"
-            >Show Props Editor</label>
-          </div>
+          <switch-component v-model="showEditor" label="Show Props Editor"/>
         </div>
 
         <div class="component__content">
@@ -32,7 +21,11 @@
 </template>
 
 <script>
+import switchComponent from "@/components/switch";
 export default {
+  components: {
+    switchComponent
+  },
   data() {
     return {
       showEditor: true
@@ -149,46 +142,6 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-  }
-
-  .custom-switch {
-    margin: 0 20px;
-    cursor: pointer;
-
-    label {
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    .custom-control-label::before {
-      left: -2.25rem;
-      width: 1.75rem;
-      pointer-events: all;
-      border-radius: 0.5rem;
-    }
-    .custom-control-label::after {
-      top: calc(0.25rem + 2px);
-      left: calc(-2.25rem + 2px);
-      width: calc(1rem - 4px);
-      height: calc(1rem - 4px);
-      background-color: #adb5bd;
-
-      border-radius: 0.5rem;
-      transition: background-color 0.15s ease-in-out,
-        border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out,
-        -webkit-transform 0.15s ease-in-out;
-      transition: transform 0.15s ease-in-out,
-        background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out;
-      transition: transform 0.15s ease-in-out,
-        background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
-        box-shadow 0.15s ease-in-out, -webkit-transform 0.15s ease-in-out;
-    }
-    .custom-control-input:checked ~ .custom-control-label::after {
-      background-color: #fff;
-      -webkit-transform: translateX(0.75rem);
-      transform: translateX(0.75rem);
     }
   }
 }
