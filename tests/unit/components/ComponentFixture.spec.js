@@ -176,8 +176,8 @@ describe("ComponentFixture.vue", () => {
       const { vm } = wrapper;
 
       await wrapper.vm.$nextTick();
-      const { $options } = vm.$children[0];
-      options = $options;
+
+      options = vm.ctor.options;
       currentProps = options.props;
       const newProps = {
         ...currentProps,
@@ -186,7 +186,6 @@ describe("ComponentFixture.vue", () => {
           default: "abc"
         }
       };
-
       options.props = newProps;
 
       vm.$forceUpdate();
