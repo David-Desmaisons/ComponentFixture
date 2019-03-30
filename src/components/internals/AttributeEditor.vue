@@ -22,7 +22,10 @@
           </template>
         </div>
 
-        <div :for="'attribute-'+attribute" class="label">{{attribute}}</div>
+        <div
+          :for="'attribute-'+attribute"
+          class="label"
+        >{{attribute}}</div>
       </div>
     </div>
 
@@ -82,11 +85,21 @@ export default {
   },
 
   data() {
-    const { types } = this.metaData;
-    const type = getDefaultType(types, this.object[this.attribute]);
     return {
-      type
+      type: null
     };
+  },
+
+  watch: {
+    "metaData.types": {
+      handler(types) {
+        if (types.includes(this.type)){
+          return;
+        }
+        this.type = getDefaultType(types, this.object[this.attribute]);
+      },
+      immediate: true
+    }
   },
 
   computed: {
@@ -121,10 +134,10 @@ export default {
   width: 80px;
 }
 
-.description{
+.description {
   display: flex;
   flex-direction: row;
-   align-items: center;
+  align-items: center;
 }
 
 .label {

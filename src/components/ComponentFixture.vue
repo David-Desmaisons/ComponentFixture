@@ -6,6 +6,7 @@ import {
   getTypeForProp,
   validateProp
 } from "@/utils/VueHelper";
+import compare from "@/utils/compare";
 
 const defaultModel = {
   event: "input",
@@ -31,10 +32,9 @@ export default {
     computedValuesFromProps(component, { props, name, model }) {
       this.componentName = name;
       this.componentModel = model || defaultModel;
+      const photo = Object.assign({}, props);
 
-      const photo = JSON.stringify(props);
-
-      if (photo === this.$photo) {
+      if (this.$photo !== undefined && compare(photo, this.$photo)) {
         return;
       }
 
