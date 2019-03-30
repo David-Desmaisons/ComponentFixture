@@ -3,7 +3,8 @@
     <div class="component">
       <div class="component__container">
         <div class="component__segment">
-          <switch-component v-model="showEditor" label="Show Props Editor"/>
+          <switch-component v-model="showEditor"/>
+          <label>Show Props Editor</label>
         </div>
 
         <div class="component__content">

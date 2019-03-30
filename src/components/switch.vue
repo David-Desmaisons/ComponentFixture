@@ -10,7 +10,8 @@
     <label
       class="custom-control-label"
       :for="id"
-    >{{label}}</label>
+    ></label>
+
   </div>
 </template>
 <script>
@@ -20,10 +21,6 @@ export default {
     value: {
       type: Boolean,
       default: false
-    },
-    label: {
-      type: String,
-      default: ""
     }
   },
   data() {
@@ -46,6 +43,10 @@ export default {
   label {
     font-weight: 500;
     cursor: pointer;
+  }
+
+  .custom-control-label {
+    position: absolute;
   }
 
   .custom-control-label::before {
