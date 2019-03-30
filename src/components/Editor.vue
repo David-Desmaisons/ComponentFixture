@@ -50,6 +50,7 @@ export default {
 
   /deep/ input {
     font-size: 12px;
+    height: 28px;
   }
 }
 </style>

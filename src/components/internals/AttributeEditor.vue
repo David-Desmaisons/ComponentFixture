@@ -93,7 +93,7 @@ export default {
   watch: {
     "metaData.types": {
       handler(types) {
-        if (types.includes(this.type)){
+        if (types.includes(this.type)) {
           return;
         }
         this.type = getDefaultType(types, this.object[this.attribute]);
@@ -182,7 +182,8 @@ export default {
 }
 
 .type-decriptor {
-  width: 30px;
+  width: 36px;
+  font-size: 12px;
   height: 26px;
   padding-top: 6px;
   margin-left: 10px;
