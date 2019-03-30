@@ -188,6 +188,13 @@ export default {
   padding-top: 6px;
   margin-left: 10px;
 
+  option {
+    background: gray;
+    color: white;
+    text-align: center;
+    font-size: 12px;
+  }
+
   select {
     background: transparent;
     color: white;
@@ -196,15 +203,6 @@ export default {
     margin-left: -3px;
     margin-top: -10px;
     outline: transparent;
-
-    option {
-      background: transparent;
-      color: white;
-      border: transparent;
-      padding: 0;
-      margin-left: 12px;
-      margin-top: -5px;
-    }
   }
 }
 
