@@ -1,40 +1,32 @@
 <template>
-  <div class="row">
-    <div class="col col-md-auto">
-      <div class="description">
-        <div
-          class="badge type-decriptor"
-          v-tooltip="{content:type, placement: 'left'}"
-          :class="badge"
-        >
-          <template v-if="types.length === 1">
-            <span>{{convert(type)}}</span>
-          </template>
+  <div class="attribute-component">
+    <div
+      class="badge type-decriptor"
+      v-tooltip="{content:type,placement:'left'}"
+      :class="badge"
+    >
+      <template v-if="types.length === 1">
+        {{convert(type)}}
+      </template>
 
-          <template v-else>
-            <select v-model="type">
-              <option
-                v-for="typeDescription in avalaibleTypes"
-                :value="typeDescription.value"
-                :key="typeDescription.value"
-              >{{typeDescription.display}}</option>
-            </select>
-          </template>
-        </div>
-
-        <div
-          :for="'attribute-'+attribute"
-          class="label"
-        >{{attribute}}</div>
-      </div>
+      <template v-else>
+        <select v-model="type">
+          <option
+            v-for="typeDescription in avalaibleTypes"
+            :value="typeDescription.value"
+            :key="typeDescription.value"
+          >{{typeDescription.display}}</option>
+        </select>
+      </template>
     </div>
 
-    <div class="col">
-      <component
-        :is="componentType"
-        v-bind="{object, attribute, metaData, types, value:object[attribute]}"
-      />
-    </div>
+    <div class="label">{{attribute}}</div>
+
+    <component
+      class="component-input"
+      :is="componentType"
+      v-bind="{object, attribute, metaData, types, value:object[attribute]}"
+    />
   </div>
 </template> 
 <script>
@@ -130,14 +122,56 @@ export default {
 };
 </script>
 <style lang="less">
-.type-select {
-  width: 80px;
-}
-
-.description {
+.attribute-component {
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 30px;
+  margin-right: 30px;
+
+  div {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .badge.type-decriptor {
+    width: 36px;
+    min-width: 36px;
+    font-size: 12px;
+    height: 26px;
+    padding-top: 6px;
+    flex-basis: 36px;
+
+    select {
+      background: transparent;
+      color: white;
+      border: transparent;
+      padding: 0;
+      margin-left: -3px;
+      margin-top: -10px;
+      outline: transparent;
+
+      option {
+        background: lightgray;
+        color: white;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      option:hover {
+        background: black;
+        color: white;
+      }
+    }
+  }
+
+  div.component-input {
+    flex-grow: 2;
+  }
+}
+
+.type-select {
+  width: 80px;
 }
 
 .label {
@@ -179,36 +213,6 @@ export default {
   left: calc(50% - 5px);
   margin-top: 0;
   margin-bottom: 0;
-}
-
-.type-decriptor {
-  width: 36px;
-  font-size: 12px;
-  height: 26px;
-  padding-top: 6px;
-  margin-left: 10px;
-
-  select {
-    background: transparent;
-    color: white;
-    border: transparent;
-    padding: 0;
-    margin-left: -3px;
-    margin-top: -10px;
-    outline: transparent;
-
-    option {
-      background: lightgray;
-      color: white;
-      text-align: center;
-      font-size: 12px;
-    }
-
-    option:hover {
-      background: black;
-      color: white;
-    }
-  }
 }
 
 .tooltip[x-placement^="bottom"] {
