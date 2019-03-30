@@ -1,71 +1,44 @@
 <template>
-  <div class="form-group row">
-    <label
-      :for="'attribute-'+attribute"
-      class="col-sm-4 col-form-label"
-    >{{attribute}}</label>
-
+  <div class="attribute-component">
     <div
-      v-tooltip="{content:type, placement: 'top', offset: -5}"
-      class="col-sm-2 col-form-label"
+      class="badge type-decriptor"
+      v-tooltip="{content:type,placement:'left'}"
+      :class="badge"
     >
-      <select
-        class="form-control form-control-sm"
-        :disabled="types.length === 1"
-        v-model="type"
-      >
-        <option
-          v-for="typeDescription in avalaibleTypes"
-          :value="typeDescription.value"
-          :key="typeDescription.value"
-        >{{typeDescription.display}}</option>
-      </select>
+      <template v-if="types.length === 1">
+        {{convert(type)}}
+      </template>
+
+      <template v-else>
+        <select v-model="type">
+          <option
+            v-for="typeDescription in avalaibleTypes"
+            :value="typeDescription.value"
+            :key="typeDescription.value"
+          >{{typeDescription.display}}</option>
+        </select>
+      </template>
     </div>
 
-    <div class="col-sm-6">
-      <input
-        v-if="type === 'Boolean'"
-        :id="'attribute-'+attribute"
-        v-model="object[attribute]"
-        type="checkbox"
-        class="checkbox control-input"
-      />
-      <numberAttributeEditor
-        v-else-if="type === 'Number'"
-        v-bind="{object, attribute, metaData, value:object[attribute]}"
-      ></numberAttributeEditor>
-      <stringAttributeEditor
-        v-else-if="type === 'String'"
-        v-bind="{object, attribute, metaData, value:object[attribute]}"
-      />
-      <functionAttributeEditor
-        v-else-if="type === 'Function'"
-        v-bind="{object, attribute, metaData}"
-      ></functionAttributeEditor>
-      <jsonAttributeEditor
-        v-else
-        v-bind="{object, attribute, metaData, types, value:object[attribute]}"
-      ></jsonAttributeEditor>
-    </div>
+    <div class="label">{{attribute}}</div>
 
+    <component
+      class="component-input"
+      :is="componentType"
+      v-bind="{object, attribute, metaData, types, value:object[attribute]}"
+    />
   </div>
 </template> 
 <script>
-import { VTooltip } from "v-tooltip";
 import jsonAttributeEditor from "./JsonAttributeEditor";
 import functionAttributeEditor from "./FunctionAttributeEditor";
 import numberAttributeEditor from "./NumberAttributeEditor";
 import stringAttributeEditor from "./StringAttributeEditor";
-import { getTypeFromValue } from "@/utils/TypeHelper";
+import booleanAttributeEditor from "./BooleanAttributeEditor";
 
-const typesDescription = [
-  { display: "{}", value: "Object" },
-  { display: "[]", value: "Array" },
-  { display: "Π", value: "Number" },
-  { display: '""', value: "String" },
-  { display: "&&", value: "Boolean" },
-  { display: "=>", value: "Function" }
-];
+import { VTooltip } from "v-tooltip";
+import { getTypeFromValue } from "@/utils/TypeHelper";
+import typesDescription from "./typesDescription";
 
 function getDefaultType(types, defaultValue) {
   if (types.length === 1) {
@@ -84,7 +57,8 @@ export default {
     jsonAttributeEditor,
     functionAttributeEditor,
     numberAttributeEditor,
-    stringAttributeEditor
+    stringAttributeEditor,
+    booleanAttributeEditor
   },
 
   props: {
@@ -102,28 +76,112 @@ export default {
     }
   },
 
+  data() {
+    return {
+      type: null
+    };
+  },
+
+  watch: {
+    "metaData.types": {
+      handler(types) {
+        if (types.includes(this.type)) {
+          return;
+        }
+        this.type = getDefaultType(types, this.object[this.attribute]);
+      },
+      immediate: true
+    }
+  },
+
   computed: {
-    type() {
-      const { types } = this.metaData;
-      return getDefaultType(types, this.object[this.attribute]);
-    },
     types() {
       return this.metaData.types;
     },
     avalaibleTypes() {
-      return typesDescription.filter(t => this.types.indexOf(t.value) !== -1);
+      return Object.keys(typesDescription)
+        .filter(t => this.types.indexOf(t) !== -1)
+        .map(key => ({
+          display: typesDescription[key].display,
+          value: key
+        }));
+    },
+    componentType() {
+      return typesDescription[this.type].component;
+    },
+    badge() {
+      return typesDescription[this.type].badge;
+    }
+  },
+
+  methods: {
+    convert(type) {
+      return typesDescription[type].display;
     }
   }
 };
 </script>
 <style lang="less">
+.attribute-component {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 30px;
+  margin-right: 30px;
+
+  div {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .badge.type-decriptor {
+    width: 36px;
+    min-width: 36px;
+    font-size: 12px;
+    height: 26px;
+    padding-top: 6px;
+    flex-basis: 36px;
+
+    select {
+      background: transparent;
+      color: white;
+      border: transparent;
+      padding: 0;
+      margin-left: -3px;
+      margin-top: -10px;
+      outline: transparent;
+
+      option {
+        background: lightgray;
+        color: white;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      option:hover {
+        background: black;
+        color: white;
+      }
+    }
+  }
+
+  div.component-input {
+    flex-grow: 2;
+  }
+}
+
 .type-select {
   width: 80px;
+}
+
+.label {
+  margin-left: 10px;
 }
 
 .tooltip {
   display: block !important;
   z-index: 10000;
+  font-size: 12px;
 }
 
 .tooltip .tooltip-inner {

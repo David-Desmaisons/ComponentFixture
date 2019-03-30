@@ -7,7 +7,7 @@ import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -17,6 +17,22 @@ const mountComponentWithDefaultSlot = (arg = {}) => {
     }
   });
 };
+
+const mountComponentWithDefaultSlotAndControllerSlot = control =>
+  shallowMount(ComponentFixture, {
+    slots: {
+      default: FakeComponent
+    },
+    scopedSlots: {
+      control
+    }
+  });
+
+const buildFakeEditor = () => {
+  return jest.fn(function (props) {
+    return this.$createElement(FakeEditor, { props });
+  });
+}
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
@@ -167,43 +183,46 @@ describe("ComponentFixture.vue", () => {
     });
   });
 
-  describe("when re-render after update", () => {
-    let wrapper;
-    let options;
-    let currentProps;
-    beforeEach(async () => {
-      wrapper = mountComponentWithDefaultSlot();
-      const { vm } = wrapper;
+  describe.each([
+    ["mounted with default", mountComponentWithDefaultSlot],
+    ["mounted with control slot", () => mountComponentWithDefaultSlotAndControllerSlot( buildFakeEditor())]
+  ])
+    ("when %s and re-rendered after update", (_, factory) => {
+      let wrapper;
+      let options;
+      let currentProps;
+      beforeEach(async () => {
+        wrapper = factory();
+        const { vm } = wrapper;
 
-      await wrapper.vm.$nextTick();
-      const { $options } = vm.$children[0];
-      options = $options;
-      currentProps = options.props;
-      const newProps = {
-        ...currentProps,
-        newProp: {
-          type: String,
-          default: "abc"
-        }
-      };
+        await wrapper.vm.$nextTick();
 
-      options.props = newProps;
+        options = vm.ctor.options;
+        currentProps = options.props;
+        const newProps = {
+          ...currentProps,
+          newProp: {
+            type: String,
+            default: "abc"
+          }
+        };
+        options.props = newProps;
 
-      vm.$forceUpdate();
-      await vm.$nextTick();
+        vm.$forceUpdate();
+        await vm.$nextTick();
+      });
+
+      afterEach(() => {
+        options.props = currentProps;
+      });
+
+      it("updates the dynamicAttributes", async () => {
+        const { vm } = wrapper;
+        await vm.$nextTick();
+        const { dynamicAttributes } = vm;
+        expect(dynamicAttributes.newProp).toEqual("abc");
+      });
     });
-
-    afterEach(() => {
-      options.props = currentProps;
-    });
-
-    it("updates the dynamicAttributes", async () => {
-      const { vm } = wrapper;
-      await vm.$nextTick();
-      const { dynamicAttributes } = vm;
-      expect(dynamicAttributes.newProp).toEqual("abc");
-    });
-  });
 
   describe("when initialized with a component supporting standard v-model API", () => {
     let wrapper = null;
@@ -252,23 +271,11 @@ describe("ComponentFixture.vue", () => {
   });
 
   describe("when initialized with a controller slot", () => {
-    const mountComponentWithDefaultSlotAndControllerSlot = control =>
-      shallowMount(ComponentFixture, {
-        slots: {
-          default: FakeComponent
-        },
-        scopedSlots: {
-          control
-        }
-      });
-
     let wrapper = null;
     let control = null;
 
     beforeEach(() => {
-      control = jest.fn(function(props) {
-        return this.$createElement(FakeEditor, { props });
-      });
+      control = buildFakeEditor();
       wrapper = mountComponentWithDefaultSlotAndControllerSlot(control);
     });
 

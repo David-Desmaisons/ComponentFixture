@@ -1,10 +1,12 @@
 <script>
 import Vue from "vue";
+import splitPane from "vue-splitpane";
 import {
   extractDefaultValue,
   getTypeForProp,
   validateProp
 } from "@/utils/VueHelper";
+import compare from "@/utils/compare";
 
 const defaultModel = {
   event: "input",
@@ -27,14 +29,12 @@ export default {
   },
 
   methods: {
-    computedValuesFromProps(component) {
-      const { props, name, model } = component.$options;
+    computedValuesFromProps(component, { props, name, model }) {
       this.componentName = name;
       this.componentModel = model || defaultModel;
+      const photo = Object.assign({}, props);
 
-      const photo = JSON.stringify(props);
-
-      if (photo === this.$photo) {
+      if (this.$photo !== undefined && compare(photo, this.$photo)) {
         return;
       }
 
@@ -60,6 +60,27 @@ export default {
           validate: validateProp.bind(null, propsValue)
         });
       });
+    },
+
+    getUnderTestComponent() {
+      if (this.$stage === 1) {
+        const [component] = this.$children;
+        return component;
+      }
+
+      const { control } = this.$scopedSlots;
+      const firstChild = this.$children[0];
+      if (!control) {
+        return firstChild;
+      }
+      return firstChild.$children[2].$children[0];
+    },
+
+    updateValuesFromProps() {
+      const component = this.getUnderTestComponent();
+      const options =
+        this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
+      this.computedValuesFromProps(component, options);
     }
   },
 
@@ -68,13 +89,10 @@ export default {
     if (!defaultSlot || defaultSlot.length !== 1) {
       throw new Error("ComponentFixture should have one unique default slot");
     }
-    const { control } = this.$scopedSlots;
 
     if (this.$stage == 2) {
       //Updates (needed for hot-reload)
-      const testedComponentIndex = control ? 1 : 0;
-      const component = this.$children[testedComponentIndex];
-      this.computedValuesFromProps(component);
+      this.updateValuesFromProps();
     }
 
     const [slot] = defaultSlot;
@@ -83,6 +101,7 @@ export default {
     }
 
     const { Ctor: ctor } = slot.componentOptions;
+    this.ctor = ctor;
     const { scopedSlots, slot: childSlot } = slot.data;
     const props = this.dynamicAttributes;
     const { componentName, componentModel, propsDefinition } = this;
@@ -97,29 +116,56 @@ export default {
       };
     }
 
+    const { control } = this.$scopedSlots;
     if (!control) {
       return h(ctor, options, []);
     }
 
-    return h("div", { class: { main: true } }, [
-      h("div", { class: { control: true } }, [
-        control({
-          attributes: props,
-          componentName,
-          propsDefinition
-        })
-      ]),
-      h("div", { class: { component: true } }, [h(ctor, options, [])])
-    ]);
+    return h(
+      splitPane,
+      {
+        class: {
+          "main-panel": true
+        },
+        props: {
+          split: "vertical",
+          defaultPercent: 30
+        }
+      },
+      [
+        h(
+          "div",
+          {
+            class: { control: true, main: true },
+            slot: "paneL"
+          },
+          [
+            control({
+              attributes: props,
+              componentName,
+              propsDefinition
+            })
+          ]
+        ),
+        h(
+          "div",
+          {
+            class: { component: true },
+            slot: "paneR"
+          },
+          [h(ctor, options, [])]
+        )
+      ]
+    );
   },
 
   mounted() {
     if (this.$children.length !== 1) {
       return;
     }
-    const [component] = this.$children;
+
     this.$stage = 1;
-    this.computedValuesFromProps(component);
+    this.updateValuesFromProps();
     this.$forceUpdate();
   },
 

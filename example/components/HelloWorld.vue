@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{msg}}
+    {{message}}
     <pre>{{name}}</pre>
   </div>
 </template>
@@ -8,9 +8,9 @@
 export default {
   name: "hello",
   props: {
-    msg: {
+    message: {
       type: String,
-      default: "msg"
+      default: "message"
     },
     name: {
       default: undefined

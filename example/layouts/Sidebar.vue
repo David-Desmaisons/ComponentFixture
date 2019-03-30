@@ -9,6 +9,7 @@
         :key="route.path"
         :to="route.path"
         class="list-group-item list-group-item-action"
+        :class="{selected: $route.path === route.path}"
       >{{route.meta.display}}
       </router-link>
 
@@ -45,6 +46,10 @@ export default {
     font-size: 14px;
     text-transform: uppercase;
     padding: 10px 20px;
+  }
+
+  .selected {
+    background-color: #f8f9fa;
   }
 
   .sidebar__items {

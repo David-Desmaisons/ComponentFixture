@@ -6,7 +6,7 @@
       :object="attributes"
       :attribute="prop.key"
       :metaData="prop.metaData"
-    ></attributeEditor>
+    />
   </div>
 </template>
 <script>
@@ -44,4 +44,13 @@ export default {
     }
   }
 };
-</script>
+</script><style lang="less" scoped>
+.editor {
+  font-size: 12px;
+
+  /deep/ input {
+    font-size: 12px;
+    height: 28px;
+  }
+}
+</style>
