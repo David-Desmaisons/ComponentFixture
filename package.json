@@ -4,12 +4,12 @@
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve ./example/main.js --open",
-    "example:build": "vue-cli-service build --modern --entry ./example/main.js --dest docs",
+    "build:doc": "vue-cli-service build --modern --entry ./example/main.js --dest docs",
     "build": "vue-cli-service build --name ComponentFixture --entry ./src/index.js --target lib",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit --coverage",
     "test:coverage": "vue-cli-service test:unit --coverage --verbose && codecov",
-    "prepublishOnly": "npm run lint && npm run test:unit && npm run example:build && npm run build",
+    "prepublishOnly": "npm run lint && npm run test:unit && npm run build:doc && npm run build",
     "doc:build": "npx vuedoc.md --section API --output ./README.md ./src/components/ComponentFixture.vue"
   },
   "dependencies": {
