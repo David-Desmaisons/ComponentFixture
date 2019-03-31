@@ -1,9 +1,12 @@
 <template>
   <div>
-    <component-fixture :defaults="defaults">
+    <component-fixture
+      :defaults="defaults"
+      ref="fixture"
+    >
       <!-- Use the default slot to create the component under test -->
       <template v-slot:default>
-        <slot/>
+        <slot />
       </template>
 
       <!-- Use this slot to enable edition of props values -->
@@ -36,6 +39,11 @@ export default {
   components: {
     ComponentFixture,
     Editor
+  },
+  methods: {
+    update() {
+      this.$$refs.fixture.$forceUpdate();
+    }
   }
 };
 </script>

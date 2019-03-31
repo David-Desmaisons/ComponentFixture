@@ -81,6 +81,10 @@ export default {
       const options =
         this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
+    },
+
+    update() {
+      this.$$refs.cut.$forceUpdate();
     }
   },
 
