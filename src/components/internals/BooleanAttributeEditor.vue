@@ -1,6 +1,6 @@
 <template>
   <div>
-    <switch-component v-model="value" />
+    <switch-component v-model="object[attribute]" />
   </div>
 </template>
 <script>
@@ -8,9 +8,13 @@ import switchComponent from "@/components/switch";
 
 export default {
   props: {
-    value: {
+    attribute: {
+      required: false,
+      type: String
+    },
+    object: {
       required: true,
-      type: Boolean
+      type: Object
     }
   },
 
