@@ -110,7 +110,13 @@ export default {
     const props = this.dynamicAttributes;
     const { componentName, componentModel, propsDefinition } = this;
     const { event, prop } = componentModel;
-    const options = { props, scopedSlots, slot: childSlot, ref: "cut" };
+    const options = {
+      props,
+      scopedSlots,
+      slot: childSlot,
+      class: { "real-component": true },
+      ref: "cut"
+    };
 
     if (props.hasOwnProperty(prop)) {
       options.on = {
