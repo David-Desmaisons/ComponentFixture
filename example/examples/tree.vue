@@ -1,7 +1,7 @@
 <template>
   <sandbox
     :showEditor="showEditor"
-    :defaults="{data, nodeText}"
+    :defaults="{data}"
   >
     <tree></tree>
   </sandbox>
