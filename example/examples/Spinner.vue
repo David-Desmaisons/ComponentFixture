@@ -1,17 +1,11 @@
 <template>
   <sandbox :showEditor="showEditor">
-    <vueSlider>
-      <div
-        class="diy-tooltip"
-        slot="tooltip"
-        slot-scope="{ value }"
-      >{{ value }}</div>
-    </vueSlider>
+    <AtomSpinner></AtomSpinner>
   </sandbox>
 </template>
 <script>
 import Sandbox from "@/components/Sandbox";
-import vueSlider from "vue-slider-component";
+import {AtomSpinner} from 'epic-spinners'
 
 export default {
   props: {
@@ -20,13 +14,13 @@ export default {
       default: true
     }
   },
-  name: "slider-example",
+  name: "AtomSpinner-example",
   meta: {
-    display: "Vue slider"
+    display: "Epic slider"
   },
   components: {
     Sandbox,
-    vueSlider
+    AtomSpinner
   }
 };
 </script>

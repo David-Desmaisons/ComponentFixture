@@ -30,6 +30,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
     "codecov": "^3.1.0",
+    "epic-spinners": "^1.0.4",
     "jquery": "^3.3.1",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
@@ -37,7 +38,6 @@
     "vue-cli-plugin-component": "^1.7.1",
     "vue-d3-sunburst": "^0.1.10",
     "vue-router": "^3.0.2",
-    "vue-slider-component": "^2.7.7",
     "vue-svg-gauge": "^1.0.0",
     "vue-template-compiler": "^2.6.9",
     "vued3tree": "^3.6.4"
