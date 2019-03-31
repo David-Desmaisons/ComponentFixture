@@ -40,7 +40,7 @@
     "vue-router": "^3.0.2",
     "vue-svg-gauge": "^1.0.0",
     "vue-template-compiler": "^2.6.9",
-    "vued3tree": "^3.6.4"
+    "vued3tree": "^3.7.1"
   },
   "eslintConfig": {
     "root": true,

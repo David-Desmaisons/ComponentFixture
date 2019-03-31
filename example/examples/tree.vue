@@ -23,7 +23,6 @@ export default {
   },
   data() {
     return {
-      nodeText: "mame",
       data: {
         name: "father",
         children: [
