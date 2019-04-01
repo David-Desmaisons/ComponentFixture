@@ -169,7 +169,7 @@ export default {
     justify-content: center;
     padding: 40px;
     background: rgba(0, 0, 0, 0.03);
-    height: 100%;
+    height: 50%;
 
     .real-component {
       height: 100%;
