@@ -26,6 +26,7 @@
 <style lang="less" scoped>
 .app__header {
   .navbar {
+    padding: 0 16px;
     background: #fff;
     border-bottom: 1px solid #eaeaea;
   }

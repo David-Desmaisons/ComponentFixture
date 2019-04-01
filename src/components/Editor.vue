@@ -49,8 +49,8 @@ export default {
   font-size: 12px;
 
   /deep/ input {
-    font-size: 12px;
-    height: 28px;
+    font-size: 14px;
+    min-width: 150px;
   }
 }
 </style>

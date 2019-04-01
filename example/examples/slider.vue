@@ -1,11 +1,7 @@
 <template>
   <sandbox :showEditor="showEditor">
     <vueSlider>
-      <div
-        class="diy-tooltip"
-        slot="tooltip"
-        slot-scope="{ value }"
-      >{{ value }}</div>
+      <div class="diy-tooltip" slot="tooltip" slot-scope="{ value }">{{ value }}</div>
     </vueSlider>
   </sandbox>
 </template>
@@ -30,4 +26,11 @@ export default {
   }
 };
 </script>
+
+<style lang="less">
+.vue-slider-component {
+  width: 100% !important;
+}
+</style>
+
 

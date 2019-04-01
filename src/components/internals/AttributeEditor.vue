@@ -1,13 +1,7 @@
 <template>
   <div class="attribute-component">
-    <div
-      class="badge type-decriptor"
-      v-tooltip="{content:type,placement:'left'}"
-      :class="badge"
-    >
-      <template v-if="types.length === 1">
-        {{convert(type)}}
-      </template>
+    <div class="badge type-decriptor" v-tooltip="{content:type,placement:'left'}" :class="badge">
+      <template v-if="types.length === 1">{{convert(type)}}</template>
 
       <template v-else>
         <select v-model="type">
@@ -126,12 +120,12 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 30px;
-  margin-right: 30px;
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  width: 100%;
 
-  div {
-    margin-left: 5px;
-    margin-right: 5px;
+  &:last-child {
+    border: 0;
   }
 
   .badge.type-decriptor {
@@ -167,6 +161,7 @@ export default {
 
   div.component-input {
     flex-grow: 2;
+    width: 70%;
   }
 }
 
@@ -176,6 +171,15 @@ export default {
 
 .label {
   margin-left: 10px;
+  margin-left: 10px;
+  flex-grow: 1;
+  font-size: 14px;
+  text-transform: capitalize;
+  padding: 0 15px 0 0;
+  min-width: 100px;
+  width: 15%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tooltip {
