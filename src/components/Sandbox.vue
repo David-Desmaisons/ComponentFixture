@@ -2,31 +2,42 @@
   <div class="root">
     <div class="component__container">
       <div class="component__segment">
-        <switch-component v-model="showEditor" />
-        <label>Show Props Editor</label>
+        <div class="props-switch">
+          <label>Show Props Editor</label>
+          <switch-component v-model="showEditor" />
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="update"
+        >
+          <i
+            class="fa fa-refresh"
+            aria-hidden="true"
+          ></i>
+        </button>
       </div>
 
       <div class="component__content">
-        <div class="components__list">
-          <component-fixture
-            :defaults="defaults"
-            ref="fixture"
-          >
-            <!-- Use the default slot to create the component under test -->
-            <template v-slot:default>
-              <slot />
-            </template>
+        <component-fixture
+          :defaults="defaults"
+          ref="fixture"
+        >
+          <!-- Use the default slot to create the component under test -->
+          <template v-slot:default>
+            <slot />
+          </template>
 
-            <!-- Use this slot to enable edition of props values -->
-            <template v-slot:control="scope">
-              <Editor
-                v-bind="scope"
-                v-show="showEditor"
-              />
-            </template>
+          <!-- Use this slot to enable edition of props values -->
+          <template v-slot:control="scope">
+            <Editor
+              v-bind="scope"
+              v-show="showEditor"
+            />
+          </template>
 
-          </component-fixture>
-        </div>
+        </component-fixture>
       </div>
     </div>
   </div>
@@ -56,7 +67,7 @@ export default {
   },
   methods: {
     update() {
-      this.$$refs.fixture.$forceUpdate();
+      this.$refs.fixture.$forceUpdate();
     }
   }
 };
@@ -75,6 +86,10 @@ export default {
   border: 1px solid #eee;
   border-radius: 5px;
   overflow: hidden;
+
+  .props-switch {
+    display: flex;
+  }
 }
 .component__segment {
   display: flex;
