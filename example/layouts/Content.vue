@@ -7,13 +7,12 @@
           <label>Show Props Editor</label>
         </div>
 
-        <div class="component__content">
+        <div
+          class="component__content"
+          :class="{ 'editor-open': showEditor, 'editor-closed': !showEditor }"
+        >
           <div class="components__list">
-            <router-view
-              :showEditor="showEditor"
-              :key="$route.fullPath"
-              class="component__single"
-            />
+            <router-view :showEditor="showEditor" :key="$route.fullPath" class="component__single"/>
           </div>
         </div>
       </div>
@@ -57,6 +56,12 @@ export default {
     padding: 10px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
     border-radius: 5px 5px 0 0;
+    position: relative;
+    z-index: 1;
+
+    > label {
+      margin: 0;
+    }
 
     .segment {
       text-align: center;
@@ -115,7 +120,6 @@ export default {
         height: calc(100vh - 186px);
         overflow-x: hidden;
         overflow-y: auto;
-        padding: 10px;
         border: 1px solid #ddd;
 
         &::-webkit-scrollbar-track {
@@ -143,6 +147,26 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+      height: 100%;
+      background: #fff;
+    }
+  }
+
+  .splitter-paneL,
+  .splitter-pane-resizer {
+    display: none;
+  }
+
+  .editor-closed {
+    .splitter-paneR {
+      width: 100% !important;
+    }
+  }
+
+  .editor-open {
+    .splitter-paneL,
+    .splitter-pane-resizer {
+      display: block;
     }
   }
 }
