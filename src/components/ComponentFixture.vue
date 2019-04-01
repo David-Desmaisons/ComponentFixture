@@ -67,13 +67,7 @@ export default {
         const [component] = this.$children;
         return component;
       }
-
-      const { control } = this.$scopedSlots;
-      const firstChild = this.$children[0];
-      if (!control) {
-        return firstChild;
-      }
-      return firstChild.$children[2].$children[0];
+      return this.$refs.cut;
     },
 
     updateValuesFromProps() {
@@ -84,7 +78,7 @@ export default {
     },
 
     update() {
-      this.$$refs.cut.$forceUpdate();
+      this.$refs.cut.$forceUpdate();
     }
   },
 
@@ -126,44 +120,58 @@ export default {
       };
     }
 
-    const { control } = this.$scopedSlots;
+    const { control, header = () => null } = this.$scopedSlots;
     if (!control) {
       return h(ctor, options, []);
     }
 
     return h(
-      splitPane,
+      "div",
       {
         class: {
           "main-panel": true
-        },
-        props: {
-          split: "vertical",
-          defaultPercent: 30
         }
       },
       [
+        header({
+          componentName,
+          update: this.update
+        }),
         h(
-          "div",
+          splitPane,
           {
-            class: { control: true, main: true },
-            slot: "paneL"
+            class: {
+              pane: true
+            },
+            props: {
+              split: "vertical",
+              defaultPercent: 30
+            }
           },
           [
-            control({
-              attributes: props,
-              componentName,
-              propsDefinition
-            })
+            h(
+              "div",
+              {
+                class: { control: true, main: true },
+                slot: "paneL"
+              },
+              [
+                control({
+                  attributes: props,
+                  componentName,
+                  propsDefinition
+                })
+              ]
+            ),
+            h(
+              "div",
+              {
+                class: { component: true },
+                slot: "paneR"
+              },
+              [h(ctor, options, [])]
+            )
           ]
-        ),
-        h(
-          "div",
-          {
-            class: { component: true },
-            slot: "paneR"
-          },
-          [h(ctor, options, [])]
         )
       ]
     );

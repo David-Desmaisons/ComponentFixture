@@ -14,9 +14,9 @@ export default {
       default: true
     }
   },
-  name: "hellow-world-example",
+  name: "hello-world-example",
   meta: {
-    display: "Hellow world"
+    display: "Hello world"
   },
   components: {
     Sandbox,

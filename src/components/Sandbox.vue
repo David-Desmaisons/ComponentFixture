@@ -1,29 +1,38 @@
 <template>
   <div class="root">
     <div class="component__container">
-      <div class="component__segment">
-        <div class="props-switch">
-          <label>Show Props Editor</label>
-          <switch-component v-model="showEditor" />
-        </div>
-
-        <button
-          type="button"
-          class="btn btn-primary"
-          @click="update"
-        >
-          <i
-            class="fa fa-refresh"
-            aria-hidden="true"
-          ></i>
-        </button>
-      </div>
 
       <div class="component__content">
         <component-fixture
           :defaults="defaults"
           ref="fixture"
         >
+          <!-- Use the default slot to manipulate the component under test -->
+          <template v-slot:header="{componentName, update}">
+            <div class="component__segment">
+
+              <div class="alert alert-primary name">
+                {{componentName}}
+              </div>
+
+              <button
+                class="btn btn-primary"
+                @click="update"
+                v-tooltip.left="'Force component update'"
+              >
+                <i
+                  class="fa fa-refresh"
+                  aria-hidden="true"
+                ></i>
+              </button>
+
+              <div class="props-switch">
+                <span>Show Props</span>
+                <switch-component v-model="showEditor" />
+              </div>
+            </div>
+          </template>
+
           <!-- Use the default slot to create the component under test -->
           <template v-slot:default>
             <slot />
@@ -46,8 +55,12 @@
 import ComponentFixture from "./ComponentFixture";
 import switchComponent from "./switch";
 import Editor from "./Editor";
+import { VTooltip } from "v-tooltip";
 
 export default {
+  directives: {
+    tooltip: VTooltip
+  },
   props: {
     defaults: {
       type: Object,
@@ -64,11 +77,6 @@ export default {
     return {
       showEditor: true
     };
-  },
-  methods: {
-    update() {
-      this.$refs.fixture.$forceUpdate();
-    }
   }
 };
 </script>
@@ -89,6 +97,7 @@ export default {
 
   .props-switch {
     display: flex;
+    align-items: center;
   }
 }
 .component__segment {
@@ -96,6 +105,19 @@ export default {
   padding: 10px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
   border-radius: 5px 5px 0 0;
+  padding-left: 30px;
+  padding-right: 30px;
+
+  div {
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+
+  button {
+    margin-right: 20px;
+    margin-top: 5px;
+    height: 40px;
+  }
 
   .segment {
     text-align: center;
@@ -192,4 +214,3 @@ export default {
   }
 }
 </style>
-

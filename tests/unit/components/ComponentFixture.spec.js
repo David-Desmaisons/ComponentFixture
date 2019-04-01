@@ -7,7 +7,7 @@ import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -29,10 +29,10 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
-}
+};
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
@@ -185,44 +185,46 @@ describe("ComponentFixture.vue", () => {
 
   describe.each([
     ["mounted with default", mountComponentWithDefaultSlot],
-    ["mounted with control slot", () => mountComponentWithDefaultSlotAndControllerSlot( buildFakeEditor())]
-  ])
-    ("when %s and re-rendered after update", (_, factory) => {
-      let wrapper;
-      let options;
-      let currentProps;
-      beforeEach(async () => {
-        wrapper = factory();
-        const { vm } = wrapper;
+    [
+      "mounted with control slot",
+      () => mountComponentWithDefaultSlotAndControllerSlot(buildFakeEditor())
+    ]
+  ])("when %s and re-rendered after update", (_, factory) => {
+    let wrapper;
+    let options;
+    let currentProps;
+    beforeEach(async () => {
+      wrapper = factory();
+      const { vm } = wrapper;
 
-        await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
 
-        options = vm.ctor.options;
-        currentProps = options.props;
-        const newProps = {
-          ...currentProps,
-          newProp: {
-            type: String,
-            default: "abc"
-          }
-        };
-        options.props = newProps;
+      options = vm.ctor.options;
+      currentProps = options.props;
+      const newProps = {
+        ...currentProps,
+        newProp: {
+          type: String,
+          default: "abc"
+        }
+      };
+      options.props = newProps;
 
-        vm.$forceUpdate();
-        await vm.$nextTick();
-      });
-
-      afterEach(() => {
-        options.props = currentProps;
-      });
-
-      it("updates the dynamicAttributes", async () => {
-        const { vm } = wrapper;
-        await vm.$nextTick();
-        const { dynamicAttributes } = vm;
-        expect(dynamicAttributes.newProp).toEqual("abc");
-      });
+      vm.$forceUpdate();
+      await vm.$nextTick();
     });
+
+    afterEach(() => {
+      options.props = currentProps;
+    });
+
+    it("updates the dynamicAttributes", async () => {
+      const { vm } = wrapper;
+      await vm.$nextTick();
+      const { dynamicAttributes } = vm;
+      expect(dynamicAttributes.newProp).toEqual("abc");
+    });
+  });
 
   describe("when initialized with a component supporting standard v-model API", () => {
     let wrapper = null;
