@@ -108,8 +108,6 @@ export default {
       if ($methods !== undefined && compare(methods, $methods)) {
         return;
       }
-
-      const { componentMethods } = this;
       this.componentMethods = getMethods(methods, component);
       this.$methods = Object.assign({}, methods);
     },
