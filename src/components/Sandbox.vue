@@ -26,12 +26,8 @@
 import ComponentFixture from "./ComponentFixture";
 import Editor from "./Editor";
 import FixtureFeader from "./FixtureFeader";
-import { VTooltip } from "v-tooltip";
 
 export default {
-  directives: {
-    tooltip: VTooltip
-  },
   props: {
     defaults: {
       type: Object,

@@ -2,6 +2,10 @@
   <div class="component__segment">
     <div class="alert alert-primary name">{{componentName}}</div>
 
+    <button class="btn btn-primary" @click="update" v-tooltip.left="'Update component'">
+      <i class="fa fa-refresh" aria-hidden="true"></i>
+    </button>
+
     <div class="btn-group" role="group" aria-label="Basic example">
       <button
         v-for="method in methods"
@@ -12,10 +16,6 @@
       >{{method.name}}</button>
     </div>
 
-    <button class="btn btn-primary" @click="update" v-tooltip.left="'Force component update'">
-      <i class="fa fa-refresh" aria-hidden="true"></i>
-    </button>
-
     <div class="props-switch">
       <switch-component :value="showEditor" @input="input"/>
       <span>Show Props</span>
@@ -24,6 +24,7 @@
 </template>
 <script>
 import switchComponent from "./switch";
+import { VTooltip } from "v-tooltip";
 
 const props = {
   componentName: {
@@ -45,6 +46,9 @@ const props = {
 };
 
 export default {
+  directives: {
+    tooltip: VTooltip
+  },
   model: {
     event: "input",
     prop: "showEditor"
