@@ -44,7 +44,8 @@ export default {
     }
   }
 };
-</script><style lang="less" scoped>
+</script>
+<style lang="less" scoped>
 .editor {
   font-size: 12px;
 

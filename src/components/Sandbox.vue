@@ -8,11 +8,25 @@
           ref="fixture"
         >
           <!-- Use the default slot to manipulate the component under test -->
-          <template v-slot:header="{componentName, update}">
+          <template v-slot:header="{componentName, methods, update}">
             <div class="component__segment">
 
               <div class="alert alert-primary name">
                 {{componentName}}
+              </div>
+
+              <div
+                class="btn-group"
+                role="group"
+                aria-label="Basic example"
+              >
+                <button
+                  v-for="method in methods"
+                  :key="method.name"
+                  @click="method.execute"
+                  type="button"
+                  class="btn btn-secondary"
+                >{{method.name}}</button>
               </div>
 
               <button
@@ -27,8 +41,8 @@
               </button>
 
               <div class="props-switch">
-                <span>Show Props</span>
                 <switch-component v-model="showEditor" />
+                <span>Show Props</span>
               </div>
             </div>
           </template>
@@ -107,14 +121,15 @@ export default {
   border-radius: 5px 5px 0 0;
   padding-left: 30px;
   padding-right: 30px;
+  overflow-x: auto;
 
   div {
-    margin-right: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
     margin-bottom: 0;
   }
 
   button {
-    margin-right: 20px;
     margin-top: 5px;
     height: 40px;
   }
@@ -156,6 +171,10 @@ export default {
     }
   }
 
+  .custom-control.custom-switch {
+    margin-right: 0;
+  }
+
   .segment-divider {
     height: 100%;
     width: 2px;
@@ -165,6 +184,19 @@ export default {
 
 .main-panel {
   height: calc(100vh - 140px) !important;
+}
+
+&::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+&::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+&::-webkit-scrollbar-thumb {
+  background-color: #999;
+  border: 1px solid #ffffff40;
+  border-radius: 20px;
 }
 
 .root {
@@ -178,18 +210,6 @@ export default {
       overflow-y: auto;
       padding: 10px;
       border: 1px solid #ddd;
-
-      &::-webkit-scrollbar-track {
-        background-color: transparent;
-      }
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-      &::-webkit-scrollbar-thumb {
-        background-color: #999;
-        border: 1px solid #ffffff40;
-        border-radius: 20px;
-      }
 
       &:first-child {
         border-radius: 0 0 0 4px;
