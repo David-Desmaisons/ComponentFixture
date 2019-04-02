@@ -18,6 +18,18 @@ function getMethods(methods, component) {
   }));
 }
 
+function filterMethods(methods) {
+  if (!methods) {
+    return {};
+  }
+  return Object.keys(methods)
+    .filter(name => methods[name].length === 0)
+    .reduce((acc, name) => {
+      acc[name] = methods[name];
+      return acc;
+    }, {});
+}
+
 const defaultModel = {
   event: "input",
   prop: "value"
@@ -89,7 +101,8 @@ export default {
     },
 
     updateMethods(component, options) {
-      const { methods } = options;
+      const { methods: rawMethods } = options;
+      const methods = filterMethods(rawMethods);
       const { $methods } = this;
 
       if ($methods !== undefined && compare(methods, $methods)) {
