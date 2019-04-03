@@ -8,6 +8,26 @@ import {
 } from "@/utils/VueHelper";
 import compare from "@/utils/compare";
 
+function getMethods(methods, component) {
+  return Object.keys(methods).map(name => ({
+    name,
+    argumentNumber: methods[name].length,
+    execute: methods[name].bind(component)
+  }));
+}
+
+function filterMethods(methods) {
+  if (!methods) {
+    return {};
+  }
+  return Object.keys(methods)
+    .filter(name => methods[name].length === 0)
+    .reduce((acc, name) => {
+      acc[name] = methods[name];
+      return acc;
+    }, {});
+}
+
 const defaultModel = {
   event: "input",
   prop: "value"
@@ -70,11 +90,24 @@ export default {
       return this.$refs.cut;
     },
 
-    updateValuesFromProps() {
+    updateValuesFromCurrrentComponent() {
       const component = this.getUnderTestComponent();
       const options =
         this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
+      this.updateMethods(component, options);
+    },
+
+    updateMethods(component, options) {
+      const { methods: rawMethods } = options;
+      const methods = filterMethods(rawMethods);
+      const { $methods } = this;
+
+      if ($methods !== undefined && compare(methods, $methods)) {
+        return;
+      }
+      this.componentMethods = getMethods(methods, component);
+      this.$methods = Object.assign({}, methods);
     },
 
     update() {
@@ -90,7 +123,7 @@ export default {
 
     if (this.$stage == 2) {
       //Updates (needed for hot-reload)
-      this.updateValuesFromProps();
+      this.updateValuesFromCurrrentComponent();
     }
 
     const [slot] = defaultSlot;
@@ -102,7 +135,14 @@ export default {
     this.ctor = ctor;
     const { scopedSlots, slot: childSlot } = slot.data;
     const props = this.dynamicAttributes;
-    const { componentName, componentModel, propsDefinition } = this;
+    const {
+      componentName,
+      componentMethods: methods,
+      componentModel,
+      events,
+      propsDefinition,
+      update
+    } = this;
     const { event, prop } = componentModel;
     const options = {
       props,
@@ -135,7 +175,8 @@ export default {
       [
         header({
           componentName,
-          update: this.update
+          update,
+          methods
         }),
         h(
           splitPane,
@@ -159,7 +200,8 @@ export default {
                 control({
                   attributes: props,
                   componentName,
-                  propsDefinition
+                  propsDefinition,
+                  events
                 })
               ]
             ),
@@ -183,7 +225,7 @@ export default {
     }
 
     this.$stage = 1;
-    this.updateValuesFromProps();
+    this.updateValuesFromCurrrentComponent();
     this.$forceUpdate();
   },
 
@@ -221,6 +263,11 @@ export default {
        * This object will contain the props definition as declared in the component under test.
        */
       propsDefinition: {},
+
+      /**
+       * This object will contain the methods as declared in the component under test.
+       */
+      componentMethods: [],
 
       /**
        * Array of events emitted by the component under test.

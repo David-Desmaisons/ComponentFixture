@@ -1,13 +1,14 @@
 import { shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
 import FakeComponent from "../../mock/FakeComponent.vue";
+import FakeComponentMethods from "../../mock/FakeComponentMethods.vue";
 import FakeComponentForVModel from "../../mock/FakeComponentForVModel";
 import FakeComponentForCustomVModel from "../../mock/FakeComponentForCustomVModel";
 import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -29,7 +30,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function(props) {
+  return jest.fn(function (props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -270,6 +271,38 @@ describe("ComponentFixture.vue", () => {
       testComponentVm.$emit("customInput", "new value");
       expect(dynamicAttributes.customValue).toEqual("new value");
     });
+  });
+
+  describe("when initialized with methods", () => {
+    let wrapper = null;
+    let vm = null;
+    let componentMethods = null;
+
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentMethods });
+      vm = wrapper.vm;
+      componentMethods = vm.componentMethods;
+    });
+
+    it("computes the methods with correct name", () => {
+      expect(componentMethods.map(({ argumentNumber, name }) => ({ argumentNumber, name }))).toEqual([
+        { argumentNumber: 0, name: "method1" },
+        { argumentNumber: 0, name: "method2" }
+      ]);
+    });
+
+    test.each([
+      ["method1"],
+      ["method2"]
+    ])
+      ("computes the method %s with correct binding",
+        (name) => {
+          const { execute } = componentMethods.find(m => m.name === name);
+          const method = FakeComponentMethods.methods[name];
+          expect(method).not.toHaveBeenCalled();
+          execute();
+          expect(method).toHaveBeenCalled();
+        });
   });
 
   describe("when initialized with a controller slot", () => {

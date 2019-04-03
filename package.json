@@ -67,6 +67,7 @@
     "not ie <= 8"
   ],
   "jest": {
+    "collectCoverageFrom": ["<rootDir>/src/components/ComponentFixture.vue", "<rootDir>/src/utils/**"],
     "moduleFileExtensions": [
       "js",
       "jsx",
