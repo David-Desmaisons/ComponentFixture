@@ -103,6 +103,7 @@ describe("extractDefaultValue", () => {
     [Boolean, false],
     [Number, 0],
     [Object, {}],
+    [[Array, Object], []],
     [null, {}]
   ];
 

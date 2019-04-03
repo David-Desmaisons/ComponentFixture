@@ -74,7 +74,11 @@ function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
   if (!prop.required) {
     return undefined;
   }
-  return prop.type ? prop.type() : {};
+  const { type } = prop;
+  if (!type) {
+    return {};
+  }
+  return !Array.isArray(type) ? type() : type[0]();
 }
 
 function getTypeForProp(prop, defaultValue) {
