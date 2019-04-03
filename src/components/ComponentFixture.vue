@@ -9,9 +9,6 @@ import {
 import compare from "@/utils/compare";
 
 function getMethods(methods, component) {
-  if (!methods) {
-    return [];
-  }
   return Object.keys(methods).map(name => ({
     name,
     argumentNumber: methods[name].length,
