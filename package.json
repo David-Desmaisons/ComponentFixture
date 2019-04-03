@@ -38,6 +38,7 @@
     "vue-cli-plugin-component": "^1.7.1",
     "vue-d3-sunburst": "^0.1.10",
     "vue-router": "^3.0.2",
+    "vue-slide-bar": "^1.1.9",
     "vue-svg-gauge": "^1.0.0",
     "vue-template-compiler": "^2.6.9",
     "vue-typer": "^1.2.0",
