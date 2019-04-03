@@ -14,6 +14,7 @@ function getMethods(methods, component) {
   }
   return Object.keys(methods).map(name => ({
     name,
+    argumentNumber: methods[name].length,
     execute: methods[name].bind(component)
   }));
 }
