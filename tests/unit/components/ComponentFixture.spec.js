@@ -182,6 +182,20 @@ describe("ComponentFixture.vue", () => {
     it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
+
+    describe("when calling update", () => {
+      let testedComponent;
+
+      beforeEach(() => {
+        testedComponent = vm.$refs.cut;
+        testedComponent.$forceUpdate = jest.fn();
+        vm.update();
+      });
+
+      it("calls force update", () => {
+        expect(testedComponent.$forceUpdate).toHaveBeenCalled();
+      });
+    });
   });
 
   describe.each([
