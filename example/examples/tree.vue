@@ -1,8 +1,5 @@
 <template>
-  <sandbox
-    :showEditor="showEditor"
-    :defaults="{data}"
-  >
+  <sandbox :defaults="{data}">
     <tree></tree>
   </sandbox>
 </template>
@@ -11,12 +8,6 @@ import { tree } from "vued3tree";
 import Sandbox from "@/components/Sandbox";
 
 export default {
-  props: {
-    showEditor: {
-      type: Boolean,
-      default: true
-    }
-  },
   name: "tree-example",
   meta: {
     display: "Vue D3 tree"

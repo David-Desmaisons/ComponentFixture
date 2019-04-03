@@ -1,18 +1,20 @@
 <template>
   <sandbox>
-    <VueSvgGauge></VueSvgGauge>
+    <VueTyper></VueTyper>
   </sandbox>
 </template>
 <script>
 import Sandbox from "@/components/Sandbox";
+import { VueTyper } from 'vue-typer'
 
 export default {
-  name: "vue-svg-gauge-example",
+  name: "vue-typer-example",
   meta: {
-    display: "Vue Svg Gauge"
+    display: "Vue typer"
   },
   components: {
-    Sandbox
+    Sandbox,
+    VueTyper
   }
 };
 </script>
