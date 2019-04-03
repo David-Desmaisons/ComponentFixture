@@ -63,6 +63,9 @@ export default {
       this.propsDefinition = {};
       const dynamicAttributes = this.dynamicAttributes;
       const propsDefinition = this.propsDefinition;
+      if (!props) {
+        return;
+      }
       Object.keys(props).forEach(key => {
         const propsValue = props[key];
         const proposedValue = this.defaults[key];
