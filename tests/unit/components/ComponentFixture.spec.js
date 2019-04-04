@@ -8,7 +8,7 @@ import FakeEditor from "../../mock/FakeEditor.vue";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -30,7 +30,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -299,24 +299,27 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("computes the methods with correct name", () => {
-      expect(componentMethods.map(({ argumentNumber, name }) => ({ argumentNumber, name }))).toEqual([
+      expect(
+        componentMethods.map(({ argumentNumber, name }) => ({
+          argumentNumber,
+          name
+        }))
+      ).toEqual([
         { argumentNumber: 0, name: "method1" },
         { argumentNumber: 0, name: "method2" }
       ]);
     });
 
-    test.each([
-      ["method1"],
-      ["method2"]
-    ])
-      ("computes the method %s with correct binding",
-        (name) => {
-          const { execute } = componentMethods.find(m => m.name === name);
-          const method = FakeComponentMethods.methods[name];
-          expect(method).not.toHaveBeenCalled();
-          execute();
-          expect(method).toHaveBeenCalled();
-        });
+    test.each([["method1"], ["method2"]])(
+      "computes the method %s with correct binding",
+      name => {
+        const { execute } = componentMethods.find(m => m.name === name);
+        const method = FakeComponentMethods.methods[name];
+        expect(method).not.toHaveBeenCalled();
+        execute();
+        expect(method).toHaveBeenCalled();
+      }
+    );
   });
 
   describe("when initialized with a controller slot", () => {
