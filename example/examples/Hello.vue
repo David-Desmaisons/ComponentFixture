@@ -1,5 +1,5 @@
 <template>
-  <sandbox :showEditor="showEditor">
+  <sandbox>
     <hello-world></hello-world>
   </sandbox>
 </template>
@@ -8,12 +8,6 @@ import HelloWorld from "../components/HelloWorld";
 import Sandbox from "@/components/Sandbox";
 
 export default {
-  props: {
-    showEditor: {
-      type: Boolean,
-      default: true
-    }
-  },
   name: "hello-world-example",
   meta: {
     display: "Hello world"
