@@ -9,8 +9,19 @@
         :metaData="prop.metaData"
       />
     </collaspable>
-    <collaspable title="Events">
-    <pre>{{events}}</pre>
+
+    <collaspable
+      title="Events"
+      class="events"
+    >
+      <div
+        v-for="(event, idx) in events"
+        :key="idx"
+      >
+        {{event.name}}
+        <pre>{{event.args}}</pre>
+      </div>
+
     </collaspable>
 
   </div>
@@ -61,6 +72,16 @@ export default {
 .editor {
   font-size: 12px;
   padding: 0px;
+
+  /deep/ .card {
+    max-height: 75%;
+  }
+
+  /deep/ .card {
+    .collapse {
+      overflow-y: auto;
+    }
+  }
 
   /deep/ input {
     font-size: 12px;
