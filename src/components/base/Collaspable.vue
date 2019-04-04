@@ -9,11 +9,18 @@
           :data-target="`#${id}`"
           aria-expanded="true"
           :aria-controls="id"
-        >{{title}}</button>
+        >
+          {{title}}
+
+          <span>{{leftTitle}}</span>
+        </button>
       </h2>
     </div>
 
-    <div :id="id" class="collapse show">
+    <div
+      :id="id"
+      class="collapse show"
+    >
       <div class="card-body">
         <slot></slot>
       </div>
@@ -28,6 +35,10 @@ export default {
     title: {
       type: String,
       default: ""
+    },
+    leftTitle: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -38,19 +49,24 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.card {
+  .card-header.expander {
+    padding: 0;
+    padding-left: 1.25em;
+  }
 
-.card-header.expander {
-  padding: 0;
-  padding-left: 1.25em;
-}
+  .expander-button {
+    background-color: transparent;
+    outline-color: transparent;
+    box-shadow: none;
+    width: 100%;
+    text-align: left;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 
-.expander-button {
-  background-color: transparent;
-  outline-color: transparent;
-  box-shadow: none;
-  width: 100%;
-  text-align: left;
-  padding-top: 0;
-  padding-bottom: 0;
+  span {
+    font-size: 12px;
+  }
 }
 </style>

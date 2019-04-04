@@ -12,15 +12,21 @@
 
     <collaspable
       title="Events"
+      :leftTitle="`(${events.length})`"
       class="events"
     >
-      <div
-        v-for="(event, idx) in events"
-        :key="idx"
-      >
-        {{event.name}}
-        <pre>{{event.args}}</pre>
-      </div>
+      <template v-if="events.length>0">
+        <div
+          v-for="(event, idx) in events"
+          :key="idx"
+        >
+          {{event.name}}
+          <pre>{{event.args}}</pre>
+        </div>
+      </template>
+      <template v-else>
+        No events emmited.
+      </template>  
 
     </collaspable>
 
