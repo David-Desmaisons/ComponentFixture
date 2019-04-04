@@ -1,7 +1,15 @@
 <template>
   <div class="editor">
-
-    <div>
+    <collaspable title="Props">
+      <attributeEditor
+        v-for="prop in props"
+        :key="prop.key"
+        :object="attributes"
+        :attribute="prop.key"
+        :metaData="prop.metaData"
+      />
+    </collaspable>
+    <!-- <div>
       <div class="card">
         <div class="card-header expander">
           <h2 class="mb-0">
@@ -31,16 +39,18 @@
           </div>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 <script>
 import "bootstrap/dist/css/bootstrap.css";
 import attributeEditor from "./internals/AttributeEditor";
+import collaspable from "./base/Collaspable";
 
 export default {
   components: {
-    attributeEditor
+    attributeEditor,
+    collaspable
   },
 
   props: {
@@ -71,21 +81,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.card-header.expander {
-  padding: 0;
-  padding-left: 1.25em;
-}
-
-.expander-button {
-  background-color: transparent;
-  outline-color: transparent;
-  box-shadow: none;
-  width: 100%;
-  text-align: left;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
 .editor {
   font-size: 12px;
   padding: 0px;

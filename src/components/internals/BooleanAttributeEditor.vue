@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import switchComponent from "@/components/switch";
+import switchComponent from "@/components/base/Switch";
 
 export default {
   props: {

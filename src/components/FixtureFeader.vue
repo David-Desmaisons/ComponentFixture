@@ -37,7 +37,7 @@
   </div>
 </template>
 <script>
-import switchComponent from "./switch";
+import switchComponent from "./base/Switch";
 import { VTooltip } from "v-tooltip";
 
 const props = {

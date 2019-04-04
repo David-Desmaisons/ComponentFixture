@@ -7,11 +7,7 @@
 </template>
 
 <script>
-import switchComponent from "@/components/switch";
 export default {
-  components: {
-    switchComponent
-  }
 };
 </script>
 
