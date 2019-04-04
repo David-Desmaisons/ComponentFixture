@@ -89,7 +89,6 @@ export default {
       height: calc(100vh - 186px);
       overflow-x: hidden;
       overflow-y: auto;
-      padding: 10px;
       border: 1px solid #ddd;
 
       &:first-child {
