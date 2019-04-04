@@ -2,11 +2,22 @@
   <div class="component__segment">
     <div class="alert alert-primary name">{{componentName}}</div>
 
-    <button class="btn btn-primary" @click="update" v-tooltip.left="'Update component'">
-      <i class="fa fa-refresh" aria-hidden="true"></i>
+    <button
+      class="btn btn-primary"
+      @click="update"
+      v-tooltip.left="'Update component'"
+    >
+      <i
+        class="fa fa-refresh"
+        aria-hidden="true"
+      ></i>
     </button>
 
-    <div class="btn-group" role="group" aria-label="Basic example">
+    <div
+      class="btn-group methods"
+      role="group"
+      aria-label="methods"
+    >
       <button
         v-for="method in methods"
         :key="method.name"
@@ -17,7 +28,10 @@
     </div>
 
     <div class="props-switch">
-      <switch-component :value="showEditor" @input="input"/>
+      <switch-component
+        :value="showEditor"
+        @input="input"
+      />
       <span>Show Props</span>
     </div>
   </div>
@@ -79,6 +93,11 @@ export default {
     margin-right: 10px;
     margin-left: 10px;
     margin-bottom: 0;
+  }
+
+  .methods {
+    width: 100%;
+    overflow-x: auto;
   }
 
   button {
