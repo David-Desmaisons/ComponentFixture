@@ -31,7 +31,7 @@
         </div>
       </template>
       <template v-else>
-        No events emmited.
+        No events emited.
       </template>
 
     </collaspable>
