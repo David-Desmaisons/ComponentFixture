@@ -126,6 +126,7 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 32px;
 
   div {
     margin-left: 5px;
@@ -133,11 +134,11 @@ export default {
   }
 
   .badge.type-decriptor {
-    width: 36px;
-    min-width: 36px;
+    width: 45px;
+    min-width: 45px;
     font-size: 12px;
-    height: 26px;
-    padding-top: 6px;
+    height: 30px;
+    padding-top: 10px;
     flex-basis: 36px;
 
     select {
