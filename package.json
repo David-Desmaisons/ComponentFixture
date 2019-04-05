@@ -36,6 +36,7 @@
     "less-loader": "^4.1.0",
     "popper.js": "^1.14.4",
     "vue-cli-plugin-component": "^1.7.1",
+    "vue-cute-rate": "^1.0.2",
     "vue-d3-sunburst": "^0.1.10",
     "vue-router": "^3.0.2",
     "vue-slide-bar": "^1.1.9",
