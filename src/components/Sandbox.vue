@@ -15,7 +15,7 @@
 
           <!-- Use this slot to enable edition of props values -->
           <template v-slot:control="scope">
-            <Editor v-bind="scope" v-show="showEditor"/>
+            <Editor v-bind="scope" :showEditor="showEditor"/>
           </template>
         </component-fixture>
       </div>

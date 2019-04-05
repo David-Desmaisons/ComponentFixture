@@ -1,6 +1,6 @@
 <template>
   <div class="editor">
-    <collaspable title="Props">
+    <collaspable title="Props" v-if="showEditor"> 
       <attributeEditor
         v-for="prop in props"
         :key="prop.key"
@@ -65,6 +65,10 @@ export default {
     events: {
       required: true,
       type: Array
+    },
+    showEditor:{
+      type: Boolean,
+      default: true
     }
   },
 
