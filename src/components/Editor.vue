@@ -17,16 +17,22 @@
     >
       <template v-if="events.length>0">
         <div
+          class="card event"
           v-for="(event, idx) in events"
           :key="idx"
         >
-          {{event.name}}
+          <div class="event-header">
+            <span> {{event.name}}</span>
+            <span class="badge badge-info">{{event.instant | date}}</span>
+          </div>
+
           <pre>{{event.args}}</pre>
+
         </div>
       </template>
       <template v-else>
         No events emmited.
-      </template>  
+      </template>
 
     </collaspable>
 
@@ -62,6 +68,12 @@ export default {
     }
   },
 
+  filters: {
+    date(d) {
+      return d.toLocaleString("en-GB");
+    }
+  },
+
   computed: {
     props() {
       return Object.keys(this.propsDefinition)
@@ -81,6 +93,16 @@ export default {
 
   /deep/ .card {
     max-height: 75%;
+  }
+
+  .event {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .event-header {
+    display: flex;
+    justify-content: space-between;
   }
 
   /deep/ .card {

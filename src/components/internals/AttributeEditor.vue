@@ -126,8 +126,6 @@ export default {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: 30px;
-  margin-right: 30px;
 
   div {
     margin-left: 5px;
