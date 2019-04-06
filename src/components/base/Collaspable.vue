@@ -1,25 +1,28 @@
 <template>
   <div class="card">
-    <div class="card-header expander">
+    <div class="card-header expander" :style="headerStyle">
       <h2 class="mb-0">
         <button
           class="btn expander-button"
           type="button"
           data-toggle="collapse"
           :data-target="`#${id}`"
-          aria-expanded="true"
+          aria-expanded="false"
           :aria-controls="id"
         >
-          {{title}}
+          <slot name="header">
+            {{title}}
 
-          <span>{{leftTitle}}</span>
+            <span>{{leftTitle}}</span>
+          </slot>
         </button>
       </h2>
     </div>
 
     <div
       :id="id"
-      class="collapse show"
+      class="collapse"
+      :class="{ show: initialShow}"
     >
       <div class="card-body">
         <slot></slot>
@@ -39,11 +42,20 @@ export default {
     leftTitle: {
       type: String,
       default: ""
+    },
+    initialShow: {
+      type: Boolean,
+      default: true
+    },
+    headerStyle: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      id: `collapse${id++}`
+      id: `collapse${id++}`,
+      collapse: this.initialShow
     };
   }
 };

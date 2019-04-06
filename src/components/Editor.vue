@@ -1,6 +1,9 @@
 <template>
   <div class="editor">
-    <collaspable title="Props" v-if="showEditor"> 
+    <collaspable
+      title="Props"
+      v-if="showEditor"
+    >
       <attributeEditor
         v-for="prop in props"
         :key="prop.key"
@@ -16,19 +19,31 @@
       class="events"
     >
       <template v-if="events.length>0">
-        <div
-          class="card event"
+        <collaspable
+          :initialShow="false"
           v-for="(event, idx) in events"
           :key="idx"
+          :headerStyle="{background: getColor(event.name)}"
+          class="event"
         >
-          <div class="event-header">
-            <span> {{event.name}}</span>
-            <span class="badge badge-info">{{event.instant | date}}</span>
-          </div>
+          <template v-slot:header>
+            <div class="event-header">
+              <span> {{event.name}}</span>
+              <span class="badge badge-light">{{event.instant | date}}</span>
+            </div>
+          </template>
+          <ul class="list-group list-group-flush">
+            <li
+              class="list-group-item"
+              v-for="(arg,idx) in event.args"
+              :key="idx"
+            >
+              <pre class="card-text">{{stringify(arg)}}</pre>
+            </li>
+          </ul>
 
-          <pre>{{event.args}}</pre>
+        </collaspable>
 
-        </div>
       </template>
       <template v-else>
         No events emited.
@@ -42,6 +57,9 @@
 import "bootstrap/dist/css/bootstrap.css";
 import attributeEditor from "./internals/AttributeEditor";
 import collaspable from "./base/Collaspable";
+import { getColor } from "@/utils/colorHelper";
+import CircularJSON from "circular-json";
+import Vue from "vue";
 
 export default {
   components: {
@@ -66,7 +84,7 @@ export default {
       required: true,
       type: Array
     },
-    showEditor:{
+    showEditor: {
       type: Boolean,
       default: true
     }
@@ -87,6 +105,24 @@ export default {
           metaData: this.propsDefinition[p]
         }));
     }
+  },
+
+  methods: {
+    getColor(value) {
+      return getColor(value, { saturation: 30, lightness: 50 });
+    },
+    stringify(value) {
+      return CircularJSON.stringify(
+        value,
+        (key, value) => {
+          if (value instanceof Vue && value._isVue) {
+            return { name: value.name, type: "VueComponent" };
+          }
+          return value;
+        },
+        "  "
+      );
+    }
   }
 };
 </script>
@@ -95,14 +131,9 @@ export default {
   font-size: 12px;
   padding: 0px;
 
-  /deep/ .card {
-    max-height: 75%;
-  }
-
-  .event {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
+  // /deep/ .card {
+  //   max-height: 75%;
+  // }
 
   .event-header {
     display: flex;
@@ -112,6 +143,13 @@ export default {
   /deep/ .card {
     .collapse {
       overflow-y: auto;
+    }
+  }
+
+  .event {
+    /deep/ .card-body {
+      padding: 0;
+      background: blue;
     }
   }
 

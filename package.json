@@ -29,6 +29,7 @@
     "@vuedoc/md": "^1.5.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
+    "circular-json": "^0.5.9",
     "codecov": "^3.1.0",
     "epic-spinners": "^1.0.4",
     "jquery": "^3.3.1",
