@@ -4,13 +4,21 @@
       title="Props"
       v-if="showEditor"
     >
-      <attributeEditor
-        v-for="prop in props"
-        :key="prop.key"
-        :object="attributes"
-        :attribute="prop.key"
-        :metaData="prop.metaData"
-      />
+
+      <template v-if="props.length>0">
+        <attributeEditor
+          v-for="prop in props"
+          :key="prop.key"
+          :object="attributes"
+          :attribute="prop.key"
+          :metaData="prop.metaData"
+        />
+      </template>
+
+      <template v-else>
+        No Props detected.
+      </template>
+
     </collaspable>
 
     <collaspable
@@ -19,32 +27,13 @@
       class="events"
     >
       <template v-if="events.length>0">
-        <collaspable
-          :initialShow="false"
+        <eventDisplayer
           v-for="(event, idx) in events"
           :key="idx"
-          :headerStyle="{background: getColor(event.name)}"
-          class="event"
-        >
-          <template v-slot:header>
-            <div class="event-header">
-              <span> {{event.name}}</span>
-              <span class="badge badge-light">{{event.instant | date}}</span>
-            </div>
-          </template>
-          <ul class="list-group list-group-flush">
-            <li
-              class="list-group-item"
-              v-for="(arg,idx) in event.args"
-              :key="idx"
-            >
-              <pre class="card-text">{{stringify(arg)}}</pre>
-            </li>
-          </ul>
-
-        </collaspable>
-
+          :event="event"
+        />
       </template>
+
       <template v-else>
         No events emited.
       </template>
@@ -56,15 +45,14 @@
 <script>
 import "bootstrap/dist/css/bootstrap.css";
 import attributeEditor from "./internals/AttributeEditor";
+import eventDisplayer from "./internals/EventDisplayer";
 import collaspable from "./base/Collaspable";
-import { getColor } from "@/utils/colorHelper";
-import CircularJSON from "circular-json";
-import Vue from "vue";
 
 export default {
   components: {
     attributeEditor,
-    collaspable
+    collaspable,
+    eventDisplayer
   },
 
   props: {
@@ -90,12 +78,6 @@ export default {
     }
   },
 
-  filters: {
-    date(d) {
-      return d.toLocaleString("en-GB");
-    }
-  },
-
   computed: {
     props() {
       return Object.keys(this.propsDefinition)
@@ -104,24 +86,6 @@ export default {
           key: p,
           metaData: this.propsDefinition[p]
         }));
-    }
-  },
-
-  methods: {
-    getColor(value) {
-      return getColor(value, { saturation: 30, lightness: 50 });
-    },
-    stringify(value) {
-      return CircularJSON.stringify(
-        value,
-        (key, value) => {
-          if (value instanceof Vue && value._isVue) {
-            return { name: value.name, type: "VueComponent" };
-          }
-          return value;
-        },
-        "  "
-      );
     }
   }
 };
@@ -135,21 +99,9 @@ export default {
   //   max-height: 75%;
   // }
 
-  .event-header {
-    display: flex;
-    justify-content: space-between;
-  }
-
   /deep/ .card {
     .collapse {
       overflow-y: auto;
-    }
-  }
-
-  .event {
-    /deep/ .card-body {
-      padding: 0;
-      background: blue;
     }
   }
 
