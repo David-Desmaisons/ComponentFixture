@@ -5,10 +5,12 @@ import FakeComponentMethods from "../../mock/FakeComponentMethods.vue";
 import FakeComponentForVModel from "../../mock/FakeComponentForVModel";
 import FakeComponentForCustomVModel from "../../mock/FakeComponentForCustomVModel";
 import FakeEditor from "../../mock/FakeEditor.vue";
+import { advanceTo } from 'jest-date-mock';
+
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -30,7 +32,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function(props) {
+  return jest.fn(function (props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -39,6 +41,7 @@ describe("ComponentFixture.vue", () => {
   beforeEach(() => {
     console.error = nullFunction;
     console.warn = nullFunction;
+    advanceTo(0);
   });
 
   afterEach(() => {
@@ -170,10 +173,12 @@ describe("ComponentFixture.vue", () => {
       expect(vm.events).toEqual([
         {
           name: "event1",
+          instant: new Date(),
           args: [0]
         },
         {
           name: "event2",
+          instant: new Date(),
           args: ["a", "b", true]
         }
       ]);
