@@ -8,6 +8,26 @@ import {
 } from "@/utils/VueHelper";
 import compare from "@/utils/compare";
 
+function getMethods(methods, component) {
+  return Object.keys(methods).map(name => ({
+    name,
+    argumentNumber: methods[name].length,
+    execute: methods[name].bind(component)
+  }));
+}
+
+function filterMethods(methods) {
+  if (!methods) {
+    return {};
+  }
+  return Object.keys(methods)
+    .filter(name => methods[name].length === 0)
+    .reduce((acc, name) => {
+      acc[name] = methods[name];
+      return acc;
+    }, {});
+}
+
 const defaultModel = {
   event: "input",
   prop: "value"
@@ -43,6 +63,9 @@ export default {
       this.propsDefinition = {};
       const dynamicAttributes = this.dynamicAttributes;
       const propsDefinition = this.propsDefinition;
+      if (!props) {
+        return;
+      }
       Object.keys(props).forEach(key => {
         const propsValue = props[key];
         const proposedValue = this.defaults[key];
@@ -67,20 +90,31 @@ export default {
         const [component] = this.$children;
         return component;
       }
-
-      const { control } = this.$scopedSlots;
-      const firstChild = this.$children[0];
-      if (!control) {
-        return firstChild;
-      }
-      return firstChild.$children[2].$children[0];
+      return this.$refs.cut;
     },
 
-    updateValuesFromProps() {
+    updateValuesFromCurrrentComponent() {
       const component = this.getUnderTestComponent();
       const options =
         this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
+      this.updateMethods(component, options);
+    },
+
+    updateMethods(component, options) {
+      const { methods: rawMethods } = options;
+      const methods = filterMethods(rawMethods);
+      const { $methods } = this;
+
+      if ($methods !== undefined && compare(methods, $methods)) {
+        return;
+      }
+      this.componentMethods = getMethods(methods, component);
+      this.$methods = Object.assign({}, methods);
+    },
+
+    update() {
+      this.$refs.cut.$forceUpdate();
     }
   },
 
@@ -92,7 +126,7 @@ export default {
 
     if (this.$stage == 2) {
       //Updates (needed for hot-reload)
-      this.updateValuesFromProps();
+      this.updateValuesFromCurrrentComponent();
     }
 
     const [slot] = defaultSlot;
@@ -104,9 +138,22 @@ export default {
     this.ctor = ctor;
     const { scopedSlots, slot: childSlot } = slot.data;
     const props = this.dynamicAttributes;
-    const { componentName, componentModel, propsDefinition } = this;
+    const {
+      componentName,
+      componentMethods: methods,
+      componentModel,
+      events,
+      propsDefinition,
+      update
+    } = this;
     const { event, prop } = componentModel;
-    const options = { props, scopedSlots, slot: childSlot, ref: "cut" };
+    const options = {
+      props,
+      scopedSlots,
+      slot: childSlot,
+      class: { "real-component": true },
+      ref: "cut"
+    };
 
     if (props.hasOwnProperty(prop)) {
       options.on = {
@@ -116,44 +163,61 @@ export default {
       };
     }
 
-    const { control } = this.$scopedSlots;
+    const { control, header = () => null } = this.$scopedSlots;
     if (!control) {
       return h(ctor, options, []);
     }
 
     return h(
-      splitPane,
+      "div",
       {
         class: {
           "main-panel": true
-        },
-        props: {
-          split: "vertical",
-          defaultPercent: 30
         }
       },
       [
+        header({
+          componentName,
+          update,
+          methods
+        }),
         h(
-          "div",
+          splitPane,
           {
-            class: { control: true, main: true },
-            slot: "paneL"
+            class: {
+              pane: true
+            },
+            props: {
+              split: "vertical",
+              defaultPercent: 30
+            }
           },
           [
-            control({
-              attributes: props,
-              componentName,
-              propsDefinition
-            })
+            h(
+              "div",
+              {
+                class: { control: true, main: true },
+                slot: "paneL"
+              },
+              [
+                control({
+                  attributes: props,
+                  componentName,
+                  propsDefinition,
+                  methods,
+                  events
+                })
+              ]
+            ),
+            h(
+              "div",
+              {
+                class: { component: true },
+                slot: "paneR"
+              },
+              [h(ctor, options, [])]
+            )
           ]
-        ),
-        h(
-          "div",
-          {
-            class: { component: true },
-            slot: "paneR"
-          },
-          [h(ctor, options, [])]
         )
       ]
     );
@@ -165,7 +229,7 @@ export default {
     }
 
     this.$stage = 1;
-    this.updateValuesFromProps();
+    this.updateValuesFromCurrrentComponent();
     this.$forceUpdate();
   },
 
@@ -177,7 +241,7 @@ export default {
     this.$nextTick(() => {
       const emit = this.$refs.cut.$emit;
       const newEmit = (eventName, ...args) => {
-        this.events.push({ name: eventName, args: args });
+        this.events.push({ name: eventName, args: args, instant: new Date() });
         emit.call(this.$refs.cut, eventName, ...args);
       };
       this.$refs.cut.$emit = newEmit;
@@ -203,6 +267,11 @@ export default {
        * This object will contain the props definition as declared in the component under test.
        */
       propsDefinition: {},
+
+      /**
+       * This object will contain the methods as declared in the component under test.
+       */
+      componentMethods: [],
 
       /**
        * Array of events emitted by the component under test.

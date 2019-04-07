@@ -1,5 +1,5 @@
 <template>
-  <sandbox :showEditor="showEditor">
+  <sandbox>
     <VueSvgGauge></VueSvgGauge>
   </sandbox>
 </template>
@@ -7,12 +7,6 @@
 import Sandbox from "@/components/Sandbox";
 
 export default {
-  props: {
-    showEditor: {
-      type: Boolean,
-      default: true
-    }
-  },
   name: "vue-svg-gauge-example",
   meta: {
     display: "Vue Svg Gauge"

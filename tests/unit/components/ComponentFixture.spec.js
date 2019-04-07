@@ -1,9 +1,12 @@
 import { shallowMount } from "@vue/test-utils";
 import ComponentFixture from "@/components/ComponentFixture.vue";
 import FakeComponent from "../../mock/FakeComponent.vue";
+import FakeComponentMethods from "../../mock/FakeComponentMethods.vue";
 import FakeComponentForVModel from "../../mock/FakeComponentForVModel";
 import FakeComponentForCustomVModel from "../../mock/FakeComponentForCustomVModel";
 import FakeEditor from "../../mock/FakeEditor.vue";
+import { advanceTo } from 'jest-date-mock';
+
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
@@ -32,12 +35,13 @@ const buildFakeEditor = () => {
   return jest.fn(function (props) {
     return this.$createElement(FakeEditor, { props });
   });
-}
+};
 
 describe("ComponentFixture.vue", () => {
   beforeEach(() => {
     console.error = nullFunction;
     console.warn = nullFunction;
+    advanceTo(0);
   });
 
   afterEach(() => {
@@ -169,10 +173,12 @@ describe("ComponentFixture.vue", () => {
       expect(vm.events).toEqual([
         {
           name: "event1",
+          instant: new Date(),
           args: [0]
         },
         {
           name: "event2",
+          instant: new Date(),
           args: ["a", "b", true]
         }
       ]);
@@ -181,48 +187,64 @@ describe("ComponentFixture.vue", () => {
     it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
+
+    describe("when calling update", () => {
+      let testedComponent;
+
+      beforeEach(() => {
+        testedComponent = vm.$refs.cut;
+        testedComponent.$forceUpdate = jest.fn();
+        vm.update();
+      });
+
+      it("calls force update", () => {
+        expect(testedComponent.$forceUpdate).toHaveBeenCalled();
+      });
+    });
   });
 
   describe.each([
     ["mounted with default", mountComponentWithDefaultSlot],
-    ["mounted with control slot", () => mountComponentWithDefaultSlotAndControllerSlot( buildFakeEditor())]
-  ])
-    ("when %s and re-rendered after update", (_, factory) => {
-      let wrapper;
-      let options;
-      let currentProps;
-      beforeEach(async () => {
-        wrapper = factory();
-        const { vm } = wrapper;
+    [
+      "mounted with control slot",
+      () => mountComponentWithDefaultSlotAndControllerSlot(buildFakeEditor())
+    ]
+  ])("when %s and re-rendered after update", (_, factory) => {
+    let wrapper;
+    let options;
+    let currentProps;
+    beforeEach(async () => {
+      wrapper = factory();
+      const { vm } = wrapper;
 
-        await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
 
-        options = vm.ctor.options;
-        currentProps = options.props;
-        const newProps = {
-          ...currentProps,
-          newProp: {
-            type: String,
-            default: "abc"
-          }
-        };
-        options.props = newProps;
+      options = vm.ctor.options;
+      currentProps = options.props;
+      const newProps = {
+        ...currentProps,
+        newProp: {
+          type: String,
+          default: "abc"
+        }
+      };
+      options.props = newProps;
 
-        vm.$forceUpdate();
-        await vm.$nextTick();
-      });
-
-      afterEach(() => {
-        options.props = currentProps;
-      });
-
-      it("updates the dynamicAttributes", async () => {
-        const { vm } = wrapper;
-        await vm.$nextTick();
-        const { dynamicAttributes } = vm;
-        expect(dynamicAttributes.newProp).toEqual("abc");
-      });
+      vm.$forceUpdate();
+      await vm.$nextTick();
     });
+
+    afterEach(() => {
+      options.props = currentProps;
+    });
+
+    it("updates the dynamicAttributes", async () => {
+      const { vm } = wrapper;
+      await vm.$nextTick();
+      const { dynamicAttributes } = vm;
+      expect(dynamicAttributes.newProp).toEqual("abc");
+    });
+  });
 
   describe("when initialized with a component supporting standard v-model API", () => {
     let wrapper = null;
@@ -268,6 +290,41 @@ describe("ComponentFixture.vue", () => {
       testComponentVm.$emit("customInput", "new value");
       expect(dynamicAttributes.customValue).toEqual("new value");
     });
+  });
+
+  describe("when initialized with methods", () => {
+    let wrapper = null;
+    let vm = null;
+    let componentMethods = null;
+
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentMethods });
+      vm = wrapper.vm;
+      componentMethods = vm.componentMethods;
+    });
+
+    it("computes the methods with correct name", () => {
+      expect(
+        componentMethods.map(({ argumentNumber, name }) => ({
+          argumentNumber,
+          name
+        }))
+      ).toEqual([
+        { argumentNumber: 0, name: "method1" },
+        { argumentNumber: 0, name: "method2" }
+      ]);
+    });
+
+    test.each([["method1"], ["method2"]])(
+      "computes the method %s with correct binding",
+      name => {
+        const { execute } = componentMethods.find(m => m.name === name);
+        const method = FakeComponentMethods.methods[name];
+        expect(method).not.toHaveBeenCalled();
+        execute();
+        expect(method).toHaveBeenCalled();
+      }
+    );
   });
 
   describe("when initialized with a controller slot", () => {

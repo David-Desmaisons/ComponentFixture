@@ -29,18 +29,23 @@
     "@vuedoc/md": "^1.5.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
+    "circular-json": "^0.5.9",
     "codecov": "^3.1.0",
+    "epic-spinners": "^1.0.4",
+    "jest-date-mock": "^1.0.7",
     "jquery": "^3.3.1",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "popper.js": "^1.14.4",
     "vue-cli-plugin-component": "^1.7.1",
+    "vue-cute-rate": "^1.0.2",
     "vue-d3-sunburst": "^0.1.10",
     "vue-router": "^3.0.2",
-    "vue-slider-component": "^2.7.7",
+    "vue-slide-bar": "^1.1.9",
     "vue-svg-gauge": "^1.0.0",
     "vue-template-compiler": "^2.6.9",
-    "vued3tree": "^3.6.4"
+    "vue-typer": "^1.2.0",
+    "vued3tree": "^3.7.1"
   },
   "eslintConfig": {
     "root": true,
@@ -67,6 +72,10 @@
     "not ie <= 8"
   ],
   "jest": {
+    "collectCoverageFrom": [
+      "<rootDir>/src/components/ComponentFixture.vue",
+      "<rootDir>/src/utils/**"
+    ],
     "moduleFileExtensions": [
       "js",
       "jsx",
@@ -86,6 +95,9 @@
     ],
     "testMatch": [
       "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
+    ],
+    "setupFiles": [
+      "jest-date-mock"
     ],
     "testURL": "http://localhost/"
   },
