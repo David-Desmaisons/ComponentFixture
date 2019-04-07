@@ -21,11 +21,17 @@
 
     </collaspable>
 
-    <collaspable
-      title="Events"
-      :leftTitle="`(${events.length})`"
-      class="events"
-    >
+    <collaspable class="events">
+      <template v-slot:header>
+        <div class="events-header">
+          Events
+          <span
+            v-if="events.length>0"
+            class="badge badge-success"
+          >{{events.length}}</span>
+        </div>
+      </template>
+
       <template v-if="events.length>0">
         <eventDisplayer
           v-for="(event, idx) in events"

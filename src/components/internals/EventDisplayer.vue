@@ -62,8 +62,9 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.event-header {
+ /deep/ .event-header {
   display: flex;
+  width: 100%;
   justify-content: space-between;
 }
 

@@ -1,7 +1,11 @@
 <template>
   <div class="card">
-    <div class="card-header expander" :style="headerStyle">
+    <div
+      class="card-header expander"
+      :style="headerStyle"
+    >
       <h2 class="mb-0">
+
         <button
           class="btn expander-button"
           type="button"
@@ -10,11 +14,12 @@
           aria-expanded="false"
           :aria-controls="id"
         >
-          <slot name="header">
-            {{title}}
-
-            <span>{{leftTitle}}</span>
-          </slot>
+          <div class="expander-header">
+            <i class="fa fa-caret-down expander-icon"></i>
+            <slot name="header">
+              {{title}}
+            </slot>
+          </div>
         </button>
       </h2>
     </div>
@@ -39,10 +44,6 @@ export default {
       type: String,
       default: ""
     },
-    leftTitle: {
-      type: String,
-      default: ""
-    },
     initialShow: {
       type: Boolean,
       default: true
@@ -64,7 +65,6 @@ export default {
 .card {
   .card-header.expander {
     padding: 0;
-    padding-left: 1.25em;
   }
 
   .expander-button {
@@ -75,6 +75,22 @@ export default {
     text-align: left;
     padding-top: 0;
     padding-bottom: 0;
+
+    .expander-icon {
+      height: 100%;
+      margin-right: 10px;
+      transition: all 0.3s;
+    }
+  }
+
+  .expander-header {
+    display: flex;
+  }
+
+  .expander-button.collapsed {
+    .expander-icon {
+      transform: rotate(0.5turn);
+    }
   }
 
   span {
