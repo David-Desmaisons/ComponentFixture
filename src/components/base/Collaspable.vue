@@ -1,11 +1,7 @@
 <template>
   <div class="card">
-    <div
-      class="card-header expander"
-      :style="headerStyle"
-    >
+    <div class="card-header expander" :style="headerStyle">
       <h2 class="mb-0">
-
         <button
           class="btn expander-button"
           type="button"
@@ -13,6 +9,7 @@
           :data-target="`#${id}`"
           aria-expanded="false"
           :aria-controls="id"
+          :class="{ collapsed: !initialShow}"
         >
           <div class="expander-header">
             <i class="fa fa-caret-down expander-icon"></i>
