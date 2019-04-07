@@ -2,38 +2,27 @@
   <div class="component__segment">
     <div class="alert alert-primary name">{{componentName}}</div>
 
-    <button
-      class="btn btn-primary"
-      @click="update"
-      v-tooltip.left="'Update component'"
-    >
-      <i
-        class="fa fa-refresh"
-        aria-hidden="true"
-      ></i>
-    </button>
+    <div class="controls">
+      <div class="props-switch">
+        <switch-component
+          :value="showEditor"
+          @input="input"
+        />
+        <span>Show Props</span>
+      </div>
 
-    <div
-      class="btn-group methods"
-      role="group"
-      aria-label="methods"
-    >
       <button
-        v-for="method in methods"
-        :key="method.name"
-        @click="method.execute"
-        type="button"
-        class="btn btn-secondary"
-      >{{method.name}}</button>
+        class="btn btn-danger"
+        @click="update"
+        v-tooltip.left="'Update component'"
+      >
+        <i
+          class="fa fa-refresh"
+          aria-hidden="true"
+        ></i>
+      </button>
     </div>
 
-    <div class="props-switch">
-      <switch-component
-        :value="showEditor"
-        @input="input"
-      />
-      <span>Show Props</span>
-    </div>
   </div>
 </template>
 <script>
@@ -82,12 +71,19 @@ export default {
 <style lang="less" scoped>
 .component__segment {
   display: flex;
-  padding: 10px;
+  justify-content: space-between;
+  flex-direction: row;
+  padding-top: 10px;
+  padding-bottom: 10px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
   border-radius: 5px 5px 0 0;
-  padding-left: 30px;
-  padding-right: 30px;
   overflow-x: auto;
+
+  .controls {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+  }
 
   div {
     margin-right: 10px;

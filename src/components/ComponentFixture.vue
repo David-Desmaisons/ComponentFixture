@@ -204,6 +204,7 @@ export default {
                   attributes: props,
                   componentName,
                   propsDefinition,
+                  methods,
                   events
                 })
               ]

@@ -5,7 +5,7 @@
         <component-fixture :defaults="defaults" ref="fixture">
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
-            <FixtureFeader v-bind="{componentName, methods, update}" v-model="showEditor"></FixtureFeader>
+            <FixtureHeader v-bind="{componentName, methods, update}" v-model="showEditor"></FixtureHeader>
           </template>
 
           <!-- Use the default slot to create the component under test -->
@@ -25,7 +25,7 @@
 <script>
 import ComponentFixture from "./ComponentFixture";
 import Editor from "./Editor";
-import FixtureFeader from "./FixtureFeader";
+import FixtureHeader from "./FixtureHeader";
 
 export default {
   props: {
@@ -38,7 +38,7 @@ export default {
   components: {
     ComponentFixture,
     Editor,
-    FixtureFeader
+    FixtureHeader
   },
   data() {
     return {

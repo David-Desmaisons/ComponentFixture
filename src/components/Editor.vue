@@ -1,10 +1,17 @@
 <template>
-  <div class="editor">
+  <transition-group
+    type="transition"
+    name="flip-list"
+    tag="div"
+    class="editor"
+  >
+
     <collaspable
       title="Props"
+      key="props"
+      class="main-collapsable"
       v-if="showEditor"
     >
-
       <template v-if="props.length>0">
         <attributeEditor
           v-for="prop in props"
@@ -18,10 +25,38 @@
       <template v-else>
         No Props detected.
       </template>
-
     </collaspable>
 
-    <collaspable class="events">
+    <collaspable
+      title="Methods"
+      key="methods"
+      class="main-collapsable"
+    >
+      <template v-if="methods.length>0">
+        <div
+          class="methods"
+          role="group"
+          aria-label="methods"
+        >
+          <button
+            v-for="method in methods"
+            :key="method.name"
+            @click="method.execute"
+            type="button"
+            class="btn btn-primary"
+          >{{method.name}}</button>
+        </div>
+      </template>
+
+      <template v-else>
+        No Methods without argument detected.
+      </template>
+    </collaspable>
+
+    <collaspable
+      class="events main-collapsable"
+      key="events"
+    >
       <template v-slot:header>
         <div class="events-header">
           Events
@@ -46,7 +81,7 @@
 
     </collaspable>
 
-  </div>
+  </transition-group>
 </template>
 <script>
 import "bootstrap/dist/css/bootstrap.css";
@@ -78,6 +113,10 @@ export default {
       required: true,
       type: Array
     },
+    methods: {
+      required: true,
+      type: Array
+    },
     showEditor: {
       type: Boolean,
       default: true
@@ -101,6 +140,20 @@ export default {
   font-size: 12px;
   padding: 0px;
 
+  .main-collapsable {
+    transition: all 0.5s;
+    display: inline-block;
+    width: 100%;
+  }
+
+  .main-collapsable.flip-list-enter,
+  .main-collapsable.flip-list-leave-to {
+    opacity: 0;
+  }
+  .main-collapsable.flip-list-leave-active {
+    position: absolute;
+  }
+
   // /deep/ .card {
   //   max-height: 75%;
   // }
@@ -108,6 +161,18 @@ export default {
   /deep/ .card {
     .collapse {
       overflow-y: auto;
+    }
+  }
+
+  .methods {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    .btn {
+      margin-top: 5px;
+      margin-bottom: 5px;
     }
   }
 
