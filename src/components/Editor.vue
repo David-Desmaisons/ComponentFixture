@@ -10,7 +10,7 @@
       title="Props"
       key="props"
       class="main-collapsable"
-      v-if="showEditor"
+      v-if="showProps"
     >
       <template v-if="props.length>0">
         <attributeEditor
@@ -29,6 +29,7 @@
 
     <collaspable
       title="Methods"
+      v-if="showMethods"
       key="methods"
       class="main-collapsable"
     >
@@ -55,6 +56,7 @@
 
     <collaspable
       class="events main-collapsable"
+      v-if="showEvents"
       key="events"
     >
       <template v-slot:header>
@@ -117,9 +119,17 @@ export default {
       required: true,
       type: Array
     },
-    showEditor: {
+    showProps: {
       type: Boolean,
       default: true
+    },
+    showMethods: {
+      required: true,
+      type: Boolean
+    },
+    showEvents: {
+      required: true,
+      type: Boolean
     }
   },
 
@@ -142,7 +152,6 @@ export default {
 
   .main-collapsable {
     transition: all 0.5s;
-    display: inline-block;
     width: 100%;
   }
 

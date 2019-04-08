@@ -2,20 +2,33 @@
   <div class="root">
     <div class="component__container">
       <div class="component__content">
-        <component-fixture :defaults="defaults" ref="fixture">
+        <component-fixture
+          :defaults="defaults"
+          ref="fixture"
+        >
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
-            <FixtureHeader v-bind="{componentName, methods, update}" v-model="showEditor"></FixtureHeader>
+            <FixtureHeader
+              v-bind="{componentName, methods, update}"
+              :showProps.sync="showProps"
+              :showMethods.sync="showMethods"
+              :showEvents.sync="showEvents"
+            ></FixtureHeader>
           </template>
 
           <!-- Use the default slot to create the component under test -->
           <template v-slot:default>
-            <slot/>
+            <slot />
           </template>
 
           <!-- Use this slot to enable edition of props values -->
           <template v-slot:control="scope">
-            <Editor v-bind="scope" :showEditor="showEditor"/>
+            <Editor
+              v-bind="scope"
+              :showProps="showProps"
+              :showMethods="showMethods"
+              :showEvents="showEvents"
+            />
           </template>
         </component-fixture>
       </div>
@@ -42,12 +55,20 @@ export default {
   },
   data() {
     return {
-      showEditor: true
+      showProps: true,
+      showMethods: true,
+      showEvents: true
     };
   }
 };
 </script>
 <style lang="less" scoped="true">
+/deep/ .splitter-pane.splitter-paneL.vertical {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100% - 80px);
+}
+
 .root {
   display: flex;
   align-items: center;
@@ -86,9 +107,6 @@ export default {
 
     > div {
       flex-grow: 1;
-      height: calc(100vh - 186px);
-      overflow-x: hidden;
-      overflow-y: auto;
       border: 1px solid #ddd;
 
       &:first-child {

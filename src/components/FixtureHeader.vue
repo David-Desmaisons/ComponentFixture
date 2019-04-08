@@ -3,12 +3,33 @@
     <div class="alert alert-primary name">{{componentName}}</div>
 
     <div class="controls">
-      <div class="props-switch">
-        <switch-component
-          :value="showEditor"
-          @input="input"
-        />
-        <span>Show Props</span>
+
+      <div class="card">
+        <div class="card-body show-options">
+          <div class="props-switch">
+            <switch-component
+              :value="showProps"
+              @input="input($event, 'showProps')"
+            />
+            <span>Props</span>
+          </div>
+
+          <div class="props-switch">
+            <switch-component
+              :value="showMethods"
+              @input="input($event, 'showMethods')"
+            />
+            <span>Methods</span>
+          </div>
+
+          <div class="props-switch">
+            <switch-component
+              :value="showEvents"
+              @input="input($event, 'showEvents')"
+            />
+            <span>Events</span>
+          </div>
+        </div>
       </div>
 
       <button
@@ -42,7 +63,15 @@ const props = {
     required: true,
     type: Function
   },
-  showEditor: {
+  showProps: {
+    required: true,
+    type: Boolean
+  },
+  showMethods: {
+    required: true,
+    type: Boolean
+  },
+  showEvents: {
     required: true,
     type: Boolean
   }
@@ -52,18 +81,14 @@ export default {
   directives: {
     tooltip: VTooltip
   },
-  model: {
-    event: "input",
-    prop: "showEditor"
-  },
   props,
   components: {
     switchComponent
   },
   name: "FixtureFeader",
   methods: {
-    input(evt) {
-      this.$emit("input", evt);
+    input(evt, name) {
+      this.$emit(`update:${name}`, evt);
     }
   }
 };
@@ -83,6 +108,14 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+
+    .card-body.show-options {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row;
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
   }
 
   div {
