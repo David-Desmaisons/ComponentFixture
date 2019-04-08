@@ -75,7 +75,7 @@ export default {
   }
 
   .expander-button {
-    background-color: transparent;
+    background-color: #f4f4f4;
     outline-color: transparent;
     box-shadow: none;
     width: 100%;

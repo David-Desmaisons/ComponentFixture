@@ -105,10 +105,9 @@ export default {
 
     > div {
       flex-grow: 1;
-      height: calc(100vh - 186px);
+      height: calc(100vh - 207px);
       overflow-x: hidden;
       overflow-y: auto;
-      border: 1px solid #ddd;
 
       &:first-child {
         border-radius: 0 0 0 4px;
