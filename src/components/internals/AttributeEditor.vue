@@ -1,13 +1,7 @@
 <template>
   <div class="attribute-component">
-    <div
-      class="badge type-decriptor"
-      v-tooltip="{content:type,placement:'left'}"
-      :class="badge"
-    >
-      <template v-if="types.length === 1">
-        {{convert(type)}}
-      </template>
+    <div class="badge type-decriptor" v-tooltip="{content:type,placement:'left'}" :class="badge">
+      <template v-if="types.length === 1">{{convert(type)}}</template>
 
       <template v-else>
         <select v-model="type">
@@ -175,6 +169,17 @@ export default {
 
 .label {
   margin-left: 10px;
+  min-width: 80px;
+  width: 15%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-control.custom-switch {
+  .custom-control-label {
+    right: calc(100% - 32px);
+  }
 }
 
 .tooltip {

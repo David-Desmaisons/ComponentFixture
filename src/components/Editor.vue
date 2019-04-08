@@ -1,17 +1,6 @@
 <template>
-  <transition-group
-    type="transition"
-    name="flip-list"
-    tag="div"
-    class="editor"
-  >
-
-    <collaspable
-      title="Props"
-      key="props"
-      class="main-collapsable"
-      v-if="showEditor"
-    >
+  <transition-group type="transition" name="flip-list" tag="div" class="editor">
+    <collaspable title="Props" key="props" class="main-collapsable">
       <template v-if="props.length>0">
         <attributeEditor
           v-for="prop in props"
@@ -22,22 +11,12 @@
         />
       </template>
 
-      <template v-else>
-        No Props detected.
-      </template>
+      <template v-else>No Props detected.</template>
     </collaspable>
 
-    <collaspable
-      title="Methods"
-      key="methods"
-      class="main-collapsable"
-    >
+    <collaspable title="Methods" key="methods" class="main-collapsable">
       <template v-if="methods.length>0">
-        <div
-          class="methods"
-          role="group"
-          aria-label="methods"
-        >
+        <div class="methods" role="group" aria-label="methods">
           <button
             v-for="method in methods"
             :key="method.name"
@@ -48,39 +27,23 @@
         </div>
       </template>
 
-      <template v-else>
-        No Methods without argument detected.
-      </template>
+      <template v-else>No Methods without argument detected.</template>
     </collaspable>
 
-    <collaspable
-      class="events main-collapsable"
-      key="events"
-    >
+    <collaspable class="events main-collapsable" key="events">
       <template v-slot:header>
-        <div class="events-header">
+        <strong class="events-header">
           Events
-          <span
-            v-if="events.length>0"
-            class="badge badge-success"
-          >{{events.length}}</span>
-        </div>
+          <span v-if="events.length>0" class="badge badge-success">{{events.length}}</span>
+        </strong>
       </template>
 
       <template v-if="events.length>0">
-        <eventDisplayer
-          v-for="(event, idx) in events"
-          :key="idx"
-          :event="event"
-        />
+        <eventDisplayer v-for="(event, idx) in events" :key="idx" :event="event"/>
       </template>
 
-      <template v-else>
-        No events emited.
-      </template>
-
+      <template v-else>No events emited.</template>
     </collaspable>
-
   </transition-group>
 </template>
 <script>
@@ -140,12 +103,6 @@ export default {
   font-size: 12px;
   padding: 0px;
 
-  .main-collapsable {
-    transition: all 0.5s;
-    display: inline-block;
-    width: 100%;
-  }
-
   .main-collapsable.flip-list-enter,
   .main-collapsable.flip-list-leave-to {
     opacity: 0;
@@ -153,10 +110,6 @@ export default {
   .main-collapsable.flip-list-leave-active {
     position: absolute;
   }
-
-  // /deep/ .card {
-  //   max-height: 75%;
-  // }
 
   /deep/ .card {
     .collapse {
@@ -180,5 +133,6 @@ export default {
     font-size: 12px;
     height: 28px;
   }
+
 }
 </style>

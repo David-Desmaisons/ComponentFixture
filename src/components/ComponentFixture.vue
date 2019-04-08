@@ -281,3 +281,10 @@ export default {
   }
 };
 </script>
+
+<style lang="less" scoped>
+.splitter-pane {
+  height: 100vh;
+}
+</style>
+

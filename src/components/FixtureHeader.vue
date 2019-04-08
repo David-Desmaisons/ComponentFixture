@@ -1,28 +1,17 @@
 <template>
   <div class="component__segment">
-    <div class="alert alert-primary name">{{componentName}}</div>
-
     <div class="controls">
-      <div class="props-switch">
-        <switch-component
-          :value="showEditor"
-          @input="input"
-        />
-        <span>Show Props</span>
-      </div>
+      <label class="props-switch">
+        <switch-component :value="showEditor" @input="input"/>
+        <span :class="{'checked': showEditor}">Show Editor</span>
+      </label>
 
-      <button
-        class="btn btn-danger"
-        @click="update"
-        v-tooltip.left="'Update component'"
-      >
-        <i
-          class="fa fa-refresh"
-          aria-hidden="true"
-        ></i>
+      <h2 class="component__title">{{componentName}}</h2>
+
+      <button class="btn btn-sm" @click="update" v-tooltip.left="'Update component'">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
       </button>
     </div>
-
   </div>
 </template>
 <script>
@@ -73,16 +62,19 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 14px 0;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
   border-radius: 5px 5px 0 0;
   overflow-x: auto;
+  position: relative;
+  z-index: 9;
 
   .controls {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
   }
 
   div {
@@ -91,14 +83,14 @@ export default {
     margin-bottom: 0;
   }
 
-  .methods {
-    width: 100%;
-    overflow-x: auto;
-  }
-
-  button {
-    margin-top: 5px;
-    height: 40px;
+  .component__title {
+    margin: 0;
+    font-size: 26px;
+    text-transform: capitalize;
+    background: #f4f4f4;
+    padding: 5px 15px;
+    border-radius: 3px;
+    line-height: 1;
   }
 
   .segment {
@@ -151,6 +143,17 @@ export default {
   .props-switch {
     display: flex;
     align-items: center;
+    padding: 0 8px;
+    margin: 0;
+    cursor: pointer;
+
+    span {
+      margin-left: 5px;
+    }
+
+    .checked {
+      font-weight: bold;
+    }
   }
 }
 </style>

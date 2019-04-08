@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div class="component__container">
-      <div class="component__content">
+      <div class="component__content" :class="{'component__editor-hide': !showEditor}">
         <component-fixture :defaults="defaults" ref="fixture">
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
@@ -15,7 +15,9 @@
 
           <!-- Use this slot to enable edition of props values -->
           <template v-slot:control="scope">
-            <Editor v-bind="scope" :showEditor="showEditor"/>
+            <div>
+              <Editor v-bind="scope" :showEditor="showEditor"/>
+            </div>
           </template>
         </component-fixture>
       </div>
@@ -47,7 +49,7 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped="true">
+<style lang="less">
 .root {
   display: flex;
   align-items: center;
@@ -61,6 +63,19 @@ export default {
   border: 1px solid #eee;
   border-radius: 5px;
   overflow: hidden;
+}
+
+.component__editor-hide {
+  .vue-splitter-container {
+    .splitter-paneL,
+    .splitter-pane-resizer {
+      display: none;
+    }
+    .splitter-paneR {
+      width: 100% !important;
+      padding: 0 !important;
+    }
+  }
 }
 
 .main-panel {

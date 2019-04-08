@@ -1,31 +1,25 @@
 <template>
   <div class="card">
     <div class="card-header expander" :style="headerStyle">
-      <h2 class="mb-0">
-        <button
-          class="btn expander-button"
-          type="button"
-          data-toggle="collapse"
-          :data-target="`#${id}`"
-          aria-expanded="false"
-          :aria-controls="id"
-          :class="{ collapsed: !initialShow}"
-        >
-          <div class="expander-header">
-            <i class="fa fa-caret-down expander-icon"></i>
-            <slot name="header">
-              {{title}}
-            </slot>
-          </div>
-        </button>
-      </h2>
+      <button
+        class="btn expander-button"
+        type="button"
+        data-toggle="collapse"
+        :data-target="`#${id}`"
+        aria-expanded="false"
+        :aria-controls="id"
+        :class="{ collapsed: !initialShow}"
+      >
+        <div class="expander-header">
+          <i class="fa fa-caret-down expander-icon"></i>
+          <slot name="header">
+            <strong>{{title}}</strong>
+          </slot>
+        </div>
+      </button>
     </div>
 
-    <div
-      :id="id"
-      class="collapse"
-      :class="{ show: initialShow}"
-    >
+    <div :id="id" class="collapse" :class="{ show: initialShow}">
       <div class="card-body">
         <slot></slot>
       </div>
@@ -60,8 +54,24 @@ export default {
 </script>
 <style lang="less" scoped>
 .card {
-  .card-header.expander {
+  padding: 0;
+  border: 0;
+  margin-bottom: 5px;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0;
+
+  &:first-child,
+  & + .card {
+    border-bottom: 0;
+  }
+
+  .card-header {
     padding: 0;
+    border-radius: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
   }
 
   .expander-button {
@@ -82,6 +92,8 @@ export default {
 
   .expander-header {
     display: flex;
+    align-items: center;
+    padding: 3px 0;
   }
 
   .expander-button.collapsed {
@@ -92,6 +104,11 @@ export default {
 
   span {
     font-size: 12px;
+  }
+
+  .card-body {
+    padding: 10px;
+    overflow-x: hidden;
   }
 }
 </style>
