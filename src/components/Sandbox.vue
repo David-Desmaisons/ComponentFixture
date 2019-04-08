@@ -63,6 +63,10 @@ export default {
   border: 1px solid #eee;
   border-radius: 5px;
   overflow: hidden;
+
+  .vue-splitter-container {
+    height: calc(100vh - 205px);
+  }
 }
 
 .component__editor-hide {
@@ -120,8 +124,8 @@ export default {
     align-items: center;
     justify-content: center;
     padding: 40px;
-    background: rgba(0, 0, 0, 0.03);
-    height: 50%;
+    background: #f9f9f9;
+    height: 100%;
 
     .real-component {
       height: 100%;
