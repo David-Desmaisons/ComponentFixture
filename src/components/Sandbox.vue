@@ -8,12 +8,7 @@
         >
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
-            <FixtureHeader
-              v-bind="{componentName, methods, update}"
-              :showProps.sync="showProps"
-              :showMethods.sync="showMethods"
-              :showEvents.sync="showEvents"
-            ></FixtureHeader>
+            <FixtureHeader v-bind="{componentName, methods, update}"/>
           </template>
 
           <!-- Use the default slot to create the component under test -->
@@ -23,12 +18,7 @@
 
           <!-- Use this slot to enable edition of props values -->
           <template v-slot:control="scope">
-            <Editor
-              v-bind="scope"
-              :showProps="showProps"
-              :showMethods="showMethods"
-              :showEvents="showEvents"
-            />
+            <Editor v-bind="scope"/>
           </template>
         </component-fixture>
       </div>
@@ -52,13 +42,6 @@ export default {
     ComponentFixture,
     Editor,
     FixtureHeader
-  },
-  data() {
-    return {
-      showProps: true,
-      showMethods: true,
-      showEvents: true
-    };
   }
 };
 </script>

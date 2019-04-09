@@ -3,35 +3,6 @@
     <div class="alert alert-primary name">{{componentName}}</div>
 
     <div class="controls">
-
-      <div class="card">
-        <div class="card-body show-options">
-          <div class="props-switch">
-            <switch-component
-              :value="showProps"
-              @input="input($event, 'showProps')"
-            />
-            <span>Props</span>
-          </div>
-
-          <div class="props-switch">
-            <switch-component
-              :value="showMethods"
-              @input="input($event, 'showMethods')"
-            />
-            <span>Methods</span>
-          </div>
-
-          <div class="props-switch">
-            <switch-component
-              :value="showEvents"
-              @input="input($event, 'showEvents')"
-            />
-            <span>Events</span>
-          </div>
-        </div>
-      </div>
-
       <button
         class="btn btn-danger"
         @click="update"
@@ -47,7 +18,6 @@
   </div>
 </template>
 <script>
-import switchComponent from "./base/Switch";
 import { VTooltip } from "v-tooltip";
 
 const props = {
@@ -55,25 +25,9 @@ const props = {
     required: true,
     type: String
   },
-  methods: {
-    required: true,
-    type: Array
-  },
   update: {
     required: true,
     type: Function
-  },
-  showProps: {
-    required: true,
-    type: Boolean
-  },
-  showMethods: {
-    required: true,
-    type: Boolean
-  },
-  showEvents: {
-    required: true,
-    type: Boolean
   }
 };
 
@@ -82,15 +36,7 @@ export default {
     tooltip: VTooltip
   },
   props,
-  components: {
-    switchComponent
-  },
-  name: "FixtureFeader",
-  methods: {
-    input(evt, name) {
-      this.$emit(`update:${name}`, evt);
-    }
-  }
+  name: "FixtureHeader"
 };
 </script>
 <style lang="less" scoped>
@@ -108,25 +54,12 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-
-    .card-body.show-options {
-      display: flex;
-      justify-content: space-between;
-      flex-direction: row;
-      padding-top: 0.75rem;
-      padding-bottom: 0.75rem;
-    }
   }
 
   div {
     margin-right: 10px;
     margin-left: 10px;
     margin-bottom: 0;
-  }
-
-  .methods {
-    width: 100%;
-    overflow-x: auto;
   }
 
   button {

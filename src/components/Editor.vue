@@ -6,6 +6,25 @@
     class="editor"
   >
 
+    <div class="card" key="controls">
+      <div class="card-body show-options">
+        <div class="props-switch">
+          <switch-component v-model="showProps" />
+          <span>Props</span>
+        </div>
+
+        <div class="props-switch">
+          <switch-component v-model="showMethods" />
+          <span>Methods</span>
+        </div>
+
+        <div class="props-switch">
+          <switch-component v-model="showEvents" />
+          <span>Events</span>
+        </div>
+      </div>
+    </div>
+
     <collaspable
       title="Props"
       key="props"
@@ -90,12 +109,14 @@ import "bootstrap/dist/css/bootstrap.css";
 import attributeEditor from "./internals/AttributeEditor";
 import eventDisplayer from "./internals/EventDisplayer";
 import collaspable from "./base/Collaspable";
+import switchComponent from "./base/Switch";
 
 export default {
   components: {
     attributeEditor,
     collaspable,
-    eventDisplayer
+    eventDisplayer,
+    switchComponent
   },
 
   props: {
@@ -118,19 +139,15 @@ export default {
     methods: {
       required: true,
       type: Array
-    },
-    showProps: {
-      type: Boolean,
-      default: true
-    },
-    showMethods: {
-      required: true,
-      type: Boolean
-    },
-    showEvents: {
-      required: true,
-      type: Boolean
     }
+  },
+
+  data() {
+    return {
+      showProps: true,
+      showMethods: true,
+      showEvents: true
+    };
   },
 
   computed: {
@@ -161,6 +178,14 @@ export default {
   }
   .main-collapsable.flip-list-leave-active {
     position: absolute;
+  }
+
+  .card-body.show-options {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
   }
 
   // /deep/ .card {
