@@ -77,5 +77,8 @@ export default {
 .prism-control {
   height: 28px;
   overflow: hidden;
+  padding: 6px;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 </style>
