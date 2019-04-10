@@ -1,6 +1,13 @@
 <template>
   <div>
-    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
+    <prism
+      :id="'attribute-'+attribute"
+      :class="{'is-invalid':!valid}"
+      :code="textValue"
+      language="javascript"
+      inline
+      class="prism-control form-control"
+    />
     <div class="invalid-feedback">
       {{error}}
     </div>
@@ -8,6 +15,9 @@
 </template>
 <script>
 import { parseFunction } from "@/utils/TypeHelper";
+import "prismjs";
+import "prismjs/themes/prism.css";
+import prism from "vue-prism-component";
 
 export default {
   props: {
@@ -25,8 +35,12 @@ export default {
     }
   },
 
+  components: {
+    prism
+  },
+
   data() {
-    const textValue = this.object[this.attribute];
+    const textValue = String(this.object[this.attribute]);
     return {
       textValue,
       error: null,
@@ -60,4 +74,8 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.prism-control {
+  height: 28px;
+  overflow: hidden;
+}
 </style>
