@@ -134,24 +134,26 @@ export default {
   }
 
   .badge.type-decriptor {
-    width: 45px;
-    min-width: 45px;
-    font-size: 12px;
-    height: 30px;
-    padding-top: 10px;
-    flex-basis: 36px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    max-width: 40px;
+    height: 20px;
+    text-transform: uppercase;
 
     select {
       background: transparent;
       color: white;
       border: transparent;
       padding: 0;
-      margin-left: -3px;
-      margin-top: -10px;
       outline: transparent;
+      text-transform: uppercase;
+      width: 40px;
 
       option {
-        background: lightgray;
+        background: #555;
         color: white;
         text-align: center;
         font-size: 12px;
@@ -175,6 +177,17 @@ export default {
 
 .label {
   margin-left: 10px;
+  min-width: 80px;
+  width: 20%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+}
+.custom-control.custom-switch {
+  .custom-control-label {
+    right: calc(100% - 32px);
+  }
 }
 
 .tooltip {

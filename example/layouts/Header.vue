@@ -38,7 +38,8 @@
   }
   .nav-link {
     color: black;
-    font-size: 36px;
+    font-size: 32px;
+    padding: 0;
   }
 }
 </style>

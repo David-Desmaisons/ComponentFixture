@@ -1,14 +1,14 @@
 <template>
   <div class="root">
     <div class="component__container">
-      <div class="component__content">
+      <div class="component__content" :class="{ 'editor-closed': !showEditor }">
         <component-fixture
           :defaults="defaults"
           ref="fixture"
         >
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
-            <FixtureHeader v-bind="{componentName, methods, update}"/>
+            <FixtureHeader @toggle="showEditor = !showEditor" v-bind="{componentName, methods, update}"/>
           </template>
 
           <!-- Use the default slot to create the component under test -->
@@ -42,14 +42,35 @@ export default {
     ComponentFixture,
     Editor,
     FixtureHeader
+  },
+  data(){
+    return {
+      showEditor: false,
+    }
+  },
+  watch: {
+    showEditor(val){
+      console.log('EDITOR', val)
+    }
   }
 };
 </script>
 <style lang="less" scoped="true">
-/deep/ .splitter-pane.splitter-paneL.vertical {
+/deep/ .splitter-pane.splitter-paneL {
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 80px);
+  height: calc(100% - 60px);
+}
+
+.editor-closed {
+  /deep/ .splitter-pane.splitter-paneL,
+  /deep/ .splitter-pane-resizer  {
+    display: none;
+  }
+  /deep/ .splitter-pane.splitter-paneR {
+    width: 100% !important;
+    padding: 0 !important;
+  }
 }
 
 .root {
@@ -69,6 +90,10 @@ export default {
 
 .main-panel {
   height: calc(100vh - 140px) !important;
+}
+
+.splitter-pane {
+  height: 100vh;
 }
 
 &::-webkit-scrollbar-track {

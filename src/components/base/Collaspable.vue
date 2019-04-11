@@ -1,24 +1,22 @@
 <template>
   <div class="card">
     <div class="card-header expander" :style="headerStyle">
-      <h2 class="mb-0">
-        <button
-          class="btn expander-button"
-          type="button"
-          data-toggle="collapse"
-          :data-target="`#${id}`"
-          aria-expanded="false"
-          :aria-controls="id"
-          :class="{ collapsed: !initialShow}"
-        >
-          <div class="expander-header">
-            <i class="fa fa-caret-down expander-icon"></i>
-            <slot name="header">
-              {{title}}
-            </slot>
-          </div>
-        </button>
-      </h2>
+      <button
+        class="btn expander-button"
+        type="button"
+        data-toggle="collapse"
+        :data-target="`#${id}`"
+        aria-expanded="false"
+        :aria-controls="id"
+        :class="{ collapsed: !initialShow}"
+      >
+        <div class="expander-header">
+          <i class="fa fa-caret-down expander-icon"></i>
+          <slot name="header">
+            {{title}}
+          </slot>
+        </div>
+      </button>
     </div>
 
     <div
@@ -60,8 +58,25 @@ export default {
 </script>
 <style lang="less" scoped>
 .card {
-  .card-header.expander {
+  padding: 0;
+  border: 0;
+  margin-bottom: 5px;
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0;
+
+  &:first-child,
+  & + .card {
+    border-bottom: 0;
+  }
+
+  .card-header {
     padding: 0;
+    border-radius: 0;
+    background: #eee;
+    position: sticky;
+    top: 0;
+    z-index: 2;
   }
 
   .expander-button {
@@ -82,6 +97,8 @@ export default {
 
   .expander-header {
     display: flex;
+    align-items: center;
+    padding: 3px 0;
   }
 
   .expander-button.collapsed {
@@ -90,8 +107,8 @@ export default {
     }
   }
 
-  span {
-    font-size: 12px;
+  &-body {
+    padding: 10px 8px;
   }
 }
 </style>
