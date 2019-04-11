@@ -45,7 +45,7 @@ export default {
   },
   data(){
     return {
-      showEditor: false,
+      showEditor: true,
     }
   },
   watch: {
