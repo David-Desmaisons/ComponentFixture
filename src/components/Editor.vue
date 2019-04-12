@@ -8,20 +8,20 @@
 
     <div class="card" key="controls">
       <div class="card-body show-options">
-        <div class="props-switch">
+        <label class="props-switch">
           <switch-component v-model="showProps" />
           <span>Props</span>
-        </div>
+        </label>
 
-        <div class="props-switch">
+        <label class="props-switch">
           <switch-component v-model="showMethods" />
           <span>Methods</span>
-        </div>
+        </label>
 
-        <div class="props-switch">
+        <label class="props-switch">
           <switch-component v-model="showEvents" />
           <span>Events</span>
-        </div>
+        </label>
       </div>
     </div>
 
@@ -184,15 +184,18 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    padding: 7px 0;
+    border-bottom: 2px solid #ddd;
+
+    .props-switch {
+      text-align: center;
+      margin: 0;
+    }
   }
 
-  // /deep/ .card {
-  //   max-height: 75%;
-  // }
-
   /deep/ .card {
+    border: 0;
+    
     .collapse {
       overflow-y: auto;
     }
@@ -213,6 +216,10 @@ export default {
   /deep/ input {
     font-size: 12px;
     height: 28px;
+  }
+
+  .props-switch {
+    cursor: pointer;
   }
 }
 </style>

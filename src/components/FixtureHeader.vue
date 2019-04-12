@@ -1,10 +1,19 @@
 <template>
   <div class="component__segment">
-    <div class="alert alert-primary name">{{componentName}}</div>
-
-    <div class="controls">
+    <div class="controls navbar-light start">
       <button
-        class="btn btn-danger"
+        class="btn btn--toggle-editor navbar-toggler"
+        @click="toggleEditor()"
+        v-tooltip.left="'Toggle sidebar editor'"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <h4 class="component__title">{{componentName}}</h4>
+    </div>
+
+    <div class="controls end">
+      <button
+        class="btn btn--refresh-component"
         @click="update"
         v-tooltip.left="'Update component'"
       >
@@ -36,7 +45,12 @@ export default {
     tooltip: VTooltip
   },
   props,
-  name: "FixtureHeader"
+  name: "FixtureHeader",
+  methods: {
+    toggleEditor(){
+      this.$emit('toggle');
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -44,79 +58,39 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px 16px;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
   border-radius: 5px 5px 0 0;
   overflow-x: auto;
+  position: relative;
+  z-index: 9;
 
   .controls {
     display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-  }
-
-  div {
-    margin-right: 10px;
-    margin-left: 10px;
-    margin-bottom: 0;
-  }
-
-  button {
-    margin-top: 5px;
-    height: 40px;
-  }
-
-  .segment {
-    text-align: center;
-    min-width: 125px;
-    text-align: center;
-    color: #2b3e50;
-    background-color: #eeeeee;
-    padding: 8px;
-    font-weight: 500;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: 14px;
-
-    &.selected {
-      font-weight: bold;
-      background: #d5dade;
-      color: #2b3e50;
-      box-shadow: inset 0px 3px #2b3e50;
-    }
-
-    &:first-child {
-      border-radius: 2px 0 0 2px;
-    }
-
-    &:last-child {
-      border-radius: 0 2px 2px 0;
-    }
-
-    &:hover {
-      opacity: 0.9;
-    }
-
-    &:active {
-      -webkit-transform: translateY(1px);
-      transform: translateY(1px);
-    }
-  }
-
-  .custom-control.custom-switch {
-    margin-right: 0;
-  }
-
-  .segment-divider {
-    height: 100%;
-    width: 2px;
-    background: #000;
-  }
-
-  .props-switch {
-    display: flex;
     align-items: center;
+
+
+    &.start {
+      flex: 1;
+    }
+
+    .btn {
+      border: 0;
+      margin: 0;
+      padding: 0;
+      background: transparent;
+    }
   }
+
+  .component__title {
+    margin: 0;
+    font-size: 26px;
+    text-transform: capitalize;
+    margin-left: 10px;
+    padding: 5px 15px;
+    border-radius: 3px;
+    line-height: 1;
+  }
+
 }
 </style>

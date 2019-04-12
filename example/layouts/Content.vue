@@ -18,7 +18,7 @@ export default {
   width: calc(100% - 400px);
 
   .component {
-    padding: 40px;
+    padding: 25px;
     background: rgba(0, 0, 0, 0.03);
   }
 }
