@@ -121,7 +121,7 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .attribute-component {
   display: flex;
   flex-direction: row;
@@ -166,7 +166,7 @@ export default {
     }
   }
 
-  div.component-input {
+  /deep/ div.component-input {
     flex-grow: 2;
   }
 }
