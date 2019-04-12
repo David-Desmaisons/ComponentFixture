@@ -65,6 +65,11 @@ export default {
   position: relative;
   z-index: 9;
 
+  .btn--toggle-editor.navbar-toggler {
+    outline: transparent;
+    box-shadow: none;
+  }
+
   .controls {
     display: flex;
     align-items: center;
