@@ -125,8 +125,8 @@ export default {
 .attribute-component {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  height: 32px;
+  align-items: flex-start;
+  min-height: 32px;
 
   div {
     margin-left: 5px;
@@ -169,6 +169,17 @@ export default {
   /deep/ div.component-input {
     flex-grow: 2;
   }
+
+  /deep/ .is-invalid {
+    border: 2px solid red;
+  }
+
+  /deep/ .invalid-feedback {
+    color: red;
+    font-weight: bold;
+    display: inline;
+    font-size: 100%;
+  }
 }
 
 .type-select {
@@ -189,7 +200,8 @@ export default {
     right: calc(100% - 32px);
   }
 }
-
+</style>
+<style lang="less">
 .tooltip {
   display: block !important;
   z-index: 10000;
