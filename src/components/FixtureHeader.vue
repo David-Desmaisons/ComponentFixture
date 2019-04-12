@@ -86,7 +86,6 @@ export default {
     margin: 0;
     font-size: 26px;
     text-transform: capitalize;
-    // background: #f4f4f4;
     margin-left: 10px;
     padding: 5px 15px;
     border-radius: 3px;

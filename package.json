@@ -17,6 +17,7 @@
     "font-awesome": "^4.7.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.9",
+    "vue-multiselect": "^2.1.4",
     "vue-splitpane": "^1.0.4"
   },
   "devDependencies": {

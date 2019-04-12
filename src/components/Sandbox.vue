@@ -48,11 +48,6 @@ export default {
       showEditor: true,
     }
   },
-  watch: {
-    showEditor(val){
-      console.log('EDITOR', val)
-    }
-  }
 };
 </script>
 <style lang="less" scoped="true">
