@@ -31,8 +31,8 @@ import { VTooltip } from "v-tooltip";
 
 const props = {
   componentName: {
-    required: true,
-    type: String
+    type: String,
+    default: () => "Component without name"
   },
   update: {
     required: true,
