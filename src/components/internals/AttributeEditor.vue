@@ -1,73 +1,71 @@
 <template>
-  <div class="main">
-    <div class="attribute-row attribute-component">
+  <div
+    class="main"
+    :class="{'is-invalid':!valid}"
+  >
+    <div class="attribute-column attribute-description">
       <div class="label">{{attribute}}</div>
+
+      <div class="prop-description">
+        <div class="prop-info">
+          <i
+            class="fa"
+            :class="requiredIcon"
+            v-tooltip.bottom="metaData.definition.required ? 'required': 'not required'"
+          />
+        </div>
+
+        <div class="prop-info">
+          <i
+            class="fa"
+            :class="validatorIcon"
+            v-tooltip.bottom="metaData.definition.validator ? 'has validator' :'no validator'"
+          />
+        </div>
+
+        <div
+          class="badge type-decriptor"
+          v-tooltip="{content:type,placement:'bottom'}"
+          :class="badge"
+        >
+          <template v-if="types.length === 1">
+            {{convert(type)}}
+          </template>
+
+          <template v-else>
+            <select v-model="type">
+              <option
+                v-for="typeDescription in avalaibleTypes"
+                :value="typeDescription.value"
+                :key="typeDescription.value"
+              >{{typeDescription.display}}</option>
+            </select>
+          </template>
+        </div>
+
+        <div class="btn-group actions">
+          <button
+            v-if="metaData.definition.default !== undefined"
+            type="button"
+            class="btn prop-info btn-outline-info"
+            v-tooltip.bottom="'Reset to default'"
+            @click="toDefault"
+          > <i class="fa fa-home" />
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="attribute-column attribute-input">
 
       <component
         ref="editor"
         :is="componentType"
         class="component-input"
-        :class="{'is-invalid':!valid}"
         @onError="error = $event"
         v-bind="{object, attribute, metaData, types, value}"
       />
-    </div>
-
-    <div class="attribute-row">
-
-      <div class="prop-info">
-        <i
-          class="fa"
-          :class="requiredIcon"
-          v-tooltip.bottom="metaData.definition.required ? 'required': 'not required'"
-        />
-      </div>
-
-      <div class="prop-info">
-        <i
-          class="fa"
-          :class="validatorIcon"
-          v-tooltip.bottom="metaData.definition.validator ? 'has validator' :'no validator'"
-        />
-      </div>
-
-      <div
-        class="badge type-decriptor"
-        v-tooltip="{content:type,placement:'bottom'}"
-        :class="badge"
-      >
-        <template v-if="types.length === 1">
-          {{convert(type)}}
-        </template>
-
-        <template v-else>
-          <select v-model="type">
-            <option
-              v-for="typeDescription in avalaibleTypes"
-              :value="typeDescription.value"
-              :key="typeDescription.value"
-            >{{typeDescription.display}}</option>
-          </select>
-        </template>
-      </div>
-
-      <div class="btn-group actions">
-        <button
-          v-if="metaData.definition.default !== undefined"
-          type="button"
-          class="btn prop-info btn-outline-info"
-          v-tooltip.bottom="'Reset to default'"
-          @click="toDefault"
-        > <i class="fa fa-home" />
-        </button>
-        <button
-          v-if="metaData.definition.default !== undefined"
-          type="button"
-          class="btn prop-info btn-outline-info"
-          v-tooltip.bottom="'Alternative input'"
-        > <i class="fa fa-exchange" />
-        </button>
-      </div>
 
       <div
         class="error-feedback"
@@ -202,19 +200,17 @@ export default {
 </script>
 <style lang="less" scoped>
 @type-decriptor-width: 50px;
-@icon-color: #474747;
+@icon-color: darkgrey;
 
 .main {
   padding: 5px 5px;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
+  display: flex;
+  flex-direction: row;
 
-  .error-feedback {
-    color: red;
-    font-weight: bold;
-    display: inline;
-    font-size: 100%;
-    margin-left: auto;
+  .is-invalid {
+    box-shadow: 0 0 0 0.2rem red;
   }
 
   .badge.type-decriptor {
@@ -224,7 +220,7 @@ export default {
     justify-content: center;
     min-width: @type-decriptor-width;
     max-width: @type-decriptor-width;
-    height: 20px;
+    height: 30px;
     text-transform: uppercase;
 
     select {
@@ -251,7 +247,7 @@ export default {
   }
 }
 
-.attribute-row {
+.attribute-column {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -259,7 +255,7 @@ export default {
   color: @icon-color;
 
   .prop-info {
-    font-size: 22px;
+    font-size: 20px;
     padding: 0 5px;
 
     .fa-unlock-alt {
@@ -270,14 +266,46 @@ export default {
   .actions {
     padding: 0 5px;
     border-color: #ced4da;
-    font-size: 20px;
 
     .btn-outline-info {
       color: @icon-color;
+      background: transparent;
       :disabled {
         color: #17a2b8;
       }
     }
+  }
+}
+
+.attribute-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 160px;
+  width:160px;
+
+  .label {
+    color: black;
+  }
+}
+
+.prop-description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.attribute-input {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .error-feedback {
+    color: red;
+    font-weight: bold;
+    display: inline;
+    font-size: 100%;
   }
 }
 
@@ -286,14 +314,6 @@ export default {
     margin-left: 5px;
     margin-right: 5px;
   }
-
-  /deep/ div.component-input {
-    flex-grow: 2;
-  }
-
-  /deep/ .is-invalid {
-    box-shadow: 0 0 0 0.2rem red;
-  }
 }
 
 .type-select {
@@ -301,9 +321,7 @@ export default {
 }
 
 .label {
-  margin-left: 10px;
-  min-width: 100px;
-  width: 30%;
+  margin-left: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
