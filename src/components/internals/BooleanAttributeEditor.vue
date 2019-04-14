@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <switch-component v-model="object[attribute]" />
-  </div>
+  <switch-component v-model="object[attribute]" />
 </template>
 <script>
 import switchComponent from "@/components/base/Switch";
@@ -20,6 +18,10 @@ export default {
 
   components: {
     switchComponent
+  },
+
+  methods: {
+    reset() {}
   }
 };
 </script>

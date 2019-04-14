@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
-    <div class="invalid-feedback">
-      {{error}}
-    </div>
-  </div>
+  <input
+    
+    :id="'attribute-'+attribute"
+    v-model="textValue"
+    class="form-control"
+  />
+  <!-- type="range" -->
 </template>
 <script>
 import { filterFloat } from "@/utils/TypeHelper";
@@ -33,7 +34,6 @@ export default {
     const textValue = this.object[this.attribute];
     return {
       textValue,
-      error: null,
       NumberValue: textValue
     };
   },
@@ -42,22 +42,22 @@ export default {
     textValue(value) {
       const numberValue = filterFloat(value);
       if (isNaN(numberValue)) {
-        this.error = "Provide a valid number";
+        this.$emit("onError", "Provide a valid number");
         return;
       }
       const validated = this.metaData.validate(numberValue);
       if (!validated.ok) {
-        this.error = validated.message;
+        this.$emit("onError", validated.message);
         return;
       }
       this.NumberValue = numberValue;
       this.object[this.attribute] = numberValue;
-      this.error = null;
+      this.$emit("onError", null);
     },
     value: {
       handler(value) {
         this.NumberValue = value;
-        this.error = null;
+        this.$emit("onError", null);
         if (filterFloat(this.textValue) != value) {
           this.textValue = value;
         }
@@ -65,9 +65,9 @@ export default {
     }
   },
 
-  computed: {
-    valid() {
-      return this.error === null;
+  methods: {
+    reset(value) {
+      this.textValue = value;
     }
   }
 };
