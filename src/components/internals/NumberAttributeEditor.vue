@@ -1,15 +1,8 @@
 <template>
   <div class="main-control">
     <div class="input-control">
-      <input
-        class="range"
-        v-model.number="min"
-      />
-      <input
-        class="range"
-        v-model.number="max"
-      />
-
+      <input class="range min" v-model.number="min">
+      <input class="range max" v-model.number="max">
     </div>
     <div class="inputs">
       <input
@@ -19,13 +12,9 @@
         :id="'attribute-'+attribute"
         v-model="textValue"
         class="range form-control"
-      />
+      >
 
-      <input
-        class="value form-control"
-        :id="'attribute-2-'+attribute"
-        v-model="textValue"
-      />
+      <input class="value form-control" :id="'attribute-2-'+attribute" v-model="textValue">
     </div>
   </div>
 </template>
@@ -113,6 +102,8 @@ export default {
 .input-control {
   display: flex;
   align-items: flex-end;
+  margin-right: @value-width;
+  justify-content: space-between;
 
   .range {
     border-width: 0;
@@ -129,10 +120,6 @@ export default {
 .inputs {
   display: flex;
   align-items: center;
-
-  .range{
-    flex-grow: 1;
-  }
 
   .value.form-control {
     margin-left: auto;
