@@ -1,36 +1,15 @@
 <template>
-  <div
-    class="main"
-    :class="{'is-invalid':!valid}"
-  >
+  <div class="main" :class="{'is-invalid':!valid}">
     <div class="attribute-column attribute-description">
       <div class="label">{{attribute}}</div>
 
       <div class="prop-description">
-        <div class="prop-info">
-          <i
-            class="fa"
-            :class="requiredIcon"
-            v-tooltip.bottom="metaData.definition.required ? 'required': 'not required'"
-          />
-        </div>
-
-        <div class="prop-info">
-          <i
-            class="fa"
-            :class="validatorIcon"
-            v-tooltip.bottom="metaData.definition.validator ? 'has validator' :'no validator'"
-          />
-        </div>
-
         <div
           class="badge type-decriptor"
           v-tooltip="{content:type,placement:'bottom'}"
           :class="badge"
         >
-          <template v-if="types.length === 1">
-            {{convert(type)}}
-          </template>
+          <template v-if="types.length === 1">{{convert(type)}}</template>
 
           <template v-else>
             <select v-model="type">
@@ -43,22 +22,31 @@
           </template>
         </div>
 
-        <div class="btn-group actions">
+         <div class="btn-group actions">
           <button
             v-if="metaData.definition.default !== undefined"
             type="button"
             class="btn prop-info btn-outline-info"
             v-tooltip.bottom="'Reset to default'"
             @click="toDefault"
-          > <i class="fa fa-home" />
+          >
+            <i class="fa fa-home"/>
           </button>
+
+        <div class="prop-info" v-if="metaData.definition.required">
+          <i class="fa fa-exclamation-triangle" v-tooltip.bottom="'required'"/>
+        </div>
+
+        <div class="prop-info" v-if="metaData.definition.validator">
+          <i class="fa fa-lock" v-tooltip.bottom="'has validator'"/>
+        </div>
+
+       
         </div>
       </div>
-
     </div>
 
     <div class="attribute-column attribute-input">
-
       <component
         ref="editor"
         :is="componentType"
@@ -67,13 +55,7 @@
         v-bind="{object, attribute, metaData, types, value}"
       />
 
-      <div
-        class="error-feedback"
-        v-if="!valid"
-      >
-        {{error}}
-      </div>
-
+      <div class="error-feedback" v-if="!valid">{{error}}</div>
     </div>
   </div>
 </template> 
@@ -177,9 +159,7 @@ export default {
       return this.error === null;
     },
     requiredIcon() {
-      return this.metaData.definition.required
-        ? "fa-exclamation-triangle"
-        : "fa-question-circle";
+      return this.metaData.definition.required ? "" : "fa-question-circle";
     },
     validatorIcon() {
       return !!this.metaData.definition.validator ? "fa-lock" : "fa-unlock-alt";
@@ -282,11 +262,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-width: 160px;
-  width:160px;
+  min-width: 120px;
+  width: 30%;
 
   .label {
     color: black;
+    margin: 5px 0;
   }
 }
 

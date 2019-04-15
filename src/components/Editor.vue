@@ -166,7 +166,7 @@ export default {
 .editor {
   font-size: 12px;
   padding: 0px;
-  min-width: 280px;
+  min-width: 325px;
 
   .main-collapsable {
     transition: all 0.5s;
