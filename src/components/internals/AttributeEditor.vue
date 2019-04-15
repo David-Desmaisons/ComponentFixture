@@ -201,6 +201,7 @@ export default {
 <style lang="less" scoped>
 @type-decriptor-width: 50px;
 @icon-color: darkgrey;
+@icon-size: 18px;
 
 .main {
   padding: 5px 5px;
@@ -220,7 +221,7 @@ export default {
     justify-content: center;
     min-width: @type-decriptor-width;
     max-width: @type-decriptor-width;
-    height: 30px;
+    height: 28px;
     text-transform: uppercase;
 
     select {
@@ -255,7 +256,7 @@ export default {
   color: @icon-color;
 
   .prop-info {
-    font-size: 20px;
+    font-size: @icon-size;
     padding: 0 5px;
 
     .fa-unlock-alt {
