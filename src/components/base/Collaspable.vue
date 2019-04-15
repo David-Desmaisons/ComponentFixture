@@ -13,7 +13,7 @@
         <div class="expander-header">
           <i class="fa fa-caret-down expander-icon"></i>
           <slot name="header">
-            <strong>{{title}}</strong>
+            {{title}}
           </slot>
         </div>
       </button>
@@ -69,9 +69,10 @@ export default {
   .card-header {
     padding: 0;
     border-radius: 0;
+    background: #eee;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
 
   .expander-button {
@@ -102,8 +103,8 @@ export default {
     }
   }
 
-  span {
-    font-size: 12px;
+  &-body {
+    padding: 10px 8px;
   }
 
   .card-body {

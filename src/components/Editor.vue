@@ -1,6 +1,36 @@
 <template>
-  <transition-group type="transition" name="flip-list" tag="div" class="editor">
-    <collaspable title="Props" key="props" class="main-collapsable">
+  <transition-group
+    type="transition"
+    name="flip-list"
+    tag="div"
+    class="editor"
+  >
+
+    <div class="card" key="controls">
+      <div class="card-body show-options">
+        <label class="props-switch">
+          <switch-component v-model="showProps" />
+          <span>Props</span>
+        </label>
+
+        <label class="props-switch">
+          <switch-component v-model="showMethods" />
+          <span>Methods</span>
+        </label>
+
+        <label class="props-switch">
+          <switch-component v-model="showEvents" />
+          <span>Events</span>
+        </label>
+      </div>
+    </div>
+
+    <collaspable
+      title="Props"
+      key="props"
+      class="main-collapsable"
+      v-if="showProps"
+    >
       <template v-if="props.length>0">
         <attributeEditor
           v-for="prop in props"
@@ -14,7 +44,12 @@
       <template v-else>No Props detected.</template>
     </collaspable>
 
-    <collaspable title="Methods" key="methods" class="main-collapsable">
+    <collaspable
+      title="Methods"
+      v-if="showMethods"
+      key="methods"
+      class="main-collapsable"
+    >
       <template v-if="methods.length>0">
         <div class="methods" role="group" aria-label="methods">
           <button
@@ -30,7 +65,11 @@
       <template v-else>No Methods without argument detected.</template>
     </collaspable>
 
-    <collaspable class="events main-collapsable" key="events">
+    <collaspable
+      class="events main-collapsable"
+      v-if="showEvents"
+      key="events"
+    >
       <template v-slot:header>
         <strong class="events-header">
           Events
@@ -51,12 +90,14 @@ import "bootstrap/dist/css/bootstrap.css";
 import attributeEditor from "./internals/AttributeEditor";
 import eventDisplayer from "./internals/EventDisplayer";
 import collaspable from "./base/Collaspable";
+import switchComponent from "./base/Switch";
 
 export default {
   components: {
     attributeEditor,
     collaspable,
-    eventDisplayer
+    eventDisplayer,
+    switchComponent
   },
 
   props: {
@@ -79,11 +120,15 @@ export default {
     methods: {
       required: true,
       type: Array
-    },
-    showEditor: {
-      type: Boolean,
-      default: true
     }
+  },
+
+  data() {
+    return {
+      showProps: true,
+      showMethods: true,
+      showEvents: true
+    };
   },
 
   computed: {
@@ -103,6 +148,11 @@ export default {
   font-size: 12px;
   padding: 0px;
 
+  .main-collapsable {
+    transition: all 0.5s;
+    width: 100%;
+  }
+
   .main-collapsable.flip-list-enter,
   .main-collapsable.flip-list-leave-to {
     opacity: 0;
@@ -111,7 +161,22 @@ export default {
     position: absolute;
   }
 
+  .card-body.show-options {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    padding: 7px 0;
+    border-bottom: 2px solid #ddd;
+
+    .props-switch {
+      text-align: center;
+      margin: 0;
+    }
+  }
+
   /deep/ .card {
+    border: 0;
+    
     .collapse {
       overflow-y: auto;
     }
@@ -134,5 +199,8 @@ export default {
     height: 28px;
   }
 
+  .props-switch {
+    cursor: pointer;
+  }
 }
 </style>

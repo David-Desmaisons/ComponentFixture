@@ -15,7 +15,7 @@ const typesDescription = {
     badge: "badge-secondary"
   },
   String: {
-    display: 'Str',
+    display: "Str",
     component: "stringAttributeEditor",
     badge: "badge-success"
   },

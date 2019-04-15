@@ -1,7 +1,4 @@
-import {
-  getHashCode,
-  getColor
-} from "@/utils/colorHelper";
+import { getHashCode, getColor } from "@/utils/colorHelper";
 
 describe("colorHelper", () => {
   const stringAndHash = [
@@ -10,7 +7,7 @@ describe("colorHelper", () => {
     ["b", 98],
     ["c", 99],
     ["abc", 96354],
-    ["abcdef", -1424385949],
+    ["abcdef", -1424385949]
   ];
 
   test.each(stringAndHash)(
@@ -27,7 +24,7 @@ describe("colorHelper", () => {
     ["b", "hsl(98,100%,30%)"],
     ["c", "hsl(99,100%,30%)"],
     ["abc", "hsl(234,100%,30%)"],
-    ["abcdef", "hsl(-229,100%,30%)"],
+    ["abcdef", "hsl(-229,100%,30%)"]
   ];
 
   test.each(stringAndColor)(
@@ -42,7 +39,7 @@ describe("colorHelper", () => {
     [50, 10, "hsl(0,50%,10%)"],
     [30, 20, "hsl(0,30%,20%)"],
     [90, 56, "hsl(0,90%,56%)"],
-    [1, 20, "hsl(0,1%,20%)"],
+    [1, 20, "hsl(0,1%,20%)"]
   ];
 
   test.each(optionsAndColor)(

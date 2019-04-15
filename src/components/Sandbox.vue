@@ -1,23 +1,24 @@
 <template>
   <div class="root">
     <div class="component__container">
-      <div class="component__content" :class="{'component__editor-hide': !showEditor}">
-        <component-fixture :defaults="defaults" ref="fixture">
+      <div class="component__content" :class="{ 'editor-closed': !showEditor }">
+        <component-fixture
+          :defaults="defaults"
+          ref="fixture"
+        >
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
-            <FixtureHeader v-bind="{componentName, methods, update}" v-model="showEditor"></FixtureHeader>
+            <FixtureHeader @toggle="showEditor = !showEditor" v-bind="{componentName, methods, update}"/>
           </template>
 
           <!-- Use the default slot to create the component under test -->
           <template v-slot:default>
-            <slot/>
+            <slot />
           </template>
 
           <!-- Use this slot to enable edition of props values -->
           <template v-slot:control="scope">
-            <div>
-              <Editor v-bind="scope" :showEditor="showEditor"/>
-            </div>
+            <Editor v-bind="scope"/>
           </template>
         </component-fixture>
       </div>
@@ -42,14 +43,31 @@ export default {
     Editor,
     FixtureHeader
   },
-  data() {
+  data(){
     return {
-      showEditor: true
-    };
-  }
+      showEditor: true,
+    }
+  },
 };
 </script>
-<style lang="less">
+<style lang="less" scoped="true">
+/deep/ .splitter-pane.splitter-paneL {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100% - 60px);
+}
+
+.editor-closed {
+  /deep/ .splitter-pane.splitter-paneL,
+  /deep/ .splitter-pane-resizer  {
+    display: none;
+  }
+  /deep/ .splitter-pane.splitter-paneR {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+}
+
 .root {
   display: flex;
   align-items: center;
@@ -82,6 +100,10 @@ export default {
   height: calc(100vh - 140px) !important;
 }
 
+.splitter-pane {
+  height: 100vh;
+}
+
 &::-webkit-scrollbar-track {
   background-color: transparent;
 }
@@ -101,9 +123,6 @@ export default {
 
     > div {
       flex-grow: 1;
-      height: calc(100vh - 186px);
-      overflow-x: hidden;
-      overflow-y: auto;
       border: 1px solid #ddd;
 
       &:first-child {

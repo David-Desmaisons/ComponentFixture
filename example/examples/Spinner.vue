@@ -10,7 +10,7 @@ import {AtomSpinner} from 'epic-spinners'
 export default {
   name: "AtomSpinner-example",
   meta: {
-    display: "Epic slider"
+    display: "Epic spinner"
   },
   components: {
     Sandbox,

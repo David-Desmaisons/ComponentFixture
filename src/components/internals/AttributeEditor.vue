@@ -115,12 +115,12 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .attribute-component {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  height: 32px;
+  align-items: flex-start;
+  min-height: 32px;
 
   div {
     margin-left: 5px;
@@ -128,24 +128,26 @@ export default {
   }
 
   .badge.type-decriptor {
-    width: 45px;
-    min-width: 45px;
-    font-size: 12px;
-    height: 30px;
-    padding-top: 10px;
-    flex-basis: 36px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    max-width: 40px;
+    height: 20px;
+    text-transform: uppercase;
 
     select {
       background: transparent;
       color: white;
       border: transparent;
       padding: 0;
-      margin-left: -3px;
-      margin-top: -10px;
       outline: transparent;
+      text-transform: uppercase;
+      width: 40px;
 
       option {
-        background: lightgray;
+        background: #555;
         color: white;
         text-align: center;
         font-size: 12px;
@@ -158,8 +160,19 @@ export default {
     }
   }
 
-  div.component-input {
+  /deep/ div.component-input {
     flex-grow: 2;
+  }
+
+  /deep/ .is-invalid {
+    border: 2px solid red;
+  }
+
+  /deep/ .invalid-feedback {
+    color: red;
+    font-weight: bold;
+    display: inline;
+    font-size: 100%;
   }
 }
 
@@ -170,18 +183,19 @@ export default {
 .label {
   margin-left: 10px;
   min-width: 80px;
-  width: 15%;
+  width: 20%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 14px;
 }
-
 .custom-control.custom-switch {
   .custom-control-label {
     right: calc(100% - 32px);
   }
 }
-
+</style>
+<style lang="less">
 .tooltip {
   display: block !important;
   z-index: 10000;
