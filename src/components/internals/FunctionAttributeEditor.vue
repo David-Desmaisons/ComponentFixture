@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
-    <div class="invalid-feedback">
-      {{error}}
-    </div>
-  </div>
+  <input
+    :id="'attribute-'+attribute"
+    v-model="textValue"
+    class="form-control"
+  />
 </template>
 <script>
 import { parseFunction } from "@/utils/TypeHelper";
@@ -26,10 +25,9 @@ export default {
   },
 
   data() {
-    const textValue = this.object[this.attribute];
+    const textValue = String(this.object[this.attribute]);
     return {
       textValue,
-      error: null,
       functionValue: this.object[this.attribute]
     };
   },
@@ -40,21 +38,21 @@ export default {
         const functionValue = parseFunction(value);
         const validated = this.metaData.validate(functionValue);
         if (!validated.ok) {
-          this.error = validated.message;
+          this.$emit("onError", validated.message);
           return;
         }
         this.functionValue = functionValue;
         this.object[this.attribute] = functionValue;
-        this.error = null;
+        this.$emit("onError", null);
       } catch (e) {
-        this.error = "Provide a valid function";
+        this.$emit("onError", "Provide a valid function");
       }
     }
   },
 
-  computed: {
-    valid() {
-      return this.error === null;
+  methods: {
+    reset(value) {
+      this.textValue = String(value);
     }
   }
 };

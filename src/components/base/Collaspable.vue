@@ -13,17 +13,13 @@
         <div class="expander-header">
           <i class="fa fa-caret-down expander-icon"></i>
           <slot name="header">
-            {{title}}
+            <strong>{{title}}</strong>
           </slot>
         </div>
       </button>
     </div>
 
-    <div
-      :id="id"
-      class="collapse"
-      :class="{ show: initialShow}"
-    >
+    <div :id="id" class="collapse" :class="{ show: initialShow}">
       <div class="card-body">
         <slot></slot>
       </div>
@@ -99,6 +95,10 @@ export default {
     display: flex;
     align-items: center;
     padding: 3px 0;
+
+    strong {
+      font-size: 13px;
+    }
   }
 
   .expander-button.collapsed {
@@ -109,6 +109,11 @@ export default {
 
   &-body {
     padding: 10px 8px;
+  }
+
+  .card-body {
+    padding: 10px;
+    overflow-x: hidden;
   }
 }
 </style>

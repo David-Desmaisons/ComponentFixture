@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
-    <div class="invalid-feedback">
-      {{error}}
-    </div>
-  </div>
+  <input
+    :id="'attribute-'+attribute"
+    v-model="textValue"
+    class="form-control"
+  />
 </template>
 <script>
 export default {
@@ -28,10 +27,9 @@ export default {
   },
 
   data() {
-    const textValue = this.object[this.attribute];
+    const textValue = this.value;
     return {
-      textValue,
-      error: null
+      textValue
     };
   },
 
@@ -39,21 +37,21 @@ export default {
     textValue(value) {
       const validated = this.metaData.validate(value);
       if (!validated.ok) {
-        this.error = validated.message;
+        this.$emit("onError", validated.message);
         return;
       }
       this.object[this.attribute] = value;
-      this.error = null;
+      this.$emit("onError", null);
     },
     value(value) {
       this.textValue = value;
-      this.error = null;
+      this.$emit("onError", null);
     }
   },
 
-  computed: {
-    valid() {
-      return this.error === null;
+  methods: {
+    reset(value) {
+      this.textValue = value;
     }
   }
 };

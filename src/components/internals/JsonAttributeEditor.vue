@@ -1,10 +1,9 @@
 <template>
-  <div>
-    <input :id="'attribute-'+attribute" :class="{'is-invalid':!valid}" v-model="textValue" class="form-control" />
-    <div class="invalid-feedback">
-      {{error}}
-    </div>
-  </div>
+  <input
+    :id="'attribute-'+attribute"
+    v-model="textValue"
+    class="form-control"
+  />
 </template>
 <script>
 import {
@@ -38,8 +37,7 @@ export default {
 
   data() {
     return {
-      textValue: "",
-      error: null
+      textValue: ""
     };
   },
 
@@ -50,32 +48,35 @@ export default {
         const types = getTypeFromValue(newObject);
         const valid = types.find(t => this.types.find(st => st === t));
         if (!valid) {
-          this.error = `types: ${types} not compatible with ${this.types}`;
+          this.$emit(
+            "onError",
+            `types: ${types} not compatible with ${this.types}`
+          );
           return;
         }
         const validated = this.metaData.validate(newObject);
         if (!validated.ok) {
-          this.error = validated.message;
+          this.$emit("onError", validated.message);
           return;
         }
         this.object[this.attribute] = newObject;
-        this.error = null;
+        this.$emit("onError", null);
       } catch (e) {
-        this.error = "Unable to convert JSON data";
+        this.$emit("onError", "Unable to convert JSON data");
       }
     },
     value: {
       handler(value) {
         this.textValue = stringifyObject(value);
-        this.error = null;
+        this.$emit("onError", null);
       },
       immediate: true
     }
   },
 
-  computed: {
-    valid() {
-      return this.error === null;
+  methods: {
+    reset() {
+      this.textValue = this.value;
     }
   }
 };

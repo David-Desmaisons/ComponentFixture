@@ -23,7 +23,6 @@
         ></i>
       </button>
     </div>
-
   </div>
 </template>
 <script>

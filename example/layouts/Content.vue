@@ -1,14 +1,13 @@
 <template>
   <section class="app__content">
     <div class="component">
-      <router-view :key="$route.fullPath" />
+      <router-view :key="$route.fullPath"/>
     </div>
   </section>
 </template>
 
 <script>
-export default {
-};
+export default {};
 </script>
 
 

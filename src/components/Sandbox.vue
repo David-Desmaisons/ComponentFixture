@@ -54,7 +54,7 @@ export default {
 /deep/ .splitter-pane.splitter-paneL {
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 60px);
+  height: calc(100% - 60px) !important;
 }
 
 .editor-closed {
@@ -81,6 +81,19 @@ export default {
   border: 1px solid #eee;
   border-radius: 5px;
   overflow: hidden;
+}
+
+.component__editor-hide {
+  .vue-splitter-container {
+    .splitter-paneL,
+    .splitter-pane-resizer {
+      display: none;
+    }
+    .splitter-paneR {
+      width: 100% !important;
+      padding: 0 !important;
+    }
+  }
 }
 
 .main-panel {
