@@ -78,7 +78,11 @@
       </template>
 
       <template v-if="events.length>0">
-        <eventDisplayer v-for="(event, idx) in events" :key="idx" :event="event"/>
+        <eventDisplayer class="event"
+          v-for="(event, idx) in events"
+          :key="idx"
+          :event="event"
+        />
       </template>
 
       <template v-else>No events emited.</template>
@@ -147,6 +151,7 @@ export default {
 .editor {
   font-size: 12px;
   padding: 0px;
+  min-width: 325px;
 
   .main-collapsable {
     transition: all 0.5s;
@@ -201,6 +206,10 @@ export default {
 
   .props-switch {
     cursor: pointer;
+  }
+
+  /deep/ .event {
+    z-index: 0;
   }
 }
 </style>

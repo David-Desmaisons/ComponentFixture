@@ -1,26 +1,62 @@
 <template>
-  <div class="attribute-component">
-    <div class="badge type-decriptor" v-tooltip="{content:type,placement:'left'}" :class="badge">
-      <template v-if="types.length === 1">{{convert(type)}}</template>
+  <div class="main" :class="{'is-invalid':!valid}">
+    <div class="attribute-column attribute-description">
+      <div class="label">{{attribute}}</div>
 
-      <template v-else>
-        <select v-model="type">
-          <option
-            v-for="typeDescription in avalaibleTypes"
-            :value="typeDescription.value"
-            :key="typeDescription.value"
-          >{{typeDescription.display}}</option>
-        </select>
-      </template>
+      <div class="prop-description">
+        <div
+          class="badge type-decriptor"
+          v-tooltip="{content:type,placement:'bottom'}"
+          :class="badge"
+        >
+          <template v-if="types.length === 1">{{convert(type)}}</template>
+
+          <template v-else>
+            <select v-model="type">
+              <option
+                v-for="typeDescription in avalaibleTypes"
+                :value="typeDescription.value"
+                :key="typeDescription.value"
+              >{{typeDescription.display}}</option>
+            </select>
+          </template>
+        </div>
+
+         <div class="btn-group actions">
+          <button
+            v-if="metaData.definition.default !== undefined"
+            type="button"
+            class="btn prop-info btn-outline-info"
+            v-tooltip.bottom="'Reset to default'"
+            @click="toDefault"
+          >
+            <i class="fa fa-home"/>
+          </button>
+
+        <div class="prop-info" v-if="metaData.definition.required">
+          <i class="fa fa-exclamation-triangle" v-tooltip.bottom="'required'"/>
+        </div>
+
+        <div class="prop-info" v-if="metaData.definition.validator">
+          <i class="fa fa-lock" v-tooltip.bottom="'has validator'"/>
+        </div>
+
+       
+        </div>
+      </div>
     </div>
 
-    <div class="label">{{attribute}}</div>
+    <div class="attribute-column attribute-input">
+      <component
+        ref="editor"
+        :is="componentType"
+        class="component-input"
+        @onError="error = $event"
+        v-bind="{object, attribute, metaData, types, value}"
+      />
 
-    <component
-      class="component-input"
-      :is="componentType"
-      v-bind="{object, attribute, metaData, types, value:object[attribute]}"
-    />
+      <div class="error-feedback" v-if="!valid">{{error}}</div>
+    </div>
   </div>
 </template> 
 <script>
@@ -72,7 +108,9 @@ export default {
 
   data() {
     return {
-      type: null
+      type: null,
+      focused: false,
+      error: null
     };
   },
 
@@ -88,7 +126,18 @@ export default {
     }
   },
 
+  created() {
+    this.$default = this.object[this.attribute];
+    this.$defaultType = this.type;
+  },
+
   computed: {
+    value() {
+      return this.object[this.attribute];
+    },
+    canBeDefaulted() {
+      return this.value !== this.$default || this.$defaultType !== this.type;
+    },
     types() {
       return this.metaData.types;
     },
@@ -105,26 +154,44 @@ export default {
     },
     badge() {
       return typesDescription[this.type].badge;
+    },
+    valid() {
+      return this.error === null;
+    },
+    requiredIcon() {
+      return this.metaData.definition.required ? "" : "fa-question-circle";
+    },
+    validatorIcon() {
+      return !!this.metaData.definition.validator ? "fa-lock" : "fa-unlock-alt";
     }
   },
 
   methods: {
     convert(type) {
       return typesDescription[type].display;
+    },
+    toDefault() {
+      this.type = this.$defaultType;
+      this.object[this.attribute] = this.$default;
+      this.$refs.editor.reset(this.$default);
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.attribute-component {
+@type-decriptor-width: 50px;
+@icon-color: darkgrey;
+@icon-size: 18px;
+
+.main {
+  padding: 5px 5px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  min-height: 32px;
 
-  div {
-    margin-left: 5px;
-    margin-right: 5px;
+  .is-invalid {
+    box-shadow: 0 0 0 0.2rem red;
   }
 
   .badge.type-decriptor {
@@ -132,9 +199,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 40px;
-    max-width: 40px;
-    height: 20px;
+    min-width: @type-decriptor-width;
+    max-width: @type-decriptor-width;
+    height: 28px;
     text-transform: uppercase;
 
     select {
@@ -144,7 +211,7 @@ export default {
       padding: 0;
       outline: transparent;
       text-transform: uppercase;
-      width: 40px;
+      width: @type-decriptor-width;
 
       option {
         background: #555;
@@ -159,20 +226,75 @@ export default {
       }
     }
   }
+}
 
-  /deep/ div.component-input {
-    flex-grow: 2;
+.attribute-column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 32px;
+  color: @icon-color;
+
+  .prop-info {
+    font-size: @icon-size;
+    padding: 0 5px;
+
+    .fa-unlock-alt {
+      opacity: 0.7;
+    }
   }
 
-  /deep/ .is-invalid {
-    border: 2px solid red;
-  }
+  .actions {
+    padding: 0 5px;
+    border-color: #ced4da;
 
-  /deep/ .invalid-feedback {
+    .btn-outline-info {
+      color: @icon-color;
+      background: transparent;
+      :disabled {
+        color: #17a2b8;
+      }
+    }
+  }
+}
+
+.attribute-description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 120px;
+  width: 30%;
+
+  .label {
+    color: black;
+    margin: 5px 0;
+  }
+}
+
+.prop-description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.attribute-input {
+  flex-grow: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .error-feedback {
     color: red;
     font-weight: bold;
     display: inline;
     font-size: 100%;
+  }
+}
+
+.attribute-component {
+  div {
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }
 
@@ -181,13 +303,12 @@ export default {
 }
 
 .label {
-  margin-left: 10px;
-  min-width: 80px;
-  width: 20%;
+  margin-left: 5px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
+  font-weight: normal;
 }
 .custom-control.custom-switch {
   .custom-control-label {
