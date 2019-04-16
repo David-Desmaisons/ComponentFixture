@@ -182,7 +182,7 @@ export default {
 @icon-size: 18px;
 
 .main {
-  padding: 5px 5px;
+  padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   display: flex;
@@ -266,7 +266,7 @@ export default {
 
   .label {
     color: black;
-    margin: 5px 0;
+    margin: 0 0 5px;
   }
 }
 
