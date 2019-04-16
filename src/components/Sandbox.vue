@@ -54,7 +54,7 @@ export default {
 /deep/ .splitter-pane.splitter-paneL {
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 60px);
+  height: calc(100% - 60px) !important;
 }
 
 .editor-closed {

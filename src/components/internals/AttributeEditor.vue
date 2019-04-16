@@ -22,7 +22,7 @@
           </template>
         </div>
 
-         <div class="btn-group actions">
+        <div class="btn-group actions">
           <button
             v-if="metaData.definition.default !== undefined"
             type="button"
@@ -33,15 +33,13 @@
             <i class="fa fa-home"/>
           </button>
 
-        <div class="prop-info" v-if="metaData.definition.required">
-          <i class="fa fa-exclamation-triangle" v-tooltip.bottom="'required'"/>
-        </div>
+          <div class="prop-info" v-if="metaData.definition.required">
+            <i class="fa fa-exclamation-triangle" v-tooltip.bottom="'required'"/>
+          </div>
 
-        <div class="prop-info" v-if="metaData.definition.validator">
-          <i class="fa fa-lock" v-tooltip.bottom="'has validator'"/>
-        </div>
-
-       
+          <div class="prop-info" v-if="metaData.definition.validator">
+            <i class="fa fa-lock" v-tooltip.bottom="'has validator'"/>
+          </div>
         </div>
       </div>
     </div>
@@ -189,6 +187,7 @@ export default {
   border-radius: 0.25rem;
   display: flex;
   flex-direction: row;
+  align-items: center;
 
   .is-invalid {
     box-shadow: 0 0 0 0.2rem red;
@@ -309,6 +308,8 @@ export default {
   text-overflow: ellipsis;
   font-size: 14px;
   font-weight: normal;
+  max-width: 150px;
+  width: 99%;
 }
 .custom-control.custom-switch {
   .custom-control-label {

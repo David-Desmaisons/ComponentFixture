@@ -13,7 +13,7 @@
         <div class="expander-header">
           <i class="fa fa-caret-down expander-icon"></i>
           <slot name="header">
-            {{title}}
+            <strong>{{title}}</strong>
           </slot>
         </div>
       </button>
@@ -95,6 +95,10 @@ export default {
     display: flex;
     align-items: center;
     padding: 3px 0;
+
+    strong {
+      font-size: 13px;
+    }
   }
 
   .expander-button.collapsed {

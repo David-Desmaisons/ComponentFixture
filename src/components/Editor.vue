@@ -28,7 +28,7 @@
     <collaspable
       title="Props"
       key="props"
-      class="main-collapsable"
+      class="main-collapsable collapsable-props"
       v-if="showProps"
     >
       <template v-if="props.length>0">
@@ -48,7 +48,7 @@
       title="Methods"
       v-if="showMethods"
       key="methods"
-      class="main-collapsable"
+      class="main-collapsable collapsable-methods"
     >
       <template v-if="methods.length>0">
         <div class="methods" role="group" aria-label="methods">
@@ -66,7 +66,7 @@
     </collaspable>
 
     <collaspable
-      class="events main-collapsable"
+      class="main-collapsable collapsable-events"
       v-if="showEvents"
       key="events"
     >
@@ -170,12 +170,16 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding: 7px 0;
+    padding: 7px 10px;
     border-bottom: 2px solid #ddd;
 
     .props-switch {
       text-align: center;
       margin: 0;
+    }
+
+    .custom-switch + span {
+      margin-left: -18px;
     }
   }
 
@@ -210,6 +214,25 @@ export default {
 
   /deep/ .event {
     z-index: 0;
+  }
+
+  .collapsable-props {
+    .card-body > .main {
+      border-radius: 0;
+      
+      & + .main {
+        border-top: 0;
+      }
+      &:first-child {
+        border-radius: 4px 4px 0 0;
+      }
+      &:last-child {
+        border-radius: 0 0 4px 4px;
+      }
+      &:first-child:last-child {
+        border-radius: 4px;
+      }
+    }
   }
 }
 </style>
