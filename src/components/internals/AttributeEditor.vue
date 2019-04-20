@@ -1,5 +1,8 @@
 <template>
-  <div class="main" :class="{'is-invalid':!valid}">
+  <div
+    class="main"
+    :class="{'is-invalid':!valid}"
+  >
     <div class="attribute-column attribute-description">
       <div class="label">{{attribute}}</div>
 
@@ -30,15 +33,27 @@
             v-tooltip.bottom="'Reset to default'"
             @click="toDefault"
           >
-            <i class="fa fa-home"/>
+            <i class="fa fa-home" />
           </button>
 
-          <div class="prop-info" v-if="metaData.definition.required">
-            <i class="fa fa-exclamation-triangle" v-tooltip.bottom="'required'"/>
+          <div
+            class="prop-info"
+            v-if="metaData.definition.required"
+          >
+            <i
+              class="fa fa-exclamation-triangle"
+              v-tooltip.bottom="'required'"
+            />
           </div>
 
-          <div class="prop-info" v-if="metaData.definition.validator">
-            <i class="fa fa-lock" v-tooltip.bottom="'has validator'"/>
+          <div
+            class="prop-info"
+            v-if="metaData.definition.validator"
+          >
+            <i
+              class="fa fa-lock"
+              v-tooltip.bottom="'has validator'"
+            />
           </div>
         </div>
       </div>
@@ -53,7 +68,10 @@
         v-bind="{object, attribute, metaData, types, value}"
       />
 
-      <div class="error-feedback" v-if="!valid">{{error}}</div>
+      <div
+        class="error-feedback"
+        v-if="!valid"
+      >{{error}}</div>
     </div>
   </div>
 </template> 
@@ -169,9 +187,11 @@ export default {
       return typesDescription[type].display;
     },
     toDefault() {
+      const {$default} = this;
       this.type = this.$defaultType;
-      this.object[this.attribute] = this.$default;
-      this.$refs.editor.reset(this.$default);
+      this.object[this.attribute] = $default;
+      this.$refs.editor.reset($default);
+      this.$emit("success", `Update property "${this.attribute}" to default value: ${JSON.stringify($default, null, 2)}`);
     }
   }
 };

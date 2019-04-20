@@ -41,6 +41,7 @@
           :object="attributes"
           :attribute="prop.key"
           :metaData="prop.metaData"
+          @success="success"
         />
       </template>
 
@@ -168,6 +169,10 @@ export default {
           message: `"${name}" executed with error: ${error}`
         });
       }
+    },
+
+    success(message) {
+      this.showSuccess({ message });
     },
 
     showResult(name, res) {
