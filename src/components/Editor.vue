@@ -176,15 +176,11 @@ export default {
     },
 
     showResult(name, res) {
-      if (res === undefined) {
-        this.showSuccess({
-          message: `"${name}" executed with success`
-        });
-        return;
-      }
-      this.showSuccess({
-        message: `"${name}" returned: ${JSON.stringify(res, null, 2)}`
-      });
+      const message =
+        res === undefined
+          ? `"${name}" executed without error`
+          : `"${name}" returned: ${JSON.stringify(res, null, 2)}`;
+      this.showSuccess({ message });
     }
   },
 
