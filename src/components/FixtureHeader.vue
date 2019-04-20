@@ -14,7 +14,7 @@
     <div class="controls end">
       <button
         class="btn btn--refresh-component"
-        @click="update"
+        @click="executeUpdate"
         v-tooltip.left="'Update component'"
       >
         <i
@@ -27,6 +27,7 @@
 </template>
 <script>
 import { VTooltip } from "v-tooltip";
+import VueNotifications from "./base/notifificationInit";
 
 const props = {
   componentName: {
@@ -48,6 +49,21 @@ export default {
   methods: {
     toggleEditor() {
       this.$emit("toggle");
+    },
+
+    executeUpdate() {
+      this.update();
+      this.$nextTick(() => {
+        this.showSuccess();
+      });
+    }
+  },
+
+  notifications: {
+    showSuccess: {
+      type: VueNotifications.types.success,
+      title: "Success",
+      message: "$forceUpdate called on component"
     }
   }
 };
