@@ -180,7 +180,7 @@ export default {
         res === undefined
           ? `"${name}" executed without error`
           : `"${name}" returned: ${JSON.stringify(res, null, 2)}`;
-      this.showSuccess({ message });
+      this.success(message);
     }
   },
 
