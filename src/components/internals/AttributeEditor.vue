@@ -160,7 +160,7 @@ export default {
       return this.metaData.definition.required ? "" : "fa-question-circle";
     },
     validatorIcon() {
-      return !!this.metaData.definition.validator ? "fa-lock" : "fa-unlock-alt";
+      return this.metaData.definition.validator ? "fa-lock" : "fa-unlock-alt";
     }
   },
 

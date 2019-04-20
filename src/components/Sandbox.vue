@@ -43,11 +43,11 @@ export default {
     Editor,
     FixtureHeader
   },
-  data(){
+  data() {
     return {
-      showEditor: true,
-    }
-  },
+      showEditor: true
+    };
+  }
 };
 </script>
 <style lang="less" scoped="true">
@@ -59,7 +59,7 @@ export default {
 
 .editor-closed {
   /deep/ .splitter-pane.splitter-paneL,
-  /deep/ .splitter-pane-resizer  {
+  /deep/ .splitter-pane-resizer {
     display: none;
   }
   /deep/ .splitter-pane.splitter-paneR {
