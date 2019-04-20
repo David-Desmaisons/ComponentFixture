@@ -173,12 +173,6 @@ export default {
     },
     valid() {
       return this.error === null;
-    },
-    requiredIcon() {
-      return this.metaData.definition.required ? "" : "fa-question-circle";
-    },
-    validatorIcon() {
-      return this.metaData.definition.validator ? "fa-lock" : "fa-unlock-alt";
     }
   },
 
@@ -187,11 +181,18 @@ export default {
       return typesDescription[type].display;
     },
     toDefault() {
-      const {$default} = this;
+      const { $default } = this;
       this.type = this.$defaultType;
       this.object[this.attribute] = $default;
       this.$refs.editor.reset($default);
-      this.$emit("success", `Update property "${this.attribute}" to default value: ${JSON.stringify($default, null, 2)}`);
+      this.$emit(
+        "success",
+        `Update property "${this.attribute}" to default value: ${JSON.stringify(
+          $default,
+          null,
+          2
+        )}`
+      );
     }
   }
 };
