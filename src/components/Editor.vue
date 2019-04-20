@@ -6,7 +6,10 @@
     class="editor"
   >
 
-    <div class="card" key="controls">
+    <div
+      class="card"
+      key="controls"
+    >
       <div class="card-body show-options">
         <label class="props-switch">
           <switch-component v-model="showProps" />
@@ -38,6 +41,7 @@
           :object="attributes"
           :attribute="prop.key"
           :metaData="prop.metaData"
+          @success="success"
         />
       </template>
 
@@ -51,11 +55,15 @@
       class="main-collapsable collapsable-methods"
     >
       <template v-if="methods.length>0">
-        <div class="methods" role="group" aria-label="methods">
+        <div
+          class="methods"
+          role="group"
+          aria-label="methods"
+        >
           <button
             v-for="method in methods"
             :key="method.name"
-            @click="method.execute"
+            @click="executeMethod(method)"
             type="button"
             class="btn btn-primary"
           >{{method.name}}</button>
@@ -73,12 +81,16 @@
       <template v-slot:header>
         <strong class="events-header">
           Events
-          <span v-if="events.length>0" class="badge badge-success">{{events.length}}</span>
+          <span
+            v-if="events.length>0"
+            class="badge badge-success"
+          >{{events.length}}</span>
         </strong>
       </template>
 
       <template v-if="events.length>0">
-        <eventDisplayer class="event"
+        <eventDisplayer
+          class="event"
           v-for="(event, idx) in events"
           :key="idx"
           :event="event"
@@ -144,6 +156,29 @@ export default {
           metaData: this.propsDefinition[p]
         }));
     }
+  },
+
+  methods: {
+    async executeMethod({ execute, name }) {
+      try {
+        const res = await execute();
+        this.showResult(name, res);
+      } catch (error) {
+        this.$emit("error", `"${name}" executed with error: ${error}`);
+      }
+    },
+
+    success(message) {
+      this.$emit("success", message);
+    },
+
+    showResult(name, res) {
+      const message =
+        res === undefined
+          ? `"${name}" executed without error`
+          : `"${name}" returned: ${JSON.stringify(res, null, 2)}`;
+      this.success(message);
+    }
   }
 };
 </script>
@@ -185,7 +220,7 @@ export default {
 
   /deep/ .card {
     border: 0;
-    
+
     .collapse {
       overflow-y: auto;
     }
@@ -219,7 +254,7 @@ export default {
   .collapsable-props {
     .card-body > .main {
       border-radius: 0;
-      
+
       & + .main {
         border-top: 0;
       }

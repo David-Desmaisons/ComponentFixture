@@ -114,7 +114,7 @@ export default {
     line-height: 0px;
     overflow-x: visible;
     background-color: transparent;
-    
+
     &:hover {
       background: #eee;
     }

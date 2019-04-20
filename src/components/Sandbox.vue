@@ -1,14 +1,21 @@
 <template>
   <div class="root">
     <div class="component__container">
-      <div class="component__content" :class="{ 'editor-closed': !showEditor }">
+      <div
+        class="component__content"
+        :class="{ 'editor-closed': !showEditor }"
+      >
         <component-fixture
           :defaults="defaults"
           ref="fixture"
         >
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, methods, update}">
-            <FixtureHeader @toggle="showEditor = !showEditor" v-bind="{componentName, methods, update}"/>
+            <FixtureHeader
+              @toggle="showEditor = !showEditor"
+              @success="success"
+              v-bind="{componentName, methods, update}"
+            />
           </template>
 
           <!-- Use the default slot to create the component under test -->
@@ -18,7 +25,11 @@
 
           <!-- Use this slot to enable edition of props values -->
           <template v-slot:control="scope">
-            <Editor v-bind="scope"/>
+            <Editor
+              v-bind="scope"
+              @success="success"
+              @error="error"
+            />
           </template>
         </component-fixture>
       </div>
@@ -29,6 +40,7 @@
 import ComponentFixture from "./ComponentFixture";
 import Editor from "./Editor";
 import FixtureHeader from "./FixtureHeader";
+import VueNotifications from "./base/notifificationInit";
 
 export default {
   props: {
@@ -38,16 +50,39 @@ export default {
     }
   },
   name: "sandbox",
+
   components: {
     ComponentFixture,
     Editor,
     FixtureHeader
   },
-  data(){
+
+  data() {
     return {
-      showEditor: true,
+      showEditor: true
+    };
+  },
+
+  methods: {
+    success(message) {
+      this.showSuccess({ message });
+    },
+
+    error(message) {
+      this.showError({ message });
     }
   },
+
+  notifications: {
+    showSuccess: {
+      type: VueNotifications.types.success,
+      title: "Success"
+    },
+    showError: {
+      type: VueNotifications.types.error,
+      title: "Error"
+    }
+  }
 };
 </script>
 <style lang="less" scoped="true">
@@ -59,7 +94,7 @@ export default {
 
 .editor-closed {
   /deep/ .splitter-pane.splitter-paneL,
-  /deep/ .splitter-pane-resizer  {
+  /deep/ .splitter-pane-resizer {
     display: none;
   }
   /deep/ .splitter-pane.splitter-paneR {

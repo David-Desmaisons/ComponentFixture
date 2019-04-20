@@ -14,7 +14,7 @@
     <div class="controls end">
       <button
         class="btn btn--refresh-component"
-        @click="update"
+        @click="executeUpdate"
         v-tooltip.left="'Update component'"
       >
         <i
@@ -46,8 +46,15 @@ export default {
   props,
   name: "FixtureHeader",
   methods: {
-    toggleEditor(){
-      this.$emit('toggle');
+    toggleEditor() {
+      this.$emit("toggle");
+    },
+
+    executeUpdate() {
+      this.update();
+      this.$nextTick(() => {
+        this.$emit("success", "$forceUpdate called on component");
+      });
     }
   }
 };
@@ -73,7 +80,6 @@ export default {
     display: flex;
     align-items: center;
 
-
     &.start {
       flex: 1;
     }
@@ -95,6 +101,5 @@ export default {
     border-radius: 3px;
     line-height: 1;
   }
-
 }
 </style>
