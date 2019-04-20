@@ -27,7 +27,6 @@
 </template>
 <script>
 import { VTooltip } from "v-tooltip";
-import VueNotifications from "./base/notifificationInit";
 
 const props = {
   componentName: {
@@ -54,16 +53,8 @@ export default {
     executeUpdate() {
       this.update();
       this.$nextTick(() => {
-        this.showSuccess();
+        this.$emit("success", "$forceUpdate called on component");
       });
-    }
-  },
-
-  notifications: {
-    showSuccess: {
-      type: VueNotifications.types.success,
-      title: "Success",
-      message: "$forceUpdate called on component"
     }
   }
 };

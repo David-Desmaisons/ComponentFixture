@@ -107,7 +107,6 @@ import attributeEditor from "./internals/AttributeEditor";
 import eventDisplayer from "./internals/EventDisplayer";
 import collaspable from "./base/Collaspable";
 import switchComponent from "./base/Switch";
-import VueNotifications from "./base/notifificationInit";
 
 export default {
   components: {
@@ -165,14 +164,12 @@ export default {
         const res = await execute();
         this.showResult(name, res);
       } catch (error) {
-        this.showError({
-          message: `"${name}" executed with error: ${error}`
-        });
+        this.$emit("error", `"${name}" executed with error: ${error}`);
       }
     },
 
     success(message) {
-      this.showSuccess({ message });
+      this.$emit("success", message);
     },
 
     showResult(name, res) {
@@ -181,17 +178,6 @@ export default {
           ? `"${name}" executed without error`
           : `"${name}" returned: ${JSON.stringify(res, null, 2)}`;
       this.success(message);
-    }
-  },
-
-  notifications: {
-    showSuccess: {
-      type: VueNotifications.types.success,
-      title: "Success"
-    },
-    showError: {
-      type: VueNotifications.types.error,
-      title: "Error"
     }
   }
 };
