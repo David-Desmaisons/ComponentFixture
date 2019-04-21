@@ -7,6 +7,7 @@ import {
   validateProp
 } from "@/utils/VueHelper";
 import compare from "@/utils/compare";
+import consoleSilenter from "@/utils/consoleSilenter";
 
 function getMethods(methods, component) {
   return Object.keys(methods).map(name => ({
@@ -131,6 +132,7 @@ export default {
 
     const [slot] = defaultSlot;
     if (this.$stage === 0) {
+      this.$consoleSilenter = consoleSilenter(window);
       return h("div", {}, [slot]);
     }
 
@@ -231,6 +233,7 @@ export default {
     this.$stage = 1;
     this.updateValuesFromCurrrentComponent();
     this.$forceUpdate();
+    this.$consoleSilenter();
   },
 
   updated() {
