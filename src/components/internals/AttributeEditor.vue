@@ -31,6 +31,7 @@
             type="button"
             class="btn prop-info btn-outline-info"
             v-tooltip.bottom="'Reset to default'"
+            :disabled="!canBeDefaulted"
             @click="toDefault"
           >
             <i class="fa fa-home" />
@@ -85,6 +86,7 @@ import booleanAttributeEditor from "./BooleanAttributeEditor";
 import { VTooltip } from "v-tooltip";
 import { getTypeFromValue } from "@/utils/TypeHelper";
 import typesDescription from "./typesDescription";
+import compare from "@/utils/compare";
 
 function getDefaultType(types, defaultValue) {
   if (types.length === 1) {
@@ -152,7 +154,15 @@ export default {
       return this.object[this.attribute];
     },
     canBeDefaulted() {
-      return this.value !== this.$default || this.$defaultType !== this.type;
+      return (
+        this.error !== null ||
+        (this.metaData.definition.default !== undefined && this.isNotDefaulted)
+      );
+    },
+    isNotDefaulted() {
+      return (
+        this.$defaultType !== this.type || !compare(this.value, this.$default)
+      );
     },
     types() {
       return this.metaData.types;
