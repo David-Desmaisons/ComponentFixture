@@ -11,7 +11,7 @@ describe("colorHelper", () => {
   ];
 
   test.each(stringAndHash)(
-    "getHashCode returns for %p should return: %p",
+    "getHashCode for %p should return: %p",
     (arg, expected) => {
       const value = getHashCode(arg);
       expect(value).toEqual(expected);
