@@ -54,7 +54,21 @@ export default {
       options: this.$router.options.routes.filter(router => router.meta)
     };
   },
+  created() {
+    this.setInitComponentByRoute();
+  },
   methods: {
+    setInitComponentByRoute(){
+      const { path, meta: { display } } = this.$route;
+
+      this.value = {
+        component: {},
+        meta: {
+          display
+        },
+        path
+      };
+    },
     changeComponent(routerEvent){
       this.$router.push({ path: routerEvent.path })
     }
