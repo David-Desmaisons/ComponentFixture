@@ -18,7 +18,7 @@
     "izitoast": "^1.4.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.9",
-    "vue-multiselect": "^2.1.4",
+    "vue-multiselect": "^2.1.6",
     "vue-notifications": "^0.9.0",
     "vue-splitpane": "^1.0.4"
   },

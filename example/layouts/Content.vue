@@ -14,10 +14,10 @@ export default {};
 <style lang="less" scoped="true">
 .app__content {
   flex-grow: 1;
-  width: calc(100% - 400px);
 
   .component {
     padding: 25px;
+    height: 100%;
     background: rgba(0, 0, 0, 0.03);
   }
 }

@@ -111,7 +111,7 @@ export default {
 
 .component__container {
   width: 100%;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 95px);
   background: #fff;
   border: 1px solid #eee;
   border-radius: 5px;
@@ -132,7 +132,7 @@ export default {
 }
 
 .main-panel {
-  height: calc(100vh - 140px) !important;
+  height: calc(100vh - 95px) !important;
 }
 
 .splitter-pane {
