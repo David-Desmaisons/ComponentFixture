@@ -12,7 +12,11 @@
           :options="options"
           :close-on-select="true"
           :show-labels="false"
-          placeholder="Select component"
+          :searchable="true"
+          :hideSelected="true"
+          label="path"
+          track-by="path"
+          placeholder="Search and select a component"
           @select="changeComponent"
         >
           <template slot="singleLabel" slot-scope="props">
@@ -50,8 +54,7 @@ export default {
   },
   data() {
     return {
-      value: "",
-      options: this.$router.options.routes.filter(router => router.meta)
+      value: ""
     };
   },
   created() {
@@ -74,7 +77,7 @@ export default {
     }
   },
   computed: {
-    routes() {
+    options() {
       return this.$router.options.routes.filter(r => r.meta);
     }
   }
@@ -97,7 +100,6 @@ export default {
     font-size: 16px;
     font-weight: bold;
     border-right: 1px solid #ddd;
-    background: #eee;
 
     img {
       max-width: 22px;
@@ -121,6 +123,8 @@ export default {
 }
 
 .app__components-select {
+  cursor: pointer;
+
   /deep/ .multiselect__tags {
     height: 100%;
     min-height: 46px;
@@ -128,13 +132,16 @@ export default {
     border-radius: 0;
     border: 0;
     border-right: 1px solid #e8e8e8;
-    border-bottom: 1px solid #e8e8e8;
     padding-top: 0;
     padding-bottom: 0;
     padding-left: 12px;
     display: flex;
     align-items: center;
   }
+  /deep/ .multiselect__tags:hover {
+    background: #f9f9f9
+  }
+
   /deep/ .multiselect__placeholder,
   /deep/ .multiselect__single {
     margin: 0;
@@ -154,6 +161,7 @@ export default {
   /deep/ .multiselect__single {
     padding-left: 12px;
     padding-top: 8px;
+    background: transparent;
   }
 
   .option__title {
@@ -169,13 +177,35 @@ export default {
   }
 
   .multiselect--active {
+
+    /deep/ .multiselect__tags {
+      border-bottom: 1px solid #e8e8e8;
+    }
+
     /deep/ input {
       position: absolute;
       top: 50%;
-      background: #f4f4f4;
+      background: #eee;
+      border: 1px solid #ddd;
       width: calc(100% - 24px) !important;
       border-radius: 2px;
       padding: 6px 8px;
+
+      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #999;
+        opacity: 1; /* Firefox */
+        font-size: 14px;
+      }
+
+      &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #999;
+        font-size: 14px;
+      }
+
+      &::-ms-input-placeholder { /* Microsoft Edge */
+        color: #999;
+        font-size: 14px;
+      }
     }
   }
 }
