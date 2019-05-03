@@ -7,33 +7,23 @@
   >
 
     <div
-      class="card"
+      class="card card-options"
       key="controls"
     >
       <div class="card-body show-options">
-        <label class="props-switch">
-          <switch-component v-model="showProps" />
+        <button type="button" class="segment" :class="{'active': segmentActive === 'props'}" @click="toggleSegment('props')">
           <span>Props</span>
-        </label>
-
-        <label class="props-switch">
-          <switch-component v-model="showMethods" />
+        </button>
+        <button type="button" class="segment" :class="{'active': segmentActive === 'methods'}" @click="toggleSegment('methods')">
           <span>Methods</span>
-        </label>
-
-        <label class="props-switch">
-          <switch-component v-model="showEvents" />
+        </button>
+        <button type="button" class="segment" :class="{'active': segmentActive === 'events'}" @click="toggleSegment('events')">
           <span>Events</span>
-        </label>
+        </button>
       </div>
     </div>
 
-    <collaspable
-      title="Props"
-      key="props"
-      class="main-collapsable collapsable-props"
-      v-if="showProps"
-    >
+    <div v-if="segmentActive === 'props'" key="props">
       <template v-if="props.length>0">
         <attributeEditor
           v-for="prop in props"
@@ -46,14 +36,9 @@
       </template>
 
       <template v-else>No Props detected.</template>
-    </collaspable>
+    </div>
 
-    <collaspable
-      title="Methods"
-      v-if="showMethods"
-      key="methods"
-      class="main-collapsable collapsable-methods"
-    >
+    <div v-if="segmentActive === 'methods'" key="methods">
       <template v-if="methods.length>0">
         <div
           class="methods"
@@ -71,23 +56,9 @@
       </template>
 
       <template v-else>No Methods without argument detected.</template>
-    </collaspable>
+    </div>
 
-    <collaspable
-      class="main-collapsable collapsable-events"
-      v-if="showEvents"
-      key="events"
-    >
-      <template v-slot:header>
-        <strong class="events-header">
-          Events
-          <span
-            v-if="events.length>0"
-            class="badge badge-success"
-          >{{events.length}}</span>
-        </strong>
-      </template>
-
+    <div v-if="segmentActive === 'events'" key="events">
       <template v-if="events.length>0">
         <eventDisplayer
           class="event"
@@ -98,7 +69,7 @@
       </template>
 
       <template v-else>No events emited.</template>
-    </collaspable>
+    </div>
   </transition-group>
 </template>
 <script>
@@ -141,9 +112,7 @@ export default {
 
   data() {
     return {
-      showProps: true,
-      showMethods: true,
-      showEvents: true
+      segmentActive: "props" 
     };
   },
 
@@ -159,6 +128,10 @@ export default {
   },
 
   methods: {
+    toggleSegment(segment){
+      this.segmentActive = segment;
+    },
+
     async executeMethod({ execute, name }) {
       try {
         const res = await execute();
@@ -201,21 +174,37 @@ export default {
     position: absolute;
   }
 
+  .card-options {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+
   .card-body.show-options {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding: 7px 10px;
-    border-bottom: 2px solid #ddd;
+    padding: 0;
 
-    .props-switch {
-      text-align: center;
-      margin: 0;
+    button {
+      flex-grow: 1;
+      background: #f4f4f4;
+      border: 0;
+      border-bottom: 2px solid #ddd;
+      font-weight: bold;
+      padding: 5px;
+      outline: none;
+      cursor: pointer;
+
+      &:hover {
+        background: #eee;
+      }
+
+      &.active {
+        border-color: #007bff;
+      }
     }
 
-    .custom-switch + span {
-      margin-left: -18px;
-    }
   }
 
   /deep/ .card {
@@ -241,10 +230,6 @@ export default {
   /deep/ input {
     font-size: 12px;
     height: 28px;
-  }
-
-  .props-switch {
-    cursor: pointer;
   }
 
   /deep/ .event {

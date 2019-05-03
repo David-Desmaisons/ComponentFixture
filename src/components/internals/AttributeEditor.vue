@@ -214,8 +214,8 @@ export default {
 
 .main {
   padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
+  border-bottom: 1px solid #ced4da;
+  border-radius: 0;
   display: flex;
   flex-direction: row;
   align-items: center;

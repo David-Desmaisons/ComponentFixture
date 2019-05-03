@@ -98,7 +98,6 @@ export default {
     padding: 12px 16px;
     margin: 0;
     font-size: 16px;
-    font-weight: bold;
     border-right: 1px solid #ddd;
 
     img {
