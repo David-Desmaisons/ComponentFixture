@@ -139,7 +139,7 @@ export default {
     align-items: center;
   }
   /deep/ .multiselect__tags:hover {
-    background: #f9f9f9
+    background: #fdfdfd;
   }
 
   /deep/ .multiselect__placeholder,
