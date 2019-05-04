@@ -64,12 +64,13 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  padding: 8px 16px;
+    padding: 3px 16px;
   border-bottom: 1px solid #ddd;
-  border-radius: 5px 5px 0 0;
+  border-radius: 0;
   overflow-x: auto;
   position: relative;
   z-index: 9;
+  // background: #f9f9f9;
 
 
   .btn--toggle-editor.navbar-toggler {
@@ -96,7 +97,7 @@ export default {
 
   .component__title {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     text-transform: capitalize;
     padding: 5px 15px;
     border-radius: 3px;

@@ -201,7 +201,7 @@ export default {
       }
 
       &.active {
-        border-color: #007bff;
+        border-color: #46ba86;
         background: #eaeaea;
       }
     }

@@ -16,7 +16,6 @@ export default {};
   flex-grow: 1;
 
   .component {
-    padding: 25px;
     height: 100%;
     background: rgba(0, 0, 0, 0.03);
   }
