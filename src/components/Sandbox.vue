@@ -87,9 +87,7 @@ export default {
 </script>
 <style lang="less" scoped="true">
 /deep/ .splitter-pane.splitter-paneL {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100% - 31px) !important;
+  overflow: hidden;
 }
 
 .editor-closed {

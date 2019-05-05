@@ -178,6 +178,12 @@ export default {
     position: sticky;
     top: 0;
     z-index: 1;
+
+    & + div  {
+      padding: 8px 0;
+      height: calc(100vh - 110px);
+      overflow: auto;
+    }
   }
 
   .card-body.show-options {
