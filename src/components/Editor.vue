@@ -11,14 +11,15 @@
       key="controls"
     >
       <div class="card-body show-options">
-        <button type="button" class="segment" :class="{'active': segmentActive === 'props'}" @click="toggleSegment('props')">
+        <button type="button" class="segment segment-props" :class="{'active': segmentActive === 'props'}" @click="toggleSegment('props')">
           <span>Props</span>
         </button>
-        <button type="button" class="segment" :class="{'active': segmentActive === 'methods'}" @click="toggleSegment('methods')">
+        <button type="button" class="segment segment-methods" :class="{'active': segmentActive === 'methods'}" @click="toggleSegment('methods')">
           <span>Methods</span>
         </button>
-        <button type="button" class="segment" :class="{'active': segmentActive === 'events'}" @click="toggleSegment('events')">
+        <button type="button" class="segment segment-events" :class="{'active': segmentActive === 'events'}" @click="toggleSegment('events')">
           <span>Events</span>
+          <span class="badge" v-if="events.length>0">{{ events.length }}</span>
         </button>
       </div>
     </div>
@@ -194,6 +195,9 @@ export default {
 
     button {
       flex-grow: 1;
+      align-items: center;
+      display: flex;
+      justify-content: center;
       background: #f4f4f4;
       border: 0;
       border-bottom: 2px solid #ddd;
@@ -209,6 +213,15 @@ export default {
       &.active {
         border-color: #46ba86;
         background: #eaeaea;
+      }
+    }
+
+    .segment-events {
+      .badge {
+        background: red;
+        color: #fff;
+        border-radius: 2px;
+        margin-left: 5px;
       }
     }
 
