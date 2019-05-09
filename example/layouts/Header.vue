@@ -10,14 +10,15 @@
         <multiselect
           v-model="value"
           :options="options"
-          :close-on-select="true"
           :show-labels="false"
-          :searchable="true"
-          :hideSelected="true"
+          :maxHeight="700"
           label="path"
           track-by="path"
           placeholder="Search and select a component"
           @select="changeComponent"
+          close-on-select
+          searchable
+          hideSelected
         >
           <template slot="singleLabel" slot-scope="props">
             <span class="option__placeholder">Current Component:</span>
