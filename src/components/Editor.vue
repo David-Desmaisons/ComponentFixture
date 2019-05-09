@@ -57,7 +57,7 @@
         />
       </template>
 
-      <template v-else>No Props detected.</template>
+      <template v-else><span class="no-info">No Props detected.</span></template>
     </div>
     <div
       v-if="segmentActive === 'methods'"
@@ -86,7 +86,7 @@
         </div>
       </template>
 
-      <template v-else>No Methods without argument detected.</template>
+      <template v-else><span class="no-info">No Methods without argument detected.</span></template>
     </div>
 
     <div
@@ -102,7 +102,7 @@
         />
       </template>
 
-      <template v-else>No events emited.</template>
+      <template v-else><span class="no-info">No events emited.</span></template>
     </div>
   </transition-group>
 </template>
@@ -194,6 +194,10 @@ export default {
   font-size: 12px;
   padding: 0px;
   min-width: 325px;
+
+  .no-info {
+    margin: 1em;
+  }
 
   .main-collapsable {
     transition: all 0.5s;
