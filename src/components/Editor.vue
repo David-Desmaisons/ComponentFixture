@@ -11,20 +11,41 @@
       key="controls"
     >
       <div class="card-body show-options">
-        <button type="button" class="segment segment-props" :class="{'active': segmentActive === 'props'}" @click="toggleSegment('props')">
+        <button
+          type="button"
+          class="segment segment-props"
+          :class="{'active': segmentActive === 'props'}"
+          @click="toggleSegment('props')"
+        >
           <span>Props</span>
         </button>
-        <button type="button" class="segment segment-methods" :class="{'active': segmentActive === 'methods'}" @click="toggleSegment('methods')">
+        <button
+          type="button"
+          class="segment segment-methods"
+          :class="{'active': segmentActive === 'methods'}"
+          @click="toggleSegment('methods')"
+        >
           <span>Methods</span>
         </button>
-        <button type="button" class="segment segment-events" :class="{'active': segmentActive === 'events'}" @click="toggleSegment('events')">
+        <button
+          type="button"
+          class="segment segment-events"
+          :class="{'active': segmentActive === 'events'}"
+          @click="toggleSegment('events')"
+        >
           <span>Events</span>
-          <span class="badge" v-if="events.length>0">{{ events.length }}</span>
+          <span
+            class="badge"
+            v-if="events.length>0"
+          >{{ events.length }}</span>
         </button>
       </div>
     </div>
 
-    <div v-if="segmentActive === 'props'" key="props">
+    <div
+      v-if="segmentActive === 'props'"
+      key="props"
+    >
       <template v-if="props.length>0">
         <attributeEditor
           v-for="prop in props"
@@ -38,28 +59,40 @@
 
       <template v-else>No Props detected.</template>
     </div>
-
-    <div v-if="segmentActive === 'methods'" key="methods">
+    <div
+      v-if="segmentActive === 'methods'"
+      key="methods"
+    >
       <template v-if="methods.length>0">
         <div
           class="methods"
           role="group"
           aria-label="methods"
         >
-          <button
+
+          <div
             v-for="method in methods"
             :key="method.name"
-            @click="executeMethod(method)"
-            type="button"
-            class="btn btn-primary"
-          >{{method.name}}</button>
+            class="methods-button"
+          >
+            <button
+              @click="executeMethod(method)"
+              type="button"
+              class="btn btn-primary"
+            >{{method.name}}
+            </button>
+          </div>
+
         </div>
       </template>
 
       <template v-else>No Methods without argument detected.</template>
     </div>
 
-    <div v-if="segmentActive === 'events'" key="events">
+    <div
+      v-if="segmentActive === 'events'"
+      key="events"
+    >
       <template v-if="events.length>0">
         <eventDisplayer
           class="event"
@@ -113,7 +146,7 @@ export default {
 
   data() {
     return {
-      segmentActive: "props" 
+      segmentActive: "props"
     };
   },
 
@@ -129,7 +162,7 @@ export default {
   },
 
   methods: {
-    toggleSegment(segment){
+    toggleSegment(segment) {
       this.segmentActive = segment;
     },
 
@@ -180,7 +213,7 @@ export default {
     top: 0;
     z-index: 1;
 
-    & + div  {
+    & + div {
       padding: 8px 0;
       height: calc(100vh - 110px);
       overflow: auto;
@@ -224,7 +257,6 @@ export default {
         margin-left: 5px;
       }
     }
-
   }
 
   /deep/ .card {
@@ -236,14 +268,14 @@ export default {
   }
 
   .methods {
-    display: flex;
     width: 100%;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
 
-    .btn {
+    .methods-button {
       margin-top: 5px;
       margin-bottom: 5px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
   }
 
