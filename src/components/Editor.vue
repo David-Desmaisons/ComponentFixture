@@ -233,7 +233,7 @@ export default {
       justify-content: center;
       background: #f4f4f4;
       border: 0;
-      border-bottom: 2px solid #ddd;
+      border-bottom: 2px solid white;
       font-weight: bold;
       padding: 5px;
       outline: none;
@@ -245,8 +245,11 @@ export default {
 
       &.active {
         border-color: #46ba86;
-        background: #eaeaea;
       }
+    }
+
+    .segment {
+      background: white;
     }
 
     .segment-events {
