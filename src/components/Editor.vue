@@ -238,7 +238,7 @@ export default {
       background: #f4f4f4;
       border: 0;
       border-bottom: 2px solid white;
-      font-weight: bold;
+      font-weight: normal;
       padding: 5px;
       outline: none;
       cursor: pointer;
@@ -249,6 +249,7 @@ export default {
 
       &.active {
         border-color: #46ba86;
+        font-weight: bold;
       }
     }
 
