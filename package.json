@@ -18,7 +18,6 @@
     "izitoast": "^1.4.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.9",
-    "vue-multiselect": "^2.1.6",
     "vue-notifications": "^0.9.0",
     "vue-splitpane": "^1.0.4"
   },
@@ -43,6 +42,7 @@
     "vue-cli-plugin-component": "^1.7.1",
     "vue-cute-rate": "^1.0.2",
     "vue-d3-sunburst": "^0.1.10",
+    "vue-multiselect": "^2.1.6",
     "vue-router": "^3.0.2",
     "vue-slide-bar": "^1.1.9",
     "vue-svg-gauge": "^1.0.0",
