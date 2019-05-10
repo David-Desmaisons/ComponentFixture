@@ -86,7 +86,7 @@
         </div>
       </template>
 
-      <template v-else><span class="no-info">No Methods without argument detected.</span></template>
+      <template v-else><span class="no-info">No methods without argument detected.</span></template>
     </div>
 
     <div
