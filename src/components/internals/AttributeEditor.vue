@@ -61,6 +61,8 @@
     </div>
 
     <div class="attribute-column attribute-input">
+      <div class="error-feedback">{{error}}</div>
+
       <component
         ref="editor"
         :is="componentType"
@@ -68,11 +70,6 @@
         @onError="error = $event"
         v-bind="{object, attribute, metaData, types, value}"
       />
-
-      <div
-        class="error-feedback"
-        v-if="!valid"
-      >{{error}}</div>
     </div>
   </div>
 </template> 
@@ -145,8 +142,9 @@ export default {
   },
 
   created() {
-    this.$default = this.object[this.attribute];
-    this.$defaultType = this.type;
+    const {default: _default}= this.metaData.definition;
+    this.$default = _default;
+    this.$defaultType = getTypeFromValue(_default);
   },
 
   computed: {
@@ -214,11 +212,12 @@ export default {
 
 .main {
   padding: 10px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
+  border-bottom: 1px solid #ced4da;
+  border-radius: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin: 3px;
 
   .is-invalid {
     box-shadow: 0 0 0 0.2rem red;
@@ -318,6 +317,7 @@ export default {
     font-weight: bold;
     display: inline;
     font-size: 100%;
+    height: 21px;
   }
 }
 

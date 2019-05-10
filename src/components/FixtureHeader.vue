@@ -64,12 +64,14 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-  padding: 10px 16px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
-  border-radius: 5px 5px 0 0;
+    padding: 3px 16px;
+  border-bottom: 1px solid #ddd;
+  border-radius: 0;
   overflow-x: auto;
   position: relative;
   z-index: 9;
+  // background: #f9f9f9;
+
 
   .btn--toggle-editor.navbar-toggler {
     outline: transparent;
@@ -89,14 +91,14 @@ export default {
       margin: 0;
       padding: 0;
       background: transparent;
+      font-size: 14px;
     }
   }
 
   .component__title {
     margin: 0;
-    font-size: 26px;
+    font-size: 14px;
     text-transform: capitalize;
-    margin-left: 10px;
     padding: 5px 15px;
     border-radius: 3px;
     line-height: 1;

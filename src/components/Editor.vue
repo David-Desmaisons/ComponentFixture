@@ -7,32 +7,44 @@
   >
 
     <div
-      class="card"
+      class="card card-options"
       key="controls"
     >
       <div class="card-body show-options">
-        <label class="props-switch">
-          <switch-component v-model="showProps" />
+        <button
+          type="button"
+          class="segment segment-props"
+          :class="{'active': segmentActive === 'props'}"
+          @click="toggleSegment('props')"
+        >
           <span>Props</span>
-        </label>
-
-        <label class="props-switch">
-          <switch-component v-model="showMethods" />
+        </button>
+        <button
+          type="button"
+          class="segment segment-methods"
+          :class="{'active': segmentActive === 'methods'}"
+          @click="toggleSegment('methods')"
+        >
           <span>Methods</span>
-        </label>
-
-        <label class="props-switch">
-          <switch-component v-model="showEvents" />
+        </button>
+        <button
+          type="button"
+          class="segment segment-events"
+          :class="{'active': segmentActive === 'events'}"
+          @click="toggleSegment('events')"
+        >
           <span>Events</span>
-        </label>
+          <span
+            class="badge"
+            v-if="events.length>0"
+          >{{ events.length }}</span>
+        </button>
       </div>
     </div>
 
-    <collaspable
-      title="Props"
+    <div
+      v-if="segmentActive === 'props'"
       key="props"
-      class="main-collapsable collapsable-props"
-      v-if="showProps"
     >
       <template v-if="props.length>0">
         <attributeEditor
@@ -45,14 +57,11 @@
         />
       </template>
 
-      <template v-else>No Props detected.</template>
-    </collaspable>
-
-    <collaspable
-      title="Methods"
-      v-if="showMethods"
+      <template v-else><span class="no-info">No Props detected.</span></template>
+    </div>
+    <div
+      v-if="segmentActive === 'methods'"
       key="methods"
-      class="main-collapsable collapsable-methods"
     >
       <template v-if="methods.length>0">
         <div
@@ -60,34 +69,30 @@
           role="group"
           aria-label="methods"
         >
-          <button
+
+          <div
             v-for="method in methods"
             :key="method.name"
-            @click="executeMethod(method)"
-            type="button"
-            class="btn btn-primary"
-          >{{method.name}}</button>
+            class="methods-button"
+          >
+            <button
+              @click="executeMethod(method)"
+              type="button"
+              class="btn btn-primary"
+            >{{method.name}}
+            </button>
+          </div>
+
         </div>
       </template>
 
-      <template v-else>No Methods without argument detected.</template>
-    </collaspable>
+      <template v-else><span class="no-info">No methods without argument detected.</span></template>
+    </div>
 
-    <collaspable
-      class="main-collapsable collapsable-events"
-      v-if="showEvents"
+    <div
+      v-if="segmentActive === 'events'"
       key="events"
     >
-      <template v-slot:header>
-        <strong class="events-header">
-          Events
-          <span
-            v-if="events.length>0"
-            class="badge badge-success"
-          >{{events.length}}</span>
-        </strong>
-      </template>
-
       <template v-if="events.length>0">
         <eventDisplayer
           class="event"
@@ -97,8 +102,8 @@
         />
       </template>
 
-      <template v-else>No events emited.</template>
-    </collaspable>
+      <template v-else><span class="no-info">No events emited.</span></template>
+    </div>
   </transition-group>
 </template>
 <script>
@@ -141,9 +146,7 @@ export default {
 
   data() {
     return {
-      showProps: true,
-      showMethods: true,
-      showEvents: true
+      segmentActive: "props"
     };
   },
 
@@ -159,6 +162,10 @@ export default {
   },
 
   methods: {
+    toggleSegment(segment) {
+      this.segmentActive = segment;
+    },
+
     async executeMethod({ execute, name }) {
       try {
         const res = await execute();
@@ -188,6 +195,10 @@ export default {
   padding: 0px;
   min-width: 325px;
 
+  .no-info {
+    margin: 1em;
+  }
+
   .main-collapsable {
     transition: all 0.5s;
     width: 100%;
@@ -201,20 +212,57 @@ export default {
     position: absolute;
   }
 
+  .card-options {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    & + div {
+      padding: 8px 0;
+      height: calc(100vh - 110px);
+      overflow: auto;
+    }
+  }
+
   .card-body.show-options {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding: 7px 10px;
-    border-bottom: 2px solid #ddd;
+    padding: 0;
 
-    .props-switch {
-      text-align: center;
-      margin: 0;
+    button {
+      flex-grow: 1;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      background: #f4f4f4;
+      border: 0;
+      border-bottom: 2px solid white;
+      font-weight: bold;
+      padding: 5px;
+      outline: none;
+      cursor: pointer;
+
+      &:hover {
+        background: #eee;
+      }
+
+      &.active {
+        border-color: #46ba86;
+      }
     }
 
-    .custom-switch + span {
-      margin-left: -18px;
+    .segment {
+      background: white;
+    }
+
+    .segment-events {
+      .badge {
+        background: red;
+        color: #fff;
+        border-radius: 2px;
+        margin-left: 5px;
+      }
     }
   }
 
@@ -227,24 +275,20 @@ export default {
   }
 
   .methods {
-    display: flex;
     width: 100%;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
 
-    .btn {
+    .methods-button {
       margin-top: 5px;
       margin-bottom: 5px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
   }
 
   /deep/ input {
     font-size: 12px;
     height: 28px;
-  }
-
-  .props-switch {
-    cursor: pointer;
   }
 
   /deep/ .event {

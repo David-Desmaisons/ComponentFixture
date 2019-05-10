@@ -87,9 +87,7 @@ export default {
 </script>
 <style lang="less" scoped="true">
 /deep/ .splitter-pane.splitter-paneL {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100% - 60px) !important;
+  overflow: hidden;
 }
 
 .editor-closed {
@@ -111,9 +109,9 @@ export default {
 
 .component__container {
   width: 100%;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 48px);
   background: #fff;
-  border: 1px solid #eee;
+  // border: 1px solid #eee;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -132,7 +130,7 @@ export default {
 }
 
 .main-panel {
-  height: calc(100vh - 140px) !important;
+  height: calc(100vh - 48px) !important;
 }
 
 .splitter-pane {
@@ -158,24 +156,15 @@ export default {
 
     > div {
       flex-grow: 1;
-      border: 1px solid #ddd;
-
-      &:first-child {
-        border-radius: 0 0 0 4px;
-      }
-      &:last-child {
-        border-radius: 0 0 4px 0;
-      }
     }
   }
 
   /deep/ .component {
     display: flex;
-    align-items: center;
     justify-content: center;
     padding: 40px;
     background: rgba(0, 0, 0, 0.03);
-    height: 50%;
+    height: 100%;
 
     .real-component {
       height: 100%;
