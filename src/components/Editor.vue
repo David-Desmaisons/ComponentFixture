@@ -1,15 +1,7 @@
 <template>
-  <transition-group
-    type="transition"
-    name="flip-list"
-    tag="div"
-    class="editor"
-  >
+  <div class="editor">
 
-    <div
-      class="card card-options"
-      key="controls"
-    >
+    <div class="card card-options">
       <div class="card-body show-options">
         <button
           type="button"
@@ -42,69 +34,77 @@
       </div>
     </div>
 
-    <div
-      v-if="segmentActive === 'props'"
-      key="props"
+    <transition-group
+      type="transition"
+      name="flip-list"
+      tag="div"
+      class="editor"
     >
-      <template v-if="props.length>0">
-        <attributeEditor
-          v-for="prop in props"
-          :key="prop.key"
-          :object="attributes"
-          :attribute="prop.key"
-          :metaData="prop.metaData"
-          @success="success"
-        />
-      </template>
+      <div
+        v-if="segmentActive === 'props'"
+        key="props"
+      >
+        <template v-if="props.length>0">
+          <attributeEditor
+            v-for="prop in props"
+            :key="prop.key"
+            :object="attributes"
+            :attribute="prop.key"
+            :metaData="prop.metaData"
+            @success="success"
+          />
+        </template>
 
-      <template v-else><span class="no-info">No Props detected.</span></template>
-    </div>
-    <div
-      v-if="segmentActive === 'methods'"
-      key="methods"
-    >
-      <template v-if="methods.length>0">
-        <div
-          class="methods"
-          role="group"
-          aria-label="methods"
-        >
-
+        <template v-else><span class="no-info">No Props detected.</span></template>
+      </div>
+      <div
+        v-if="segmentActive === 'methods'"
+        key="methods"
+      >
+        <template v-if="methods.length>0">
           <div
-            v-for="method in methods"
-            :key="method.name"
-            class="methods-button"
+            class="methods"
+            role="group"
+            aria-label="methods"
           >
-            <button
-              @click="executeMethod(method)"
-              type="button"
-              class="btn btn-primary"
-            >{{method.name}}
-            </button>
+
+            <div
+              v-for="method in methods"
+              :key="method.name"
+              class="methods-button"
+            >
+              <button
+                @click="executeMethod(method)"
+                type="button"
+                class="btn btn-primary"
+              >{{method.name}}
+              </button>
+            </div>
+
           </div>
+        </template>
 
-        </div>
-      </template>
+        <template v-else><span class="no-info">No methods without argument detected.</span></template>
+      </div>
 
-      <template v-else><span class="no-info">No methods without argument detected.</span></template>
-    </div>
+      <div
+        v-if="segmentActive === 'events'"
+        key="events"
+      >
+        <template v-if="events.length>0">
+          <eventDisplayer
+            class="event"
+            v-for="(event, idx) in events"
+            :key="idx"
+            :event="event"
+          />
+        </template>
 
-    <div
-      v-if="segmentActive === 'events'"
-      key="events"
-    >
-      <template v-if="events.length>0">
-        <eventDisplayer
-          class="event"
-          v-for="(event, idx) in events"
-          :key="idx"
-          :event="event"
-        />
-      </template>
+        <template v-else><span class="no-info">No events emited.</span></template>
+      </div>
+    </transition-group>
 
-      <template v-else><span class="no-info">No events emited.</span></template>
-    </div>
-  </transition-group>
+  </div>
 </template>
 <script>
 import "bootstrap/dist/css/bootstrap.css";
