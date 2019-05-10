@@ -61,9 +61,7 @@
     </div>
 
     <div class="attribute-column attribute-input">
-       <div
-        class="error-feedback"
-      >{{error}}</div>
+      <div class="error-feedback">{{error}}</div>
 
       <component
         ref="editor"
@@ -144,8 +142,9 @@ export default {
   },
 
   created() {
-    this.$default = this.object[this.attribute];
-    this.$defaultType = this.type;
+    const {default: _default}= this.metaData.definition;
+    this.$default = _default;
+    this.$defaultType = getTypeFromValue(_default);
   },
 
   computed: {
