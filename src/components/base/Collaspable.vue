@@ -70,7 +70,6 @@ export default {
     padding: 0;
     border-radius: 0;
     background: #eee;
-    position: sticky;
     top: 0;
     z-index: 2;
   }
