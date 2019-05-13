@@ -2,7 +2,7 @@
   <div>
     <prism-editor
       v-if="hasData"
-      :code="stringify(data)"
+      :code="data | stringify"
       language="js"
       readonly
     />
@@ -16,8 +16,7 @@
   </div>
 </template>
 <script>
-import CircularJSON from "circular-json";
-import Vue from "vue";
+import stringify from "@/utils/stringify";
 import PrismEditor from "vue-prism-editor";
 import "prismjs";
 import "prismjs/themes/prism.css";
@@ -42,19 +41,8 @@ export default {
       return this.data != null && Object.keys(this.data).length > 0;
     }
   },
-  methods: {
-    stringify(value) {
-      return CircularJSON.stringify(
-        value,
-        (key, value) => {
-          if (value instanceof Vue && value._isVue) {
-            return { name: value.name, type: "VueComponent" };
-          }
-          return value;
-        },
-        "  "
-      );
-    }
+  filters: {
+    stringify
   }
 };
 </script>
