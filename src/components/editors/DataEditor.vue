@@ -1,15 +1,18 @@
 <template>
   <div>
-    <template v-if="hasData">
-      <prism-editor
-        :code="stringify(data)"
-        language="js"
-        readonly
-      />
+    <prism-editor
+      v-if="hasData"
+      :code="stringify(data)"
+      language="js"
+      readonly
+    />
 
-    </template>
-
-    <template v-else><span class="no-info">No data detected.</span></template>
+    <span
+      class="no-info"
+      v-else
+    >
+      No data detected.
+    </span>
   </div>
 </template>
 <script>

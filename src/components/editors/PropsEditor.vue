@@ -11,7 +11,11 @@
       />
     </template>
 
-    <template v-else><span class="no-info">No props detected.</span></template>
+    <span
+      class="no-info"
+      v-else
+    >No props detected.
+    </span>
   </div>
 </template>
 <script>
