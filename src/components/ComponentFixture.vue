@@ -94,13 +94,10 @@ export default {
       return this.$refs.cut;
     },
 
-    getOptions() {
-      return this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
-    },
-
     updateValuesFromCurrrentComponent() {
       const component = this.getUnderTestComponent();
-      const options = this.getOptions();
+      const options =
+        this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
       this.updateMethods(component, options);
     },
