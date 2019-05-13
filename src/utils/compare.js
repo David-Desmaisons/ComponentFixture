@@ -10,7 +10,7 @@ function compareArray(o1, o2) {
 }
 
 function compare(o1, o2) {
-  if (o1 == null || o2 == null){
+  if (o1 == null || o2 == null) {
     return o1 === o2;
   }
 
@@ -21,7 +21,7 @@ function compare(o1, o2) {
     return compareArray(o1, o2);
   }
 
-  if (typeof o1 !== 'object') {
+  if (typeof o1 !== "object") {
     return o1 === o2;
   }
 
