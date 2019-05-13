@@ -4,6 +4,7 @@
       <prism-editor
         :code="stringify(data)"
         language="js"
+        readonly
       />
 
     </template>
