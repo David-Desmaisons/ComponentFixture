@@ -1,7 +1,11 @@
 <template>
   <div>
     <template v-if="hasData">
-      <pre class="description">{{stringify(data)}}</pre>
+      <prism-editor
+        :code="stringify(data)"
+        language="js"
+      />
+
     </template>
 
     <template v-else><span class="no-info">No data detected.</span></template>
@@ -10,6 +14,9 @@
 <script>
 import CircularJSON from "circular-json";
 import Vue from "vue";
+import PrismEditor from "vue-prism-editor";
+import "prismjs";
+import "prismjs/themes/prism.css";
 
 const props = {
   data: {
@@ -17,11 +24,15 @@ const props = {
     required: false
   }
 };
+
 export default {
   name: "data-editor",
   key: "data",
   display: "Data",
   props,
+  components: {
+    PrismEditor
+  },
   computed: {
     hasData() {
       return this.data != null && Object.keys(this.data).length > 0;
