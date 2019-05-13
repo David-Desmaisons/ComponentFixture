@@ -6,7 +6,7 @@ function stringify(value) {
     value,
     (key, value) => {
       if (value instanceof Vue && value._isVue) {
-        return { name: value.name, type: "VueComponent" };
+        return { name: value.$options.name, type: "VueComponent" };
       }
       return value;
     },
