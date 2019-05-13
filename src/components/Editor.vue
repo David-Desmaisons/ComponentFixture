@@ -1,5 +1,5 @@
 <template>
-  <div class="editor">
+  <div class="main-editor">
 
     <div class="card card-options">
       <div class="card-body show-options">
@@ -190,10 +190,11 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.editor {
+.main-editor {
   font-size: 12px;
   padding: 0px;
   min-width: 325px;
+  margin-left: 16px;
 
   .no-info {
     margin: 1em;
@@ -224,14 +225,17 @@ export default {
     }
   }
 
+  /deep/ .contol.main {
+    margin-left: 16px;
+  }
+
   .card-body.show-options {
     display: flex;
-    justify-content: space-between;
     flex-direction: row;
+    flex-wrap: wrap;
     padding: 0;
 
     button {
-      flex-grow: 1;
       align-items: center;
       display: flex;
       justify-content: center;
