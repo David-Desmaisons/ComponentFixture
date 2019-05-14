@@ -1,26 +1,16 @@
 <template>
-  <collaspable
-    :initialShow="false"
-    :headerStyle="event.name | background"
-    class="event"
-  >
+  <collaspable :initialShow="false" :headerStyle="event.name | background" class="event">
     <template v-slot:header>
       <div class="event-header">
-        <span> {{event.name}}</span>
+        <span>{{event.name}}</span>
         <span class="badge badge-light">{{event.instant | date}}</span>
       </div>
     </template>
     <ul class="list-group list-group-flush">
-      <li
-        class="list-group-item"
-        v-for="(arg,idx) in event.args"
-        :key="idx"
-      >
+      <li v-for="(arg,idx) in event.args" :key="idx">
         <ObjectDisplayer :data="arg"/>
-        <!-- <pre class="card-text">{{arg | stringify}}</pre> -->
       </li>
     </ul>
-
   </collaspable>
 </template>
 <script>
@@ -40,7 +30,6 @@ export default {
     }
   },
   filters: {
-//    stringify,
     date(d) {
       return d.toLocaleString("en-GB");
     },
@@ -61,7 +50,6 @@ export default {
 .event {
   /deep/ .card-body {
     padding: 0;
-    background: blue;
   }
 }
 </style>
