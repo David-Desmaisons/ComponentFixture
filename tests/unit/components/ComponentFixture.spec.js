@@ -9,7 +9,7 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -31,7 +31,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };

@@ -8,25 +8,26 @@ const component = mount(FakeComponent, {
 
 describe("stringify", () => {
   test.each([
-    [{ component }, 
-`{
-  \"component\": {
-    \"name\": \"fake-component\",
-    \"type\": \"VueComponent\"
+    [
+      { component },
+      `{
+  "component": {
+    "name": "fake-component",
+    "type": "VueComponent"
   }
-}`],
-    ["abc", "\"abc\""],
+}`
+    ],
+    ["abc", '"abc"'],
     [1, "1"],
-    [{ a: "a", one: "one" },
-`{
-  \"a\": \"a\",
-  \"one\": \"one\"
-}`],
-  ])(
-    "stringify for %p should return: %p",
-    (arg, expected) => {
-      const value = stringify(arg);
-      expect(value).toEqual(expected);
-    }
-  );
+    [
+      { a: "a", one: "one" },
+      `{
+  "a": "a",
+  "one": "one"
+}`
+    ]
+  ])("stringify for %p should return: %p", (arg, expected) => {
+    const value = stringify(arg);
+    expect(value).toEqual(expected);
+  });
 });
