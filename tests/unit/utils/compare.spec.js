@@ -26,12 +26,9 @@ describe("compare", () => {
     ["abc", "bac", false],
     [1, 2, false],
     [undefined, null, false],
-    [null, undefined, false],
-  ])(
-    "compare for %o and %o should return: %o",
-    (arg1, arg2, expected) => {
-      const value = compare(arg1, arg2);
-      expect(value).toEqual(expected);
-    }
-  );
+    [null, undefined, false]
+  ])("compare for %o and %o should return: %o", (arg1, arg2, expected) => {
+    const value = compare(arg1, arg2);
+    expect(value).toEqual(expected);
+  });
 });

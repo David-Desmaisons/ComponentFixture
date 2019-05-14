@@ -64,14 +64,12 @@ export default {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
-    padding: 3px 16px;
+  padding: 3px 16px;
   border-bottom: 1px solid #ddd;
   border-radius: 0;
   overflow-x: auto;
   position: relative;
   z-index: 9;
-  // background: #f9f9f9;
-
 
   .btn--toggle-editor.navbar-toggler {
     outline: transparent;

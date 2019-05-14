@@ -24,6 +24,11 @@ export default {
       type: String,
       required: false
     }
+  },
+  data() {
+    return {
+      a: 90
+    };
   }
 };
 </script>

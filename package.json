@@ -16,9 +16,11 @@
     "bootstrap": "^4.1.3",
     "font-awesome": "^4.7.0",
     "izitoast": "^1.4.0",
+    "prismjs": "^1.16.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.9",
     "vue-notifications": "^0.9.0",
+    "vue-prism-editor": "^0.2.1",
     "vue-splitpane": "^1.0.4"
   },
   "devDependencies": {

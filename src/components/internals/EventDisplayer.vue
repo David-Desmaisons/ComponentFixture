@@ -25,8 +25,7 @@
 <script>
 import collaspable from "../base/Collaspable";
 import { getColor } from "@/utils/colorHelper";
-import CircularJSON from "circular-json";
-import Vue from "vue";
+import stringify from "@/utils/stringify";
 
 export default {
   components: {
@@ -39,20 +38,9 @@ export default {
     }
   },
   filters: {
+    stringify,
     date(d) {
       return d.toLocaleString("en-GB");
-    },
-    stringify(value) {
-      return CircularJSON.stringify(
-        value,
-        (key, value) => {
-          if (value instanceof Vue && value._isVue) {
-            return { name: value.name, type: "VueComponent" };
-          }
-          return value;
-        },
-        "  "
-      );
     },
     background(value) {
       const background = getColor(value, { saturation: 30, lightness: 50 });

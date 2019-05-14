@@ -100,6 +100,7 @@ export default {
         this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
       this.updateMethods(component, options);
+      this.$nextTick(() => this.updateData());
     },
 
     updateMethods(component, options) {
@@ -116,6 +117,10 @@ export default {
 
     update() {
       this.$refs.cut.$forceUpdate();
+    },
+
+    updateData() {
+      this.data = this.getUnderTestComponent().$data;
     }
   },
 
@@ -204,6 +209,7 @@ export default {
               [
                 control({
                   attributes: props,
+                  data: this.data,
                   componentName,
                   propsDefinition,
                   methods,
@@ -272,9 +278,14 @@ export default {
       propsDefinition: {},
 
       /**
-       * This object will contain the methods as declared in the component under test.
+       * This array will contain the methods as declared in the component under test.
        */
       componentMethods: [],
+
+      /**
+       * This object will contain the component under test data.
+       */
+      data: null,
 
       /**
        * Array of events emitted by the component under test.

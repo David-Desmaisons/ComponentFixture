@@ -10,11 +10,11 @@
           ref="fixture"
         >
           <!-- Use the default slot to manipulate the component under test -->
-          <template v-slot:header="{componentName, methods, update}">
+          <template v-slot:header="{componentName, update}">
             <FixtureHeader
               @toggle="showEditor = !showEditor"
               @success="success"
-              v-bind="{componentName, methods, update}"
+              v-bind="{componentName, update}"
             />
           </template>
 

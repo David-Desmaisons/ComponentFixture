@@ -142,7 +142,7 @@ export default {
   },
 
   created() {
-    const {default: _default}= this.metaData.definition;
+    const { default: _default } = this.metaData.definition;
     this.$default = _default;
     this.$defaultType = getTypeFromValue(_default);
   },

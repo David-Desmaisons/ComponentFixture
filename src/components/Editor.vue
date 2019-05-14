@@ -1,24 +1,20 @@
 <template>
-  <div class="editor">
+  <div class="main-editor">
 
     <div class="card card-options">
       <div class="card-body show-options">
+
         <button
+          v-for="(name,idx) in ['props','data','methods']"
+          :key="idx"
           type="button"
-          class="segment segment-props"
-          :class="{'active': segmentActive === 'props'}"
-          @click="toggleSegment('props')"
+          class="segment"
+          :class="{'active': segmentActive === name}"
+          @click="toggleSegment(name)"
         >
-          <span>Props</span>
+          <span>{{name}}</span>
         </button>
-        <button
-          type="button"
-          class="segment segment-methods"
-          :class="{'active': segmentActive === 'methods'}"
-          @click="toggleSegment('methods')"
-        >
-          <span>Methods</span>
-        </button>
+
         <button
           type="button"
           class="segment segment-events"
@@ -40,86 +36,33 @@
       tag="div"
       class="editor"
     >
-      <div
-        v-if="segmentActive === 'props'"
-        key="props"
-      >
-        <template v-if="props.length>0">
-          <attributeEditor
-            v-for="prop in props"
-            :key="prop.key"
-            :object="attributes"
-            :attribute="prop.key"
-            :metaData="prop.metaData"
-            @success="success"
-          />
-        </template>
 
-        <template v-else><span class="no-info">No Props detected.</span></template>
-      </div>
-      <div
-        v-if="segmentActive === 'methods'"
-        key="methods"
-      >
-        <template v-if="methods.length>0">
-          <div
-            class="methods"
-            role="group"
-            aria-label="methods"
-          >
-
-            <div
-              v-for="method in methods"
-              :key="method.name"
-              class="methods-button"
-            >
-              <button
-                @click="executeMethod(method)"
-                type="button"
-                class="btn btn-primary"
-              >{{method.name}}
-              </button>
-            </div>
-
-          </div>
-        </template>
-
-        <template v-else><span class="no-info">No methods without argument detected.</span></template>
-      </div>
-
-      <div
-        v-if="segmentActive === 'events'"
-        key="events"
-      >
-        <template v-if="events.length>0">
-          <eventDisplayer
-            class="event"
-            v-for="(event, idx) in events"
-            :key="idx"
-            :event="event"
-          />
-        </template>
-
-        <template v-else><span class="no-info">No events emited.</span></template>
-      </div>
+      <component
+        :is="`${segmentActive}-editor`"
+        :key="segmentActive"
+        :props="props"
+        :events="events"
+        :methods="methods"
+        :attributes="attributes"
+        :data="data"
+        @success="success"
+        @error="error"
+      />
     </transition-group>
 
   </div>
 </template>
 <script>
 import "bootstrap/dist/css/bootstrap.css";
-import attributeEditor from "./internals/AttributeEditor";
-import eventDisplayer from "./internals/EventDisplayer";
-import collaspable from "./base/Collaspable";
-import switchComponent from "./base/Switch";
+const requireContext = require.context("./editors/", false, /\.vue$/);
+const components = requireContext.keys().reduce((acc, key) => {
+  const component = requireContext(key).default;
+  acc[`${component.key}-editor`] = component;
+  return acc;
+}, {});
 
 export default {
-  components: {
-    attributeEditor,
-    collaspable,
-    eventDisplayer,
-    switchComponent
-  },
+  components,
 
   props: {
     attributes: {
@@ -132,6 +75,10 @@ export default {
     },
     propsDefinition: {
       required: true,
+      type: Object
+    },
+    data: {
+      required: false,
       type: Object
     },
     events: {
@@ -166,36 +113,24 @@ export default {
       this.segmentActive = segment;
     },
 
-    async executeMethod({ execute, name }) {
-      try {
-        const res = await execute();
-        this.showResult(name, res);
-      } catch (error) {
-        this.$emit("error", `"${name}" executed with error: ${error}`);
-      }
-    },
-
     success(message) {
       this.$emit("success", message);
     },
 
-    showResult(name, res) {
-      const message =
-        res === undefined
-          ? `"${name}" executed without error`
-          : `"${name}" returned: ${JSON.stringify(res, null, 2)}`;
-      this.success(message);
+    error(message) {
+      this.$emit("error", message);
     }
   }
 };
 </script>
 <style lang="less" scoped>
-.editor {
+.main-editor {
   font-size: 12px;
   padding: 0px;
   min-width: 325px;
+  margin-left: 16px;
 
-  .no-info {
+  /deep/ .no-info {
     margin: 1em;
   }
 
@@ -224,14 +159,17 @@ export default {
     }
   }
 
+  /deep/ .contol.main {
+    margin-left: 16px;
+  }
+
   .card-body.show-options {
     display: flex;
-    justify-content: space-between;
     flex-direction: row;
+    flex-wrap: wrap;
     padding: 0;
 
     button {
-      flex-grow: 1;
       align-items: center;
       display: flex;
       justify-content: center;
@@ -255,6 +193,7 @@ export default {
 
     .segment {
       background: white;
+      text-transform: capitalize;
     }
 
     .segment-events {
@@ -272,18 +211,6 @@ export default {
 
     .collapse {
       overflow-y: auto;
-    }
-  }
-
-  .methods {
-    width: 100%;
-
-    .methods-button {
-      margin-top: 5px;
-      margin-bottom: 5px;
-      width: 100%;
-      display: flex;
-      justify-content: center;
     }
   }
 
