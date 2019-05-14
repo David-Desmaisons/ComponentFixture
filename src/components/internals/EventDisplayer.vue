@@ -47,6 +47,20 @@ export default {
   justify-content: space-between;
 }
 
+/deep/ pre[class*="language-"] {
+  margin: 0;
+}
+
+ul.list-group-flush {
+  li:nth-child(1) {
+    margin: 0;
+  }
+
+  li {
+    margin-top: 5px;
+  }
+}
+
 .event {
   /deep/ .card-body {
     padding: 0;

@@ -1,31 +1,11 @@
 <template>
   <div>
-    <div
-      v-if="methods.length>0"
-      class="methods"
-      role="group"
-      aria-label="methods"
-    >
-      <div
-        v-for="method in methods"
-        :key="method.name"
-        class="methods-button"
-      >
-        <button
-          @click="executeMethod(method)"
-          type="button"
-          class="btn btn-primary"
-        >{{method.name}}
-        </button>
+    <div v-if="methods.length>0" class="methods" role="group" aria-label="methods">
+      <div v-for="method in methods" :key="method.name" class="methods-button">
+        <button @click="executeMethod(method)" type="button" class="btn btn-primary">{{method.name}}</button>
       </div>
-
     </div>
-    <span
-      class="no-info"
-      v-else
-    >No methods without argument detected.
-    </span>
-
+    <span class="no-info" v-else>No methods without argument detected.</span>
   </div>
 </template>
 <script>
@@ -70,6 +50,10 @@ export default {
     width: 100%;
     display: flex;
     justify-content: center;
+
+    button {
+      font-size: 12px;
+    }
   }
 }
 </style>

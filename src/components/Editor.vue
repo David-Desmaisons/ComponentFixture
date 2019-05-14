@@ -127,7 +127,6 @@ export default {
 .main-editor {
   font-size: 12px;
   padding: 0px;
-  min-width: 325px;
   margin-left: 16px;
 
   /deep/ .no-info {

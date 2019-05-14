@@ -337,7 +337,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: normal;
   max-width: 150px;
   width: 99%;
