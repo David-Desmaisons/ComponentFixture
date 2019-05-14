@@ -100,6 +100,7 @@ export default {
         this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
       this.computedValuesFromProps(component, options);
       this.updateMethods(component, options);
+      this.$nextTick(() => this.updateData());
     },
 
     updateMethods(component, options) {
@@ -116,6 +117,10 @@ export default {
 
     update() {
       this.$refs.cut.$forceUpdate();
+    },
+
+    updateData() {
+      this.data = this.getUnderTestComponent().$data;
     }
   },
 
@@ -243,7 +248,6 @@ export default {
     }
     this.$stage = 2;
     this.$nextTick(() => {
-      this.data = this.getUnderTestComponent().$data;
       const emit = this.$refs.cut.$emit;
       const newEmit = (eventName, ...args) => {
         this.events.push({ name: eventName, args: args, instant: new Date() });
