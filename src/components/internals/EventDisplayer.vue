@@ -1,5 +1,9 @@
 <template>
-  <collaspable :initialShow="false" :headerStyle="event.name | background" class="event">
+  <collaspable
+    :initialShow="false"
+    :headerStyle="event.name | background"
+    class="event"
+  >
     <template v-slot:header>
       <div class="event-header">
         <span>{{event.name}}</span>
@@ -7,8 +11,11 @@
       </div>
     </template>
     <ul class="list-group list-group-flush">
-      <li v-for="(arg,idx) in event.args" :key="idx">
-        <ObjectDisplayer :data="arg"/>
+      <li
+        v-for="(arg,idx) in event.args"
+        :key="idx"
+      >
+        <ObjectDisplayer :data="arg" />
       </li>
     </ul>
   </collaspable>
@@ -64,6 +71,14 @@ ul.list-group-flush {
 .event {
   /deep/ .card-body {
     padding: 0;
+  }
+
+  /deep/ button.btn {
+    font-size: 12px;
+
+    span.badge {
+      font-size: 10px;
+    }
   }
 }
 </style>
