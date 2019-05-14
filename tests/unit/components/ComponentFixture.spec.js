@@ -340,7 +340,7 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("calls the control scoped slot", () => {
-      expect(control.mock.calls.length).toBe(2);
+      expect(control.mock.calls.length).toBe(1);
     });
 
     it("call the control scoped slot with attributes", () => {
@@ -360,9 +360,8 @@ describe("ComponentFixture.vue", () => {
       expect(control.mock.calls[0][0].componentName).toEqual("fake-component");
     });
 
-    it("calls the control scoped slot with valid data", () => {
-      expect(control.mock.calls[0][0].data).toEqual(null);
-      expect(control.mock.calls[1][0].data).toEqual({ a: 90 });
+    it("calls the control scoped slot initially with data", () => {
+      expect(control.mock.calls[0][0].data).toEqual({ a: 90 });
     });
 
     it("renders the control slot", () => {
