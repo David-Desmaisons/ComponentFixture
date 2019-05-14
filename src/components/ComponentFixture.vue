@@ -62,8 +62,7 @@ export default {
       this.$photo = photo;
       this.dynamicAttributes = {};
       this.propsDefinition = {};
-      const dynamicAttributes = this.dynamicAttributes;
-      const propsDefinition = this.propsDefinition;
+      const { dynamicAttributes, propsDefinition } = this;
       if (!props) {
         return;
       }
@@ -79,6 +78,7 @@ export default {
         );
         Vue.set(dynamicAttributes, key, defaultValue);
         Vue.set(propsDefinition, key, {
+          defaultValue,
           definition: propsValue,
           types: getTypeForProp(propsValue, defaultValue),
           validate: validateProp.bind(null, propsValue)
