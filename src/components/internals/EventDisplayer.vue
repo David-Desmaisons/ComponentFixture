@@ -16,7 +16,8 @@
         v-for="(arg,idx) in event.args"
         :key="idx"
       >
-        <pre class="card-text">{{arg | stringify}}</pre>
+        <ObjectDisplayer :data="arg"/>
+        <!-- <pre class="card-text">{{arg | stringify}}</pre> -->
       </li>
     </ul>
 
@@ -25,11 +26,12 @@
 <script>
 import collaspable from "../base/Collaspable";
 import { getColor } from "@/utils/colorHelper";
-import stringify from "@/utils/stringify";
+import ObjectDisplayer from "@/components/base/ObjectDisplayer";
 
 export default {
   components: {
-    collaspable
+    collaspable,
+    ObjectDisplayer
   },
   props: {
     event: {
@@ -38,7 +40,7 @@ export default {
     }
   },
   filters: {
-    stringify,
+//    stringify,
     date(d) {
       return d.toLocaleString("en-GB");
     },

@@ -1,25 +1,12 @@
 <template>
   <div>
-    <prism-editor
-      v-if="hasData"
-      :code="data | stringify"
-      language="js"
-      readonly
-    />
+    <ObjectDisplayer v-if="hasData" :data="data"/>
 
-    <span
-      class="no-info"
-      v-else
-    >
-      No data detected.
-    </span>
+    <span class="no-info" v-else>No data detected.</span>
   </div>
 </template>
 <script>
-import stringify from "@/utils/stringify";
-import PrismEditor from "vue-prism-editor";
-import "prismjs";
-import "prismjs/themes/prism.css";
+import ObjectDisplayer from "@/components/base/ObjectDisplayer";
 
 const props = {
   data: {
@@ -34,15 +21,12 @@ export default {
   display: "Data",
   props,
   components: {
-    PrismEditor
+    ObjectDisplayer
   },
   computed: {
     hasData() {
       return this.data != null && Object.keys(this.data).length > 0;
     }
-  },
-  filters: {
-    stringify
   }
 };
 </script>
