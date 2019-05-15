@@ -5,8 +5,8 @@
       <div class="card-body show-options">
 
         <button
-          v-for="(name,idx) in ['props','data','methods']"
-          :key="idx"
+          v-for="name in ['props','data','methods']"
+          :key="name"
           type="button"
           class="segment"
           :class="{'active': segmentActive === name}"
