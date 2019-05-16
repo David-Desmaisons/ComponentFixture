@@ -29,6 +29,12 @@ function filterMethods(methods) {
     }, {});
 }
 
+function buildListener(props, prop) {
+  return evt => {
+    props[prop] = evt;
+  };
+}
+
 const defaultModel = {
   event: "input",
   prop: "value"
@@ -94,6 +100,19 @@ export default {
       return this.$refs.cut;
     },
 
+    setupEventsListeners(props, { event, prop }) {
+      const on = {};
+      if (props.hasOwnProperty(prop)) {
+        on[event] = buildListener(props, prop);
+      }
+      Object.keys(props)
+        .filter(p => p !== prop)
+        .forEach(key => {
+          on[`update:${key}`] = buildListener(props, key);
+        });
+      return on;
+    },
+
     updateValuesFromCurrrentComponent() {
       const component = this.getUnderTestComponent();
       const options =
@@ -153,22 +172,15 @@ export default {
       propsDefinition,
       update
     } = this;
-    const { event, prop } = componentModel;
+
     const options = {
       props,
       scopedSlots,
       slot: childSlot,
       class: { "real-component": true },
-      ref: "cut"
+      ref: "cut",
+      on: this.setupEventsListeners(props, componentModel)
     };
-
-    if (props.hasOwnProperty(prop)) {
-      options.on = {
-        [event]: evt => {
-          props[prop] = evt;
-        }
-      };
-    }
 
     const { control, header = () => null } = this.$scopedSlots;
     if (!control) {

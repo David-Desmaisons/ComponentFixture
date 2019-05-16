@@ -1,6 +1,5 @@
 <template>
-  <div>
-  </div>
+  <div></div>
 </template>
 <script>
 export default {
@@ -9,6 +8,10 @@ export default {
     value: {
       type: Array,
       required: true
+    },
+    int: {
+      default: 1,
+      type: Number
     }
   }
 };

@@ -3,7 +3,7 @@
     <div class="controls navbar-light start">
       <button
         class="btn btn--toggle-editor navbar-toggler"
-        @click="toggleEditor()"
+        @click="toggleEditor"
         v-tooltip.left="'Toggle sidebar editor'"
       >
         <span class="navbar-toggler-icon"></span>

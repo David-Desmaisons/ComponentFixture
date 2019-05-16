@@ -249,11 +249,13 @@ describe("ComponentFixture.vue", () => {
     let wrapper = null;
     let vm = null;
     let dynamicAttributes = null;
+    let testComponentVm = null;
 
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForVModel });
       vm = wrapper.vm;
       dynamicAttributes = wrapper.vm.dynamicAttributes;
+      testComponentVm = vm.$children[0];
     });
 
     it("computes the dynamicAttributes with default value computed when required", () => {
@@ -261,9 +263,15 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("listens to event tracked by v-model and update prop", () => {
-      const testComponentVm = vm.$children[0];
-      testComponentVm.$emit("input", [1, 2, 3]);
+      const testVm = vm.$children[0];
+      testVm.$emit("input", [1, 2, 3]);
       expect(dynamicAttributes.value).toEqual([1, 2, 3]);
+    });
+
+    it("listens to two-way binding events to update properties", () => {
+      const testVm = vm.$children[0];
+      testVm.$emit("update:int", 25);
+      expect(dynamicAttributes.int).toEqual(25);
     });
   });
 
