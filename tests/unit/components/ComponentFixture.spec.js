@@ -249,13 +249,11 @@ describe("ComponentFixture.vue", () => {
     let wrapper = null;
     let vm = null;
     let dynamicAttributes = null;
-    let testComponentVm = null;
 
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForVModel });
       vm = wrapper.vm;
       dynamicAttributes = wrapper.vm.dynamicAttributes;
-      testComponentVm = vm.$children[0];
     });
 
     it("computes the dynamicAttributes with default value computed when required", () => {
