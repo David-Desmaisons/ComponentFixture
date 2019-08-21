@@ -42,8 +42,10 @@ Component is designed to receive any component you want to test as a default slo
   - Create `v-model` binding if needed
   - Custom props validation when available
   - Support component with slots
+  - Display of all events emitted by the component
+  - Display of component $data
+  - exposition of component method as burttons that can be called with display of the produced result
   - Compatible with hot-reload: automatic update on changes hapening on the tested component
-
 
 Example using [vue-slider-component](https://github.com/NightCatSama/vue-slider-component):
 
