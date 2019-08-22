@@ -1,5 +1,5 @@
 <template>
-  <sandbox :defaults="{data}">
+  <sandbox :defaults="{data, identifier}">
     <tree></tree>
   </sandbox>
 </template>
@@ -16,17 +16,20 @@ export default {
     return {
       data: {
         name: "father",
+        id: 0,
         children: [
           {
             name: "son1",
-            children: [{ name: "grandson" }, { name: "grandson2" }]
+            id: 1,
+            children: [{  id: 2, name: "grandson" }, {  id: 6, name: "grandson2" }]
           },
           {
             name: "son2",
-            children: [{ name: "grandson3" }, { name: "grandson4" }]
+            children: [{  id: 4, name: "grandson3" }, {  id: 5, name: "grandson4" }]
           }
         ]
-      }
+      },
+      identifier: n => n.id
     };
   },
   components: {

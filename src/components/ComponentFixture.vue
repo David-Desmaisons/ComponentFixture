@@ -262,8 +262,15 @@ export default {
     this.$nextTick(() => {
       const emit = this.$refs.cut.$emit;
       const newEmit = (eventName, ...args) => {
-        this.events.push({ name: eventName, args: args, instant: new Date() });
         emit.call(this.$refs.cut, eventName, ...args);
+        if (eventName.startsWith("hook:")) {
+          return;
+        }
+        this.events.push({
+          name: eventName,
+          args: args,
+          instant: new Date()
+        });
       };
       this.$refs.cut.$emit = newEmit;
     });
