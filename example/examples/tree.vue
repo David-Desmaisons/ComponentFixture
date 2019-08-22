@@ -21,11 +21,17 @@ export default {
           {
             name: "son1",
             id: 1,
-            children: [{  id: 2, name: "grandson" }, {  id: 6, name: "grandson2" }]
+            children: [
+              { id: 2, name: "grandson" },
+              { id: 6, name: "grandson2" }
+            ]
           },
           {
             name: "son2",
-            children: [{  id: 4, name: "grandson3" }, {  id: 5, name: "grandson4" }]
+            children: [
+              { id: 4, name: "grandson3" },
+              { id: 5, name: "grandson4" }
+            ]
           }
         ]
       },
