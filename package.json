@@ -50,7 +50,7 @@
     "vue-svg-gauge": "^1.0.0",
     "vue-template-compiler": "^2.6.9",
     "vue-typer": "^1.2.0",
-    "vued3tree": "^3.7.1"
+    "vued3tree": "^4.0.0"
   },
   "eslintConfig": {
     "root": true,
