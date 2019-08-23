@@ -183,6 +183,13 @@ describe("ComponentFixture.vue", () => {
       ]);
     });
 
+    it("does not tracks hook events on component under fixtures", () => {
+      const testComponentVm = vm.$children[0];
+      testComponentVm.$emit("hook:beforeUpdate", 0);
+      testComponentVm.$emit("hook:updated", "a", "b", true);
+      expect(vm.events).toEqual([]);
+    });
+
     it("renders component from slot", () => {
       expect(wrapper.contains(FakeComponent)).toBe(true);
     });
