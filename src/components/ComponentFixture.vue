@@ -244,10 +244,6 @@ export default {
   },
 
   mounted() {
-    if (this.$children.length !== 1) {
-      return;
-    }
-
     this.$stage = 1;
     this.updateValuesFromCurrrentComponent();
     this.$forceUpdate();
