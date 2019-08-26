@@ -27,6 +27,7 @@ export default {
   name: "events-editor",
   key: "events",
   display: "Events",
+  inheritAttrs: false,
   components: {
     eventDisplayer
   },

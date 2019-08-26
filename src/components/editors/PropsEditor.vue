@@ -35,7 +35,7 @@ export default {
   name: "props-editor",
   key: "props",
   display: "Props",
-
+  inheritAttrs: false,
   components: {
     attributeEditor
   },

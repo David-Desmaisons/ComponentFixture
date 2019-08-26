@@ -20,6 +20,7 @@ export default {
   key: "data",
   display: "Data",
   props,
+  inheritAttrs: false,
   components: {
     ObjectDisplayer
   },

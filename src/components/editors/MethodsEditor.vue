@@ -36,6 +36,7 @@ export default {
   key: "methods",
   display: "Methods",
   props,
+  inheritAttrs: false,
   methods: {
     async executeMethod({ execute, name }) {
       try {
