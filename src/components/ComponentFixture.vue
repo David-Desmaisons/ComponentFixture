@@ -51,9 +51,7 @@ export default {
     }
   },
 
-  renderError(h, err) {
-    return h("pre", { style: { color: "red" } }, err.stack);
-  },
+  renderError: (h, err) => h("pre", { style: { color: "red" } }, err.stack),
 
   methods: {
     computedValuesFromProps(component, { props, name, model }) {
