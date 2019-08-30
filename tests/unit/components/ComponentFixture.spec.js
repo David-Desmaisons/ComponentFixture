@@ -48,9 +48,25 @@ describe("ComponentFixture.vue", () => {
     console.warn = originalWarn;
   });
 
+  const defaultSlotNotUnique = [
+    [[]],
+    [["<div/>", "<div/>"]],
+    [["<div/>", "<component1/>", "<component2/>"]]
+  ];
+
+  test.each(defaultSlotNotUnique)(
+    "throws when there is not exactly than one default slots are passed: %p",
+    args => {
+      const render = () => mountComponentWithDefaultSlot({ slot: args });
+      expect(render).toThrow(
+        "ComponentFixture should have one unique default slot"
+      );
+    }
+  );
+
   it("does not throw when one default slot is passed", () => {
     const render = () =>
-      mountComponentWithDefaultSlot({ slot: FakeComponentMethods });
+      mountComponentWithDefaultSlot({ slot: "<component/>" });
     expect(render).not.toThrow();
   });
 
