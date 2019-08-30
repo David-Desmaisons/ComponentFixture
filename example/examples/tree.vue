@@ -1,6 +1,7 @@
 <template>
   <sandbox :defaults="{data, identifier}">
-    <tree></tree>
+    <tree>
+    </tree>
   </sandbox>
 </template>
 <script>
