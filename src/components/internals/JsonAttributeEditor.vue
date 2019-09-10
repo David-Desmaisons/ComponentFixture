@@ -97,4 +97,14 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+/deep/ .jsoneditor {
+  &,
+  .jsoneditor-menu {
+    border-color: #ccc;
+  }
+
+  .jsoneditor-menu {
+    background: #ccc;
+  }
+}
 </style>
