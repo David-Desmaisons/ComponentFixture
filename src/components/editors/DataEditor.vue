@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ObjectDisplayer v-if="hasData" :data="data"/>
+    <ObjectDisplayer v-if="hasData" :data="data" />
 
     <span class="no-info" v-else>No data detected.</span>
   </div>

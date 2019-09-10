@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="main"
-    :class="{'is-invalid':!valid}"
-  >
+  <div class="main" :class="{'is-invalid':!valid}">
     <div class="attribute-column attribute-description">
       <div class="label">{{attribute}}</div>
 
@@ -37,33 +34,22 @@
             <i class="fa fa-home" />
           </button>
 
-          <div
-            class="prop-info"
-            v-if="metaData.definition.required"
-          >
-            <i
-              class="fa fa-exclamation-triangle"
-              v-tooltip.bottom="'required'"
-            />
+          <div class="prop-info" v-if="metaData.definition.required">
+            <i class="fa fa-exclamation-triangle" v-tooltip.bottom="'required'" />
           </div>
 
-          <div
-            class="prop-info"
-            v-if="metaData.definition.validator"
-          >
-            <i
-              class="fa fa-lock"
-              v-tooltip.bottom="'has validator'"
-            />
+          <div class="prop-info" v-if="metaData.definition.validator">
+            <i class="fa fa-lock" v-tooltip.bottom="'has validator'" />
           </div>
         </div>
       </div>
     </div>
 
     <div class="attribute-column attribute-input">
-      <div class="error-feedback">{{error}}</div>
+      <div class="error-feedback" v-if="error">{{error}}</div>
 
       <component
+        v-else
         ref="editor"
         :is="componentType"
         class="component-input"
@@ -326,6 +312,10 @@ export default {
     margin-left: 5px;
     margin-right: 5px;
   }
+}
+
+.component-input {
+  width: 100%;
 }
 
 .type-select {

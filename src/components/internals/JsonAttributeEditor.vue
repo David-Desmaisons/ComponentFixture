@@ -1,9 +1,5 @@
 <template>
-  <input
-    :id="'attribute-'+attribute"
-    v-model="textValue"
-    class="form-control"
-  />
+  <vue-json-editor v-model="jsonValue" @json-change="onJsonChange" />
 </template>
 <script>
 import {
@@ -12,7 +8,12 @@ import {
   stringifyObject
 } from "@/utils/TypeHelper";
 
+import vueJsonEditor from "vue-json-editor";
+
 export default {
+  components: {
+    vueJsonEditor
+  },
   props: {
     attribute: {
       required: false,
@@ -35,9 +36,14 @@ export default {
     }
   },
 
+  created() {
+    this.parseTextToJson();
+  },
+
   data() {
     return {
-      textValue: ""
+      textValue: "",
+      jsonValue: ""
     };
   },
 
@@ -77,9 +83,28 @@ export default {
   methods: {
     reset() {
       this.textValue = this.value;
+    },
+    parseTextToJson() {
+      this.jsonValue = JSON.parse(this.textValue);
+    },
+    parseJsonToText() {
+      this.textValue = JSON.stringify(this.jsonValue);
+    },
+    onJsonChange($event) {
+      this.parseJsonToText();
     }
   }
 };
 </script>
 <style lang="less" scoped>
+/deep/ .jsoneditor {
+  &,
+  &-menu {
+    border-color: #ccc;
+  }
+
+  &-menu {
+    background: #ccc;
+  }
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <prism-editor :code="data | stringify" language="js" readonly/>
+  <prism-editor :code="data | stringify" language="js" readonly />
 </template>
 <script>
 import stringify from "@/utils/stringify";

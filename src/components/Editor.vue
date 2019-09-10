@@ -1,9 +1,7 @@
 <template>
   <div class="main-editor">
-
     <div class="card card-options">
       <div class="card-body show-options">
-
         <button
           v-for="name in ['props','data','methods']"
           :key="name"
@@ -22,21 +20,12 @@
           @click="toggleSegment('events')"
         >
           <span>Events</span>
-          <span
-            class="badge"
-            v-if="events.length>0"
-          >{{ events.length }}</span>
+          <span class="badge" v-if="events.length>0">{{ events.length }}</span>
         </button>
       </div>
     </div>
 
-    <transition-group
-      type="transition"
-      name="flip-list"
-      tag="div"
-      class="editor"
-    >
-
+    <transition-group type="transition" name="flip-list" tag="div" class="editor">
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
@@ -49,7 +38,6 @@
         @error="error"
       />
     </transition-group>
-
   </div>
 </template>
 <script>
@@ -127,7 +115,6 @@ export default {
 .main-editor {
   font-size: 12px;
   padding: 0px;
-  margin-left: 16px;
 
   /deep/ .no-info {
     margin: 1em;
@@ -193,6 +180,8 @@ export default {
     .segment {
       background: white;
       text-transform: capitalize;
+      flex-grow: 1;
+      border-color: #eee;
     }
 
     .segment-events {
@@ -215,7 +204,15 @@ export default {
 
   /deep/ input {
     font-size: 12px;
-    height: 28px;
+
+    &[type="text"] {
+      height: 28px;
+    }
+    &[type="range"] {
+      padding: 0;
+      margin-right: 20px;
+      cursor: grab;
+    }
   }
 
   /deep/ .event {
