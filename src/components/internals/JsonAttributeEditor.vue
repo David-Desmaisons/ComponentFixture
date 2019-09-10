@@ -99,11 +99,11 @@ export default {
 <style lang="less" scoped>
 /deep/ .jsoneditor {
   &,
-  .jsoneditor-menu {
+  &-menu {
     border-color: #ccc;
   }
 
-  .jsoneditor-menu {
+  &-menu {
     background: #ccc;
   }
 }
