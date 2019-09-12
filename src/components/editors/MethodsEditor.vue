@@ -29,10 +29,6 @@ const props = {
   methods: {
     required: true,
     type: Array
-  },
-  getUnderTestComponent: {
-    required: true,
-    type: Function
   }
 };
 export default {
@@ -44,8 +40,7 @@ export default {
   methods: {
     async executeMethod({ execute, name }) {
       try {
-        const component = this.getUnderTestComponent();
-        const res = await execute.apply(component);
+        const res = await execute();
         this.showResult(name, res);
       } catch (error) {
         this.$emit("error", `"${name}" executed with error: ${error}`);

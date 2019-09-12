@@ -9,11 +9,14 @@ import {
 import compare from "@/utils/compare";
 import consoleSilenter from "@/utils/consoleSilenter";
 
-function getMethods(methods) {
+function getMethods(methods, getUnderTestComponent) {
   return Object.keys(methods).map(name => ({
     name,
     argumentNumber: methods[name].length,
-    execute: methods[name]
+    execute: (parameters = []) => {
+      const component = getUnderTestComponent();
+      return methods[name].apply(component, parameters);
+    }
   }));
 }
 
@@ -128,7 +131,7 @@ export default {
       if ($methods !== undefined && compare(methods, $methods)) {
         return;
       }
-      this.componentMethods = getMethods(methods);
+      this.componentMethods = getMethods(methods, this.getUnderTestComponent);
       this.$methods = Object.assign({}, methods);
     },
 
@@ -167,7 +170,6 @@ export default {
       componentMethods: methods,
       componentModel,
       events,
-      getUnderTestComponent,
       propsDefinition,
       update
     } = this;
@@ -224,8 +226,7 @@ export default {
                   componentName,
                   propsDefinition,
                   methods,
-                  events,
-                  getUnderTestComponent
+                  events
                 })
               ]
             ),

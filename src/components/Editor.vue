@@ -34,7 +34,6 @@
         :methods="methods"
         :attributes="attributes"
         :data="data"
-        :getUnderTestComponent="getUnderTestComponent"
         @success="success"
         @error="error"
       />
@@ -77,10 +76,6 @@ export default {
     methods: {
       required: true,
       type: Array
-    },
-    getUnderTestComponent: {
-      required: true,
-      type: Function
     }
   },
 
