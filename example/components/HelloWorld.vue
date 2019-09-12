@@ -15,6 +15,11 @@ export default {
     name: {
       default: undefined
     }
+  },
+  methods: {
+    sayHello() {
+      return this.message;
+    }
   }
 };
 </script>

@@ -1,9 +1,7 @@
 <template>
   <div class="main-editor">
-
     <div class="card card-options">
       <div class="card-body show-options">
-
         <button
           v-for="name in ['props','data','methods']"
           :key="name"
@@ -22,21 +20,12 @@
           @click="toggleSegment('events')"
         >
           <span>Events</span>
-          <span
-            class="badge"
-            v-if="events.length>0"
-          >{{ events.length }}</span>
+          <span class="badge" v-if="events.length>0">{{ events.length }}</span>
         </button>
       </div>
     </div>
 
-    <transition-group
-      type="transition"
-      name="flip-list"
-      tag="div"
-      class="editor"
-    >
-
+    <transition-group type="transition" name="flip-list" tag="div" class="editor">
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
@@ -45,11 +34,11 @@
         :methods="methods"
         :attributes="attributes"
         :data="data"
+        :getUnderTestComponent="getUnderTestComponent"
         @success="success"
         @error="error"
       />
     </transition-group>
-
   </div>
 </template>
 <script>
@@ -88,6 +77,10 @@ export default {
     methods: {
       required: true,
       type: Array
+    },
+    getUnderTestComponent: {
+      required: true,
+      type: Function
     }
   },
 
