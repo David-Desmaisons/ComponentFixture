@@ -1,0 +1,24 @@
+<template>
+  <sandbox :defaults="{url:'https://api.github.com/orgs/vuejs/repos'}">
+    <ajax-handler></ajax-handler>
+  </sandbox>
+</template>
+<script>
+import Sandbox from "@/components/Sandbox";
+import { ajaxHandler } from "vue-ajax-handler";
+import { get } from "axios";
+
+export default {
+  name: "vue-ajax-handler",
+  meta: {
+    display: "Vue ajax handler"
+  },
+  provide: {
+    get
+  },
+  components: {
+    ajaxHandler,
+    Sandbox
+  }
+};
+</script>

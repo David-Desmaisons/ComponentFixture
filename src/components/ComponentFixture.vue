@@ -140,6 +140,9 @@ export default {
     },
 
     updateData() {
+      if (this.$stage === 1) {
+        return;
+      }
       this.data = this.getUnderTestComponent().$data;
     }
   },
@@ -260,6 +263,7 @@ export default {
     }
     this.$stage = 2;
     this.$nextTick(() => {
+      this.updateData();
       const emit = this.$refs.cut.$emit;
       const newEmit = (eventName, ...args) => {
         emit.call(this.$refs.cut, eventName, ...args);
