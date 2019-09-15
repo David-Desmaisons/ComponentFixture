@@ -1,6 +1,10 @@
 <template>
   <sandbox :defaults="{url:'https://api.github.com/orgs/vuejs/repos'}">
-    <ajax-handler></ajax-handler>
+    <ajax-handler>
+      <template #default="{data}">
+        <div>{{data.data[0].id}}</div>
+      </template>
+    </ajax-handler>
   </sandbox>
 </template>
 <script>
