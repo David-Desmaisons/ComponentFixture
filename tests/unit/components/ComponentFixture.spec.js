@@ -9,7 +9,7 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = (arg = {}) => {
   const { slot = FakeComponent } = arg;
@@ -31,7 +31,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -332,11 +332,13 @@ describe("ComponentFixture.vue", () => {
     );
   });
 
-  const lastParameters = (fake) => {
-    const { mock: { calls } } = fake;
+  const lastParameters = fake => {
+    const {
+      mock: { calls }
+    } = fake;
     const length = calls.length;
     return calls[length - 1];
-  }
+  };
 
   describe("when initialized with a controller slot", () => {
     let wrapper = null;
@@ -369,7 +371,9 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("call the control scoped slot with componentName", () => {
-      expect(lastParameters(control)[0].componentName).toEqual("fake-component");
+      expect(lastParameters(control)[0].componentName).toEqual(
+        "fake-component"
+      );
     });
 
     it("calls the control scoped slot initially with data", () => {
