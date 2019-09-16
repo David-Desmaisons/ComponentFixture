@@ -17,6 +17,7 @@
 <script>
 let id = 1;
 export default {
+  name: "switch",
   props: {
     value: {
       type: Boolean,

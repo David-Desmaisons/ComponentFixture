@@ -40,11 +40,11 @@ const props = {
 };
 
 export default {
+  name: "fixture-header",
   directives: {
     tooltip: VTooltip
   },
   props,
-  name: "FixtureHeader",
   methods: {
     toggleEditor() {
       this.$emit("toggle");

@@ -50,6 +50,8 @@ const components = requireContext.keys().reduce((acc, key) => {
 }, {});
 
 export default {
+  name: "editor",
+  
   components,
 
   props: {

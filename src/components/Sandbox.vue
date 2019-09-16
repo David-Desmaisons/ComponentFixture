@@ -43,13 +43,14 @@ import FixtureHeader from "./FixtureHeader";
 import VueNotifications from "./base/notifificationInit";
 
 export default {
+  name: "sandbox",
+
   props: {
     defaults: {
       type: Object,
       default: () => {}
     }
   },
-  name: "sandbox",
 
   components: {
     ComponentFixture,

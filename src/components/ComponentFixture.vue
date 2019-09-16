@@ -44,7 +44,7 @@ const defaultModel = {
 };
 
 export default {
-  name: "ComponentFixture",
+  name: "component-fixture",
 
   props: {
     defaults: {
