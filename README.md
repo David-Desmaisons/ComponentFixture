@@ -21,15 +21,12 @@ Interactive test fixture for vue component.
 Component is designed to receive any component you want to test as a default slot
 
 ```HTML
-<component-fixture>
+<sandbox>
 
   <!-- Use the default slot to create the component under test -->
   <component-under-test/>
 
-  <!-- Use this slot to enable edition of props values, Editor is provided by this lib-->
-  <Editor slot="control" slot-scope="scope" v-bind="scope"/>
-
-</component-fixture>
+</sandbox>
 ```
 ### Component-fixture will automatically:
   - Mirror all the props of the tested component
@@ -79,37 +76,29 @@ This will be provided on next major version.
 ## Example usage
 
 ```HTML
-<component-fixture :defaults="{value: 23}">
+<sandbox :defaults="{value: 23}">
 
-  <!-- Use the default slot to create the component under test -->
+  <!-- Use the default slot to for the component under test -->
   <component-under-test></component-under-test>
 
-  <!-- Use this slot to enable edition of props values -->
-  <template v-slot:control="scope">
-    <editor v-bind="scope"/>
-  </template>
-
-</component-fixture>
+</sandbox>
 ```
 
 ```javascript
-import { ComponentFixture, Editor } from 'component-fixture'
+import { Sandbox } from 'component-fixture'
 import "component-fixture/dist/ComponentFixture.css"
 import { componentUnderTest } from 'componentUnderTest'
 
 export default {
   components: {
-    ComponentFixture,
     componentUnderTest,
-    Editor
+    Sandbox
   }
 }
 ```
 
 ### API
 #### slots 
-
-- `control` slot for the form that will edit the props; editor is provided by this library and provide all the features.
 
 - `default` Slot for the component under test
 
