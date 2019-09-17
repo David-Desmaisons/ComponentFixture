@@ -8,7 +8,7 @@
   </sandbox>
 </template>
 <script>
-import Sandbox from "@/components/Sandbox";
+import {Sandbox} from "@/index";
 import { ajaxHandler } from "vue-ajax-handler";
 import { get } from "axios";
 

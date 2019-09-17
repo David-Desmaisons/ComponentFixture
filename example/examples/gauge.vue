@@ -4,7 +4,7 @@
   </sandbox>
 </template>
 <script>
-import Sandbox from "@/components/Sandbox";
+import {Sandbox} from "@/index";
 
 export default {
   name: "vue-svg-gauge-example",

@@ -6,7 +6,7 @@
 </template>
 <script>
 import { tree } from "vued3tree";
-import Sandbox from "@/components/Sandbox";
+import {Sandbox} from "@/index";
 
 export default {
   name: "tree-example",

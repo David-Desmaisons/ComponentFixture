@@ -4,7 +4,7 @@
   </sandbox>
 </template>
 <script>
-import Sandbox from "@/components/Sandbox";
+import {Sandbox} from "@/index";
 import VueSlideBar from "vue-slide-bar";
 
 export default {

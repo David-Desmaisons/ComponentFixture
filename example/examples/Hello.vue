@@ -5,7 +5,7 @@
 </template>
 <script>
 import HelloWorld from "../components/HelloWorld";
-import Sandbox from "@/components/Sandbox";
+import {Sandbox} from "@/index";
 
 export default {
   name: "hello-world-example",
