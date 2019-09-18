@@ -1,14 +1,15 @@
 <template>
   <div class="card">
-    <div class="card-header expander" :style="headerStyle">
+    <div
+      class="card-header expander"
+      :style="headerStyle"
+    >
       <button
         class="btn expander-button"
-        type="button"
-        data-toggle="collapse"
-        :data-target="`#${id}`"
         aria-expanded="false"
-        :aria-controls="id"
-        :class="{ collapsed: !initialShow}"
+        :class="{ collapsed: collapse}"
+        type="button"
+        @click="collapse=!collapse"
       >
         <div class="expander-header">
           <i class="fa fa-caret-down expander-icon"></i>
@@ -19,7 +20,11 @@
       </button>
     </div>
 
-    <div :id="id" class="collapse" :class="{ show: initialShow}">
+    <div
+      :id="id"
+      class="collapse"
+      :class="{ show: !collapse}"
+    >
       <div class="card-body">
         <slot></slot>
       </div>
@@ -27,7 +32,6 @@
   </div>
 </template>
 <script>
-let id = 0;
 export default {
   name: "collaspable",
   props: {
@@ -46,8 +50,7 @@ export default {
   },
   data() {
     return {
-      id: `collapse${id++}`,
-      collapse: this.initialShow
+      collapse: !this.initialShow
     };
   }
 };
@@ -86,7 +89,7 @@ export default {
     .expander-icon {
       height: 100%;
       margin-right: 10px;
-      transition: all 0.3s;
+      transition: all 0.15s;
     }
   }
 

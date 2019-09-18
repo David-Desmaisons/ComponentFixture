@@ -1,6 +1,5 @@
 import Vue from "vue";
 import App from "./App.vue";
-require("bootstrap");
 import VueSvgGauge from 'vue-svg-gauge'
 import VueRouter from "vue-router"
 import routes from "./routes"
