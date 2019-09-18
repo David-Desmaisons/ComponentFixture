@@ -1,6 +1,6 @@
 {
   "name": "component-fixture",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "private": false,
   "scripts": {
     "serve": "vue-cli-service serve ./example/main.js --open",
@@ -10,7 +10,7 @@
     "test:unit": "vue-cli-service test:unit --coverage",
     "test:coverage": "vue-cli-service test:unit --coverage --verbose && codecov",
     "prepublishOnly": "npm run lint && npm run test:unit && npm run build:doc && npm run build",
-    "doc:build": "npx vuedoc.md --section API --output ./README.md ./src/components/ComponentFixture.vue"
+    "doc:build": "npx vuedoc.md --section API --output ./README.md ./src/components/Sandbox.vue"
   },
   "dependencies": {
     "bootstrap": "^4.1.3",
