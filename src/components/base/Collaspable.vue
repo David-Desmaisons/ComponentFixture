@@ -21,7 +21,6 @@
     </div>
 
     <div
-      :id="id"
       class="collapse"
       :class="{ show: !collapse}"
     >
