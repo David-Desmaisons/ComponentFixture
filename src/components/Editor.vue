@@ -20,12 +20,20 @@
           @click="toggleSegment('events')"
         >
           <span>Events</span>
-          <span class="badge" v-if="events.length>0">{{ events.length }}</span>
+          <span
+            class="badge"
+            v-if="events.length>0"
+          >{{ events.length }}</span>
         </button>
       </div>
     </div>
 
-    <transition-group type="transition" name="flip-list" tag="div" class="editor">
+    <transition-group
+      type="transition"
+      name="flip-list"
+      tag="div"
+      class="editor"
+    >
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
@@ -41,7 +49,7 @@
   </div>
 </template>
 <script>
-import "bootstrap/dist/css/bootstrap.css";
+// import "bootstrap/dist/css/bootstrap.css";
 const requireContext = require.context("./editors/", false, /\.vue$/);
 const components = requireContext.keys().reduce((acc, key) => {
   const component = requireContext(key).default;
@@ -231,4 +239,6 @@ export default {
     }
   }
 }
+</style>
+<style src="./styles/bootstrap-ligth.css">
 </style>
