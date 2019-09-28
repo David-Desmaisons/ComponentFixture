@@ -49,7 +49,6 @@
   </div>
 </template>
 <script>
-// import "bootstrap/dist/css/bootstrap.css";
 const requireContext = require.context("./editors/", false, /\.vue$/);
 const components = requireContext.keys().reduce((acc, key) => {
   const component = requireContext(key).default;
