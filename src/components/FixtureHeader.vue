@@ -6,7 +6,7 @@
         @click="toggleEditor"
         v-tooltip.left="'Toggle sidebar editor'"
       >
-        <span class="navbar-toggler-icon"></span>
+        <i class="fa fa-bars"></i>
       </button>
       <h4 class="component__title">{{componentName}}</h4>
     </div>

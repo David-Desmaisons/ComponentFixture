@@ -1,5 +1,5 @@
 <template>
-  <div class="main-editor">
+  <div class="main-editor-component-fixture">
     <div class="card card-options">
       <div class="card-body show-options">
         <button
@@ -20,12 +20,20 @@
           @click="toggleSegment('events')"
         >
           <span>Events</span>
-          <span class="badge" v-if="events.length>0">{{ events.length }}</span>
+          <span
+            class="badge"
+            v-if="events.length>0"
+          >{{ events.length }}</span>
         </button>
       </div>
     </div>
 
-    <transition-group type="transition" name="flip-list" tag="div" class="editor">
+    <transition-group
+      type="transition"
+      name="flip-list"
+      tag="div"
+      class="editor"
+    >
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
@@ -41,7 +49,6 @@
   </div>
 </template>
 <script>
-import "bootstrap/dist/css/bootstrap.css";
 const requireContext = require.context("./editors/", false, /\.vue$/);
 const components = requireContext.keys().reduce((acc, key) => {
   const component = requireContext(key).default;
@@ -114,7 +121,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.main-editor {
+.main-editor-component-fixture {
   font-size: 12px;
   padding: 0px;
   margin-left: 16px;
@@ -232,3 +239,4 @@ export default {
   }
 }
 </style>
+<style lang="less" src="@/styles/bootstrap-ligth.less"/>
