@@ -2,7 +2,7 @@
   <switch-component v-model="object[attribute]" />
 </template>
 <script>
-import switchComponent from "@/components/base/Switch";
+import switchComponent from "@/components/base/SwitchComponent";
 
 export default {
   props: {
@@ -25,5 +25,3 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
-</style>
