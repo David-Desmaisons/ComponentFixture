@@ -26,13 +26,14 @@
 </template>
 <script>
 import stringify from "@/utils/stringify";
+import {log} from "@/utils/logger";
+
 const props = {
   methods: {
     required: true,
     type: Array
   }
 };
-const { console: { log } } = window;
 function buildMessageAndLog(name, res) {
   if (res === undefined) {
     const message = `"${name}" executed without error`;
