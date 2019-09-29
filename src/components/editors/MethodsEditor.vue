@@ -40,8 +40,9 @@ function buildMessageAndLog(name, res) {
     return message;
   }
 
-  log(`"${name}" returned`, res);
-  return `"${name}" returned: ${stringify(res, null, 2)}`;
+  const intro = `"${name}" returned: `;
+  log(intro, res);
+  return `${intro}${stringify(res)}`;
 }
 
 export default {
