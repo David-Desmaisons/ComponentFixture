@@ -25,12 +25,25 @@
   </div>
 </template>
 <script>
+import stringify from "@/utils/stringify";
 const props = {
   methods: {
     required: true,
     type: Array
   }
 };
+const { console: { log } } = window;
+function buildMessageAndLog(name, res) {
+  if (res === undefined) {
+    const message = `"${name}" executed without error`;
+    log(message);
+    return message;
+  }
+
+  log(`"${name}" returned`, res);
+  return `"${name}" returned: ${stringify(res, null, 2)}`;
+}
+
 export default {
   name: "methods-editor",
   key: "methods",
@@ -48,10 +61,7 @@ export default {
     },
 
     showResult(name, res) {
-      const message =
-        res === undefined
-          ? `"${name}" executed without error`
-          : `"${name}" returned: ${JSON.stringify(res, null, 2)}`;
+      const message = buildMessageAndLog(name, res);
       this.$emit("success", message);
     }
   },
