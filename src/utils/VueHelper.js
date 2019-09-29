@@ -1,4 +1,7 @@
 import { getTypeFromValue } from "./TypeHelper";
+import {warn} from "@/utils/logger";
+import stringify from "@/utils/stringify";
+
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 function hasOwn(obj, key) {
@@ -49,16 +52,16 @@ function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
     const proposedTypes = getTypeFromValue(normalizedProposed);
     const typeMatch = propTypes.some(t => proposedTypes.includes(t));
     if (!typeMatch) {
-      window.console.warn(
-        `defaults: ${JSON.stringify(
+      warn(
+        `defaults: ${stringify(
           normalizedProposed
         )} will be discarded because type is not matching props type`
       );
     } else {
       const validation = validateProp(prop, normalizedProposed);
       if (!validation.ok) {
-        window.console.warn(
-          `defaults: ${JSON.stringify(
+        warn(
+          `defaults: ${stringify(
             normalizedProposed
           )} will be discarded because ${validation.message}.`
         );
