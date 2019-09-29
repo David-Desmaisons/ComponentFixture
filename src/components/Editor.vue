@@ -1,5 +1,5 @@
 <template>
-  <div class="main-editor">
+  <div class="main-editor-component-fixture">
     <div class="card card-options">
       <div class="card-body show-options">
         <button
@@ -121,7 +121,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.main-editor {
+.main-editor-component-fixture {
   font-size: 12px;
   padding: 0px;
   margin-left: 16px;
@@ -239,5 +239,4 @@ export default {
   }
 }
 </style>
-<style src="./styles/bootstrap-ligth.css">
-</style>
+<style lang="less" src="@/styles/bootstrap-ligth.less"/>
