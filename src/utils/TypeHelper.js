@@ -1,3 +1,5 @@
+import { stringify, parse } from "@/utils/stringify";
+
 function filterFloat(value) {
   if (value === "") {
     return null;
@@ -15,7 +17,7 @@ function parseObject(value) {
   if (value === "null") {
     return null;
   }
-  return JSON.parse(value);
+  return parse(value);
 }
 
 function stringifyObject(value) {
@@ -25,7 +27,7 @@ function stringifyObject(value) {
   if (value === null) {
     return "null";
   }
-  return JSON.stringify(value);
+  return stringify(value, "");
 }
 
 function parseFunction(value) {

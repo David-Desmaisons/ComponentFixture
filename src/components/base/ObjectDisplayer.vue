@@ -2,7 +2,7 @@
   <prism-editor :code="data | stringify" language="js" readonly/>
 </template>
 <script>
-import stringify from "@/utils/stringify";
+import { stringify } from "@/utils/stringify";
 import PrismEditor from "vue-prism-editor";
 import "prismjs";
 import "prismjs/themes/prism.css";
