@@ -27,7 +27,7 @@ function stringifyObject(value) {
   if (value === null) {
     return "null";
   }
-  return stringify(value);
+  return stringify(value, "");
 }
 
 function parseFunction(value) {

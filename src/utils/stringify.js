@@ -1,7 +1,7 @@
 import CircularJSON from "circular-json";
 import Vue from "vue";
 
-function stringify(value) {
+function stringify(value, space = "  ") {
   return CircularJSON.stringify(
     value,
     (key, value) => {
@@ -10,7 +10,7 @@ function stringify(value) {
       }
       return value;
     },
-    "  "
+    space
   );
 }
 
