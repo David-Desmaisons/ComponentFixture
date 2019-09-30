@@ -2,34 +2,25 @@ import { log, warn } from "@/utils/logger";
 
 const suffix = "ComponentFixture:";
 
-describe.each([
-  ["log", log],
-  ["warn", warn]
-])(
-  "%s",
-  (name, logFunction) => {
-    let native;
-    let mockedLog;
-    beforeEach(() => {
-      native = window.console[name];
-      mockedLog = jest.fn();
-      window.console[name] = mockedLog;
-    });
+describe.each([["log", log], ["warn", warn]])("%s", (name, logFunction) => {
+  let native;
+  let mockedLog;
+  beforeEach(() => {
+    native = window.console[name];
+    mockedLog = jest.fn();
+    window.console[name] = mockedLog;
+  });
 
-    afterEach(() => {
-      window.console[name] = native;
-    });
+  afterEach(() => {
+    window.console[name] = native;
+  });
 
-    test.each([
-      [["message"], [suffix, "message"]],
-      [["message", {}], [suffix, "message", {}]],
-      [[{}], [suffix, {}]]
-    ])(
-     `called with %j calls console.${name} with %j"`,
-      (arg, expected) => {
-        logFunction.apply(null, arg);
-        expect(mockedLog).toHaveBeenCalledWith(...expected);
-      }
-    )
-  }
-);
+  test.each([
+    [["message"], [suffix, "message"]],
+    [["message", {}], [suffix, "message", {}]],
+    [[{}], [suffix, {}]]
+  ])(`called with %j calls console.${name} with %j"`, (arg, expected) => {
+    logFunction.apply(null, arg);
+    expect(mockedLog).toHaveBeenCalledWith(...expected);
+  });
+});

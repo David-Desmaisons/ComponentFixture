@@ -1,4 +1,4 @@
-import stringify from "@/utils/stringify";
+import { stringify } from "@/utils/stringify";
 import { mount } from "@vue/test-utils";
 import FakeComponent from "../../mock/FakeComponent.vue";
 

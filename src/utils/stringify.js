@@ -14,4 +14,8 @@ function stringify(value) {
   );
 }
 
-export default stringify;
+function parse(value) {
+  return CircularJSON.parse(value);
+}
+
+export { stringify, parse };

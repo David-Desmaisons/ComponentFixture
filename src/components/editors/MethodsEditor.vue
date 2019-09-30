@@ -25,8 +25,8 @@
   </div>
 </template>
 <script>
-import stringify from "@/utils/stringify";
-import {log} from "@/utils/logger";
+import { stringify } from "@/utils/stringify";
+import { log } from "@/utils/logger";
 
 const props = {
   methods: {
