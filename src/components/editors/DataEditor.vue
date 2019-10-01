@@ -2,7 +2,7 @@
   <div>
     <ObjectDisplayer v-if="hasData" :data="data"/>
 
-    <span class="no-info" v-else>No data detected.</span>
+    <div class="no-info" v-else>No data detected.</div>
   </div>
 </template>
 <script>

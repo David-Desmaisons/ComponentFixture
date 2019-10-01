@@ -18,10 +18,10 @@
         >{{method.name}}</button>
       </div>
     </div>
-    <span
+    <div
       class="no-info"
       v-else
-    >No methods without argument detected.</span>
+    >No methods without argument detected.</div>
   </div>
 </template>
 <script>

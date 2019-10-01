@@ -149,8 +149,8 @@ export default {
     z-index: 1;
 
     & + div {
-      padding: 8px 0;
-      height: calc(100vh - 110px);
+      padding: 0;
+      height: calc(100vh - 130px);
       overflow: auto;
     }
   }
@@ -212,7 +212,7 @@ export default {
 
   /deep/ input {
     font-size: 12px;
-    height: 28px;
+    height: @standard-height;
   }
 
   /deep/ .event {

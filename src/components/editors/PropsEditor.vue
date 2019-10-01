@@ -11,11 +11,11 @@
       />
     </template>
 
-    <span
+    <div
       class="no-info"
       v-else
     >No props detected.
-    </span>
+    </div>
   </div>
 </template>
 <script>
@@ -47,5 +47,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-</style>

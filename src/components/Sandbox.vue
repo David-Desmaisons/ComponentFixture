@@ -112,7 +112,6 @@ export default {
   width: 100%;
   height: calc(100vh - 48px);
   background: #fff;
-  // border: 1px solid #eee;
   border-radius: 5px;
   overflow: hidden;
 }

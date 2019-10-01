@@ -8,7 +8,7 @@
 
       <div class="prop-description">
         <div
-          class="badge type-decriptor"
+          class="badge type-descriptor"
           v-tooltip="{content:type,placement:'bottom'}"
           :class="badge"
         >
@@ -206,10 +206,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@type-decriptor-width: 50px;
-@icon-color: darkgrey;
-@icon-size: 18px;
-
 .main {
   padding: 10px;
   border-bottom: 1px solid #ced4da;
@@ -223,14 +219,14 @@ export default {
     box-shadow: 0 0 0 0.2rem red;
   }
 
-  .badge.type-decriptor {
+  .badge.type-descriptor {
     font-size: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: @type-decriptor-width;
-    max-width: @type-decriptor-width;
-    height: 28px;
+    min-width: @type-descriptor-width;
+    max-width: @type-descriptor-width;
+    height: 24px;
     text-transform: uppercase;
 
     select {
@@ -240,7 +236,7 @@ export default {
       padding: 0;
       outline: transparent;
       text-transform: uppercase;
-      width: @type-decriptor-width;
+      width: @type-descriptor-width;
 
       option {
         background: #555;
@@ -267,6 +263,8 @@ export default {
   .prop-info {
     font-size: @icon-size;
     padding: 0 5px;
+    display: flex;
+    align-items: center;
 
     .fa-unlock-alt {
       opacity: 0.7;
@@ -276,6 +274,7 @@ export default {
   .actions {
     padding: 0 5px;
     border-color: #ced4da;
+    height: 32px;
 
     .btn-outline-info {
       color: @icon-color;
@@ -291,8 +290,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-width: 120px;
-  width: 30%;
+  min-width: 110px;
+  width: 20%;
 
   .label {
     color: black;

@@ -9,10 +9,10 @@
       />
     </template>
 
-    <span
+    <div
       class="no-info"
       v-else
-    >No events emited.</span>
+    >No events emited.</div>
   </div>
 </template>
 <script>
