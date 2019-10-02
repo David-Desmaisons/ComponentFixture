@@ -166,7 +166,10 @@ export default {
 
     const { Ctor: ctor } = slot.componentOptions;
     this.ctor = ctor;
-    const { scopedSlots, slot: childSlot } = slot.data;
+    const {
+      $scopedSlots: scopedSlots,
+      $slots: childSlots
+    } = slot.componentInstance;
     const props = this.dynamicAttributes;
     const {
       componentName,
@@ -180,7 +183,7 @@ export default {
     const options = {
       props,
       scopedSlots,
-      slot: childSlot,
+      slots: childSlots,
       class: { "real-component": true },
       ref: "cut",
       on: this.setupEventsListeners(props, componentModel)
