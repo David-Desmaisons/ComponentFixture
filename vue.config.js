@@ -1,4 +1,4 @@
-const {globalVars} = require("./src/styles/globals");
+const { globalVars } = require("./src/styles/globals");
 
 module.exports = {
   baseUrl: "./",
