@@ -169,7 +169,10 @@ export default {
     const {
       $scopedSlots: scopedSlots,
       $slots: childSlots
-    } = slot.componentInstance;
+    } = slot.componentInstance || {
+      $scopedSlots: undefined,
+      $slots: undefined
+    };
     const props = this.dynamicAttributes;
     const {
       componentName,
