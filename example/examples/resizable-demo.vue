@@ -1,7 +1,7 @@
 <template>
   <sandbox>
     <resizable>
-      <div>
+      <div class="content">
         resizable content
       </div>
     </resizable>
@@ -22,3 +22,9 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.content {
+  background: red;
+  height: 100%;
+}
+</style>
