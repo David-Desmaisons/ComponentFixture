@@ -51,6 +51,16 @@ export default {
       required: false,
       type: Object,
       default: () => ({})
+    },
+    componentHeigth: {
+      required: false,
+      type: String,
+      default: null
+    },
+    componentWidth: {
+      required: false,
+      type: String,
+      default: null
     }
   },
 
@@ -180,14 +190,25 @@ export default {
       componentModel,
       events,
       propsDefinition,
-      update
+      update,
+      componentHeigth,
+      componentWidth
     } = this;
+
+    const style = {};
+    if (componentHeigth !== null) {
+      style.height = componentHeigth;
+    }
+    if (componentWidth !== null) {
+      style.width = componentWidth;
+    }
 
     const options = {
       props,
       scopedSlots,
       slots: childSlots,
       class: { "real-component": true },
+      style,
       ref: "cut",
       on: this.setupEventsListeners(props, componentModel)
     };

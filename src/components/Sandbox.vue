@@ -7,6 +7,8 @@
       >
         <component-fixture
           :defaults="defaults"
+          :componentHeigth="componentHeigth"
+          :componentWidth="componentWidth"
           ref="fixture"
         >
           <!-- Use the default slot to manipulate the component under test -->
@@ -49,6 +51,16 @@ export default {
     defaults: {
       type: Object,
       default: () => {}
+    },
+    componentHeigth: {
+      required: false,
+      type: String,
+      default: null
+    },
+    componentWidth: {
+      required: false,
+      type: String,
+      default: null
     }
   },
 

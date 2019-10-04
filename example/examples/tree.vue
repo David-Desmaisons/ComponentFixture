@@ -1,5 +1,5 @@
 <template>
-  <sandbox :defaults="{data, identifier}">
+  <sandbox :defaults="{data, identifier}" componentHeigth="300px">
     <tree>
     </tree>
   </sandbox>
