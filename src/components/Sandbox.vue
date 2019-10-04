@@ -5,12 +5,7 @@
         class="component__content"
         :class="{ 'editor-closed': !showEditor }"
       >
-        <component-fixture
-          :defaults="defaults"
-          :componentHeigth="componentHeigth"
-          :componentWidth="componentWidth"
-          ref="fixture"
-        >
+        <component-fixture  ref="fixture" v-bind="$attrs">
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, update}">
             <FixtureHeader
@@ -47,22 +42,7 @@ import VueNotifications from "./base/notifificationInit";
 export default {
   name: "sandbox",
 
-  props: {
-    defaults: {
-      type: Object,
-      default: () => {}
-    },
-    componentHeigth: {
-      required: false,
-      type: String,
-      default: null
-    },
-    componentWidth: {
-      required: false,
-      type: String,
-      default: null
-    }
-  },
+  inheritAttrs: false,
 
   components: {
     ComponentFixture,
