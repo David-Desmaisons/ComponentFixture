@@ -8,7 +8,7 @@
   </sandbox>
 </template>
 <script>
-import resizable from "@/components/base/resizable";
+import resizable from "@/components/base/Resizable";
 import {Sandbox} from "@/index";
 
 export default {

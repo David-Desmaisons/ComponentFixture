@@ -6,7 +6,8 @@
   >
     <slot>
     </slot>
-    <div v-if="isResizable"
+    <div
+      v-if="isResizable"
       class="resizer-element"
       @mousedown.prevent="initResize"
     >
@@ -29,13 +30,19 @@ export default {
   data() {
     return {
       style: null,
-      active: false
+      active: false,
+      original: null
     };
   },
   mounted() {
-    const parent = this.$el.parentNode;
+    const { $el } = this;
+    const parent = $el.parentNode;
     parent.addEventListener("mousemove", this.resize, false);
     parent.addEventListener("mouseup", this.stopResize, false);
+    this.original = {
+      x: `${$el.clientWidth}px`,
+      y: `${$el.clientHeight}px`
+    };
   },
   beforeDestroy() {
     const parent = this.$el.parentNode;
@@ -48,6 +55,9 @@ export default {
   methods: {
     initResize() {
       this.active = true;
+    },
+    toOriginalSize() {
+      this.style = this.original;
     },
     resize(e) {
       if (e.buttons === 0 || e.which === 0) {
