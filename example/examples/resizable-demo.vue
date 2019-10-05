@@ -1,5 +1,5 @@
 <template>
-  <sandbox>
+  <sandbox :defaults="{inicialWidth:'800px', inicialHeight:'500px'}">
     <resizable>
       <div class="content">
         resizable content

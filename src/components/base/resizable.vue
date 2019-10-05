@@ -2,7 +2,7 @@
   <div
     class="resizable-container"
     :class="{active}"
-    :style="style"
+    :style="realStyle"
   >
     <slot>
     </slot>
@@ -24,6 +24,16 @@ export default {
     isResizable: {
       type: Boolean,
       default: true
+    },
+    inicialHeight: {
+      type: String,
+      required: false,
+      default: null
+    },
+    inicialWidth: {
+      type: String,
+      required: false,
+      default: null
     }
   },
   name: "resizable",
@@ -31,7 +41,7 @@ export default {
     return {
       style: null,
       active: false,
-      original: null
+      inicial: true
     };
   },
   mounted() {
@@ -39,10 +49,6 @@ export default {
     const parent = $el.parentNode;
     parent.addEventListener("mousemove", this.resize, false);
     parent.addEventListener("mouseup", this.stopResize, false);
-    this.original = {
-      x: `${$el.clientWidth}px`,
-      y: `${$el.clientHeight}px`
-    };
   },
   beforeDestroy() {
     const parent = this.$el.parentNode;
@@ -57,7 +63,7 @@ export default {
       this.active = true;
     },
     toOriginalSize() {
-      this.style = this.original;
+      this.style = this.inicialStyle;
     },
     resize(e) {
       if (e.buttons === 0 || e.which === 0) {
@@ -77,10 +83,27 @@ export default {
         width: e.pageX - offset.x + "px",
         height: e.pageY - offset.y + "px"
       };
+      this.inicial = false;
       this.style = style;
     },
     stopResize() {
       this.active = false;
+    }
+  },
+  computed: {
+    realStyle() {
+      return this.inicial ? this.inicialStyle : this.style;
+    },
+    inicialStyle() {
+      const style = {};
+      const { inicialHeight: heigth, inicialWidth: width } = this;
+      if (heigth !== null) {
+        style.height = heigth;
+      }
+      if (width !== null) {
+        style.width = width;
+      }
+      return style;
     }
   }
 };
