@@ -45,18 +45,14 @@ export default {
     };
   },
   mounted() {
-    const { $el } = this;
-    const parent = $el.parentNode;
-    parent.addEventListener("mousemove", this.resize, false);
-    parent.addEventListener("mouseup", this.stopResize, false);
+    const {document} = window;
+    document.addEventListener("mousemove", this.resize, false);
+    document.addEventListener("mouseup", this.stopResize, false);
   },
   beforeDestroy() {
-    const parent = this.$el.parentNode;
-    if (!parent) {
-      return;
-    }
-    parent.removeEventListener("mousemove", this.resize, false);
-    parent.removeEventListener("mouseup", this.stopResize, false);
+    const {document} = window;
+    document.removeEventListener("mousemove", this.resize, false);
+    document.removeEventListener("mouseup", this.stopResize, false);
   },
   methods: {
     initResize() {
