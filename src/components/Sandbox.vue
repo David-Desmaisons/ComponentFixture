@@ -5,13 +5,14 @@
         class="component__content"
         :class="{ 'editor-closed': !showEditor }"
       >
-        <component-fixture  ref="fixture" v-bind="$attrs">
+        <component-fixture  ref="fixture" v-bind="$attrs" :isResizable="isResizable">
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, update}">
             <FixtureHeader
               @toggle="showEditor = !showEditor"
+              @resize="isResizable = !isResizable"
               @success="success"
-              v-bind="{componentName, update}"
+              v-bind="{componentName, update, isResizable}"
             />
           </template>
 
@@ -52,7 +53,8 @@ export default {
 
   data() {
     return {
-      showEditor: true
+      showEditor: true,
+      isResizable: false
     };
   },
 

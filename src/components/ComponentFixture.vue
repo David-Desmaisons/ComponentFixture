@@ -8,6 +8,7 @@ import {
 } from "@/utils/VueHelper";
 import compare from "@/utils/compare";
 import consoleSilenter from "@/utils/consoleSilenter";
+import resizable from "./base/Resizable";
 
 function getMethods(methods, getUnderTestComponent) {
   return Object.keys(methods).map(name => ({
@@ -61,6 +62,11 @@ export default {
       required: false,
       type: String,
       default: null
+    },
+    isResizable: {
+      required: false,
+      type: Boolean,
+      default: false
     }
   },
 
@@ -191,24 +197,16 @@ export default {
       events,
       propsDefinition,
       update,
-      componentHeigth,
-      componentWidth
+      componentHeigth: inicialHeight,
+      componentWidth: inicialWidth,
+      isResizable
     } = this;
-
-    const style = {};
-    if (componentHeigth !== null) {
-      style.height = componentHeigth;
-    }
-    if (componentWidth !== null) {
-      style.width = componentWidth;
-    }
 
     const options = {
       props,
       scopedSlots,
       slots: childSlots,
       class: { "real-component": true },
-      style,
       ref: "cut",
       on: this.setupEventsListeners(props, componentModel)
     };
@@ -229,7 +227,8 @@ export default {
         header({
           componentName,
           update,
-          methods
+          methods,
+          isResizable
         }),
         h(
           splitPane,
@@ -266,7 +265,22 @@ export default {
                 class: { component: true },
                 slot: "paneR"
               },
-              [h(ctor, options, [])]
+              [
+                h(
+                  resizable,
+                  {
+                    props: {
+                      inicialHeight,
+                      inicialWidth,
+                      isResizable
+                    },
+                    scopedSlots: {
+                      default: () => h(ctor, options, [])
+                    }
+                  },
+                  []
+                )
+              ]
             )
           ]
         )
