@@ -45,12 +45,12 @@ export default {
     };
   },
   mounted() {
-    const {document} = window;
+    const { document } = window;
     document.addEventListener("mousemove", this.resize, false);
     document.addEventListener("mouseup", this.stopResize, false);
   },
   beforeDestroy() {
-    const {document} = window;
+    const { document } = window;
     document.removeEventListener("mousemove", this.resize, false);
     document.removeEventListener("mouseup", this.stopResize, false);
   },

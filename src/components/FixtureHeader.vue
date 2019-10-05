@@ -45,9 +45,9 @@ const props = {
     type: String,
     default: () => "Component without name"
   },
-  isResizable:{
+  isResizable: {
     type: Boolean,
-    required: true,
+    required: true
   },
   update: {
     required: true,
@@ -77,9 +77,9 @@ export default {
       });
     }
   },
-  computed:{
+  computed: {
     resizeText() {
-      return this.isResizable ? 'disable resize' : 'enable resize'
+      return this.isResizable ? "disable resize" : "enable resize";
     }
   }
 };
