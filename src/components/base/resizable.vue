@@ -105,6 +105,11 @@ export default {
       }
       return style;
     }
+  },
+  watch: {
+    inicialStyle() {
+      this.inicial = true;
+    }
   }
 };
 </script>
