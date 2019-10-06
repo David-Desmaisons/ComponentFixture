@@ -53,7 +53,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    componentHeigth: {
+    componentHeight: {
       required: false,
       type: String,
       default: null
@@ -197,7 +197,7 @@ export default {
       events,
       propsDefinition,
       update,
-      componentHeigth: inicialHeight,
+      componentHeight: inicialHeight,
       componentWidth: inicialWidth,
       isResizable
     } = this;
