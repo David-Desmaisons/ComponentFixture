@@ -5,16 +5,14 @@
         class="component__content"
         :class="{ 'editor-closed': !showEditor }"
       >
-        <component-fixture
-          :defaults="defaults"
-          ref="fixture"
-        >
+        <component-fixture  ref="fixture" v-bind="$attrs" :isResizable="isResizable">
           <!-- Use the default slot to manipulate the component under test -->
           <template v-slot:header="{componentName, update}">
             <FixtureHeader
               @toggle="showEditor = !showEditor"
+              @resize="isResizable = !isResizable"
               @success="success"
-              v-bind="{componentName, update}"
+              v-bind="{componentName, update, isResizable}"
             />
           </template>
 
@@ -45,12 +43,7 @@ import VueNotifications from "./base/notifificationInit";
 export default {
   name: "sandbox",
 
-  props: {
-    defaults: {
-      type: Object,
-      default: () => {}
-    }
-  },
+  inheritAttrs: false,
 
   components: {
     ComponentFixture,
@@ -60,7 +53,8 @@ export default {
 
   data() {
     return {
-      showEditor: true
+      showEditor: true,
+      isResizable: false
     };
   },
 
@@ -164,10 +158,9 @@ export default {
     justify-content: center;
     padding: 40px;
     background: rgba(0, 0, 0, 0.03);
-    height: 100%;
 
     .real-component {
-      height: 100%;
+      max-height: 100%;
     }
   }
 }

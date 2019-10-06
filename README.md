@@ -108,6 +108,14 @@ export default {
 
    Object that will be set to default the component under-test props. For example if you want to default the props value with 46, just use:  `:defaults="{value: 46}"`
 
+- `componentHeight` ***String*** (*optional*) 
+
+    Style to be applied to the component under-test height. Default to null.
+
+- `componentWidth` ***String*** (*optional*) 
+
+    Style to be applied to the component under-test width. Default to null.
+
 
 ## Installation
 

@@ -1,4 +1,4 @@
-const globalVars= {
+const globalVars = {
   "type-descriptor-width": "42px",
   "icon-color": "darkgrey",
   "icon-size": "18px",
@@ -7,4 +7,4 @@ const globalVars= {
 
 module.exports = {
   globalVars
-}
+};

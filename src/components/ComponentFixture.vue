@@ -8,6 +8,7 @@ import {
 } from "@/utils/VueHelper";
 import compare from "@/utils/compare";
 import consoleSilenter from "@/utils/consoleSilenter";
+import resizable from "./base/Resizable";
 
 function getMethods(methods, getUnderTestComponent) {
   return Object.keys(methods).map(name => ({
@@ -51,6 +52,21 @@ export default {
       required: false,
       type: Object,
       default: () => ({})
+    },
+    componentHeight: {
+      required: false,
+      type: String,
+      default: null
+    },
+    componentWidth: {
+      required: false,
+      type: String,
+      default: null
+    },
+    isResizable: {
+      required: false,
+      type: Boolean,
+      default: false
     }
   },
 
@@ -166,7 +182,13 @@ export default {
 
     const { Ctor: ctor } = slot.componentOptions;
     this.ctor = ctor;
-    const { scopedSlots, slot: childSlot } = slot.data;
+    const {
+      $scopedSlots: scopedSlots,
+      $slots: childSlots
+    } = slot.componentInstance || {
+      $scopedSlots: undefined,
+      $slots: undefined
+    };
     const props = this.dynamicAttributes;
     const {
       componentName,
@@ -174,13 +196,16 @@ export default {
       componentModel,
       events,
       propsDefinition,
-      update
+      update,
+      componentHeight: inicialHeight,
+      componentWidth: inicialWidth,
+      isResizable
     } = this;
 
     const options = {
       props,
       scopedSlots,
-      slot: childSlot,
+      slots: childSlots,
       class: { "real-component": true },
       ref: "cut",
       on: this.setupEventsListeners(props, componentModel)
@@ -202,7 +227,8 @@ export default {
         header({
           componentName,
           update,
-          methods
+          methods,
+          isResizable
         }),
         h(
           splitPane,
@@ -239,7 +265,22 @@ export default {
                 class: { component: true },
                 slot: "paneR"
               },
-              [h(ctor, options, [])]
+              [
+                h(
+                  resizable,
+                  {
+                    props: {
+                      inicialHeight,
+                      inicialWidth,
+                      isResizable
+                    },
+                    scopedSlots: {
+                      default: () => h(ctor, options, [])
+                    }
+                  },
+                  []
+                )
+              ]
             )
           ]
         )

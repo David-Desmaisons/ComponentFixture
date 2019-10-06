@@ -13,6 +13,18 @@
 
     <div class="controls end">
       <button
+        class="btn btn--resize"
+        :class="{not: !isResizable}"
+        @click="toogleResize"
+        v-tooltip.left="resizeText"
+      >
+        <i
+          class="fa fa-expand"
+          aria-hidden="true"
+        ></i>
+      </button>
+
+      <button
         class="btn btn--refresh-component"
         @click="executeUpdate"
         v-tooltip.left="'Update component'"
@@ -33,6 +45,10 @@ const props = {
     type: String,
     default: () => "Component without name"
   },
+  isResizable: {
+    type: Boolean,
+    required: true
+  },
   update: {
     required: true,
     type: Function
@@ -50,11 +66,20 @@ export default {
       this.$emit("toggle");
     },
 
+    toogleResize() {
+      this.$emit("resize", !this.isResizable);
+    },
+
     executeUpdate() {
       this.update();
       this.$nextTick(() => {
         this.$emit("success", "$forceUpdate called on component");
       });
+    }
+  },
+  computed: {
+    resizeText() {
+      return this.isResizable ? "disable resize" : "enable resize";
     }
   }
 };
@@ -100,6 +125,16 @@ export default {
     padding: 5px 15px;
     border-radius: 3px;
     line-height: 1;
+  }
+
+  .btn--resize.not {
+    opacity: 0.2;
+  }
+
+  .controls.end {
+    button {
+      margin: 5px;
+    }
   }
 }
 </style>
