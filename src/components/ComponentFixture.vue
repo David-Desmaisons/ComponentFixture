@@ -148,16 +148,16 @@ export default {
     },
 
     getComponentInformation() {
-      if (this.$stage === 1) {
-        const component = this.getUnderTestComponent();
-        const node = this.$slots.default[0];
-        return {
-          node,
-          component,
-          options: node.componentOptions.Ctor.options
-        };
+      const {
+        $scopedSlots: { default: defaultSlot }
+      } = this;
+      if (this.$stage === 0) {
+        return getNodeFromSandBox(defaultSlot);
       }
-      return getNodeFromSandBox(this.$scopedSlots.default);
+      return {
+        node: defaultSlot()[0],
+        component: this.getUnderTestComponent()
+      };
     }
   },
 
@@ -168,21 +168,14 @@ export default {
     }
 
     const {
-      node: slot,
-      component,
-      options: componentOptions
+      node: {
+        componentOptions: { Ctor: componentConstructor },
+        componentInstance: { $scopedSlots: scopedSlots, $slots: childSlots }
+      },
+      component
     } = this.getComponentInformation();
+    this.updateValuesAndMethod(component, componentConstructor.options);
 
-    this.updateValuesAndMethod(component, componentOptions);
-
-    const { Ctor: componentConstructor } = slot.componentOptions;
-    const {
-      $scopedSlots: scopedSlots,
-      $slots: childSlots
-    } = slot.componentInstance || {
-      $scopedSlots: undefined,
-      $slots: undefined
-    };
     const props = this.dynamicAttributes;
     const {
       componentName,

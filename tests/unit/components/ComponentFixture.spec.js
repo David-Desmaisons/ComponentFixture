@@ -223,7 +223,8 @@ describe("ComponentFixture.vue", () => {
 
       await vm.$nextTick();
 
-      options = vm.getComponentInformation().options;
+      const { node } = vm.getComponentInformation();
+      options = node.componentOptions.Ctor.options;
 
       currentProps = options.props;
       const newProps = {

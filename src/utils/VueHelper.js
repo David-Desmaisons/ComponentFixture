@@ -118,8 +118,7 @@ function getNodeFromSandBox(slot) {
   silenter();
   return {
     node: mainComponent.$vnode,
-    component: mainComponent,
-    options: mainComponent.$options
+    component: mainComponent
   };
 }
 
