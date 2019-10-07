@@ -176,8 +176,8 @@ export default {
     } = this.getComponentInformation();
     this.updateValuesAndMethod(component, componentConstructor.options);
 
-    const props = this.dynamicAttributes;
     const {
+      dynamicAttributes : props,
       componentName,
       componentMethods: methods,
       componentModel,
