@@ -126,7 +126,8 @@ export default {
           defaultValue,
           definition: propsValue,
           types: getTypeForProp(propsValue, defaultValue),
-          validate: validateProp.bind(null, propsValue)
+          validate: validateProp.bind(null, propsValue),
+          isModel: key === this.componentModel.prop
         });
       });
     },
@@ -195,7 +196,7 @@ export default {
     this.updateValuesAndMethod(component, componentConstructor.options);
 
     const {
-      dynamicAttributes : props,
+      dynamicAttributes: props,
       componentName,
       componentMethods: methods,
       componentModel,
@@ -330,6 +331,11 @@ export default {
        * This object will contain the component under test data.
        */
       data: null,
+
+      /**
+       * This object will contain the component under test computed.
+       */
+      computed: null,
 
       /**
        * Array of events emitted by the component under test.

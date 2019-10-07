@@ -149,6 +149,14 @@ describe("ComponentFixture.vue", () => {
       }
     );
 
+    test.each(propDefinition)(
+      "propsDefinition contains props isModel: key: %p value: false",
+      (key) => {
+        const { propsDefinition } = vm;
+        expect(propsDefinition[key].isModel).toEqual(false);
+      }
+    );
+
     it("propsDefinition contains props types", () => {
       const expectedTypes = {
         number: ["Number"],
@@ -256,15 +264,21 @@ describe("ComponentFixture.vue", () => {
     let wrapper = null;
     let vm = null;
     let dynamicAttributes = null;
+    let propsDefinition = null;
 
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForVModel });
       vm = wrapper.vm;
-      dynamicAttributes = wrapper.vm.dynamicAttributes;
+      dynamicAttributes = vm.dynamicAttributes;
+      propsDefinition = vm.propsDefinition;
     });
 
     it("computes the dynamicAttributes with default value computed when required", () => {
       expect(dynamicAttributes.value).toEqual([]);
+    });
+
+    it("set propsDefinition isModel to true", () => {
+      expect(propsDefinition.value.isModel).toEqual(true);
     });
 
     it("listens to event tracked by v-model and update prop", () => {
@@ -284,17 +298,23 @@ describe("ComponentFixture.vue", () => {
     let wrapper = null;
     let vm = null;
     let dynamicAttributes = null;
+    let propsDefinition = null;
 
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot({
         slot: FakeComponentForCustomVModel
       });
       vm = wrapper.vm;
-      dynamicAttributes = wrapper.vm.dynamicAttributes;
+      dynamicAttributes = vm.dynamicAttributes;
+      propsDefinition = vm.propsDefinition;
     });
 
     it("computes the dynamicAttributes with default value", () => {
       expect(dynamicAttributes.customValue).toEqual("string");
+    });
+
+    it("set propsDefinition isModel to true", () => {
+      expect(propsDefinition.customValue.isModel).toEqual(true);
     });
 
     it("listens to event tracked by v-model ans update prop", () => {
