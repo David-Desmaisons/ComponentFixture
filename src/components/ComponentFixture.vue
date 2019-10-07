@@ -73,7 +73,29 @@ export default {
   renderError: (h, err) => h("pre", { style: { color: "red" } }, err.stack),
 
   methods: {
-    computedValuesFromProps(component, { props, name, model }) {
+    getUnderTestComponent() {
+      return this.$refs.cut;
+    },
+
+    setupEventsListeners(props, { event, prop }) {
+      const on = {};
+      if (props.hasOwnProperty(prop)) {
+        on[event] = buildListener(props, prop);
+      }
+      Object.keys(props)
+        .filter(p => p !== prop)
+        .forEach(key => {
+          on[`update:${key}`] = buildListener(props, key);
+        });
+      return on;
+    },
+
+    updateValuesAndMethod(component, options) {
+      this.computeValuesFromProps(component, options);
+      this.updateMethods(component, options);
+    },
+
+    computeValuesFromProps(component, { props, name, model }) {
       this.componentName = name;
       this.componentModel = model || defaultModel;
       const photo = Object.assign({}, props);
@@ -109,28 +131,6 @@ export default {
       });
     },
 
-    getUnderTestComponent() {
-      return this.$refs.cut;
-    },
-
-    setupEventsListeners(props, { event, prop }) {
-      const on = {};
-      if (props.hasOwnProperty(prop)) {
-        on[event] = buildListener(props, prop);
-      }
-      Object.keys(props)
-        .filter(p => p !== prop)
-        .forEach(key => {
-          on[`update:${key}`] = buildListener(props, key);
-        });
-      return on;
-    },
-
-    updateValuesAndMethod(component, options) {
-      this.computedValuesFromProps(component, options);
-      this.updateMethods(component, options);
-    },
-
     updateMethods(component, options) {
       const { methods: rawMethods } = options;
       const methods = filterMethods(rawMethods);
@@ -158,6 +158,24 @@ export default {
         node: defaultSlot()[0],
         component: this.getUnderTestComponent()
       };
+    },
+
+    afterMount() {
+      const componentUnderTest = this.getUnderTestComponent();
+      this.data = componentUnderTest.$data;
+      const emit = componentUnderTest.$emit;
+      const newEmit = (eventName, ...args) => {
+        emit.call(componentUnderTest, eventName, ...args);
+        if (eventName.startsWith("hook:")) {
+          return;
+        }
+        this.events.push({
+          name: eventName,
+          args: args,
+          instant: new Date()
+        });
+      };
+      componentUnderTest.$emit = newEmit;
     }
   },
 
@@ -280,23 +298,7 @@ export default {
       return;
     }
     this.$stage = 1;
-    this.$nextTick(() => {
-      const componentUnderTest = this.getUnderTestComponent();
-      this.data = componentUnderTest.$data;
-      const emit = componentUnderTest.$emit;
-      const newEmit = (eventName, ...args) => {
-        emit.call(componentUnderTest, eventName, ...args);
-        if (eventName.startsWith("hook:")) {
-          return;
-        }
-        this.events.push({
-          name: eventName,
-          args: args,
-          instant: new Date()
-        });
-      };
-      componentUnderTest.$emit = newEmit;
-    });
+    this.$nextTick(() => this.afterMount());
   },
 
   data() {
