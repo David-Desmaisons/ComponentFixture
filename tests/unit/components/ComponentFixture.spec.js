@@ -16,6 +16,11 @@ const mountComponentWithDefaultSlot = (arg = {}) => {
   return shallowMount(ComponentFixture, {
     slots: {
       default: slot
+    },
+    stubs: {
+      component: true,
+      component1: true,
+      component2: true
     }
   });
 };
@@ -216,9 +221,11 @@ describe("ComponentFixture.vue", () => {
       wrapper = factory();
       const { vm } = wrapper;
 
-      await wrapper.vm.$nextTick();
+      await vm.$nextTick();
 
-      options = vm.ctor.options;
+      const { node } = vm.getComponentInformation();
+      options = node.componentOptions.Ctor.options;
+
       currentProps = options.props;
       const newProps = {
         ...currentProps,
