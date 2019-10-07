@@ -221,9 +221,10 @@ describe("ComponentFixture.vue", () => {
       wrapper = factory();
       const { vm } = wrapper;
 
-      await wrapper.vm.$nextTick();
+      await vm.$nextTick();
 
-      options = vm.ctor.options;
+      options = vm.getComponentInformation().options;
+
       currentProps = options.props;
       const newProps = {
         ...currentProps,

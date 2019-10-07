@@ -148,13 +148,16 @@ export default {
     },
 
     getComponentInformation() {
-      return this.$stage === 1
-        ? {
-            node: this.$slots.default[0],
-            component: this.getUnderTestComponent(),
-            options: this.ctor.options
-          }
-        : getNodeFromSandBox(this.$scopedSlots.default);
+      if (this.$stage === 1) {
+        const component = this.getUnderTestComponent();
+        const node = this.$slots.default[0];
+        return {
+          node,
+          component,
+          options: node.componentOptions.Ctor.options
+        };
+      }
+      return getNodeFromSandBox(this.$scopedSlots.default);
     }
   },
 
@@ -172,8 +175,7 @@ export default {
 
     this.updateValuesAndMethod(component, componentOptions);
 
-    const { Ctor: ctor } = slot.componentOptions;
-    this.ctor = ctor;
+    const { Ctor: componentConstructor } = slot.componentOptions;
     const {
       $scopedSlots: scopedSlots,
       $slots: childSlots
@@ -205,7 +207,7 @@ export default {
 
     const { control, header = () => null } = this.$scopedSlots;
     if (!control) {
-      return h(ctor, options, []);
+      return h(componentConstructor, options, []);
     }
 
     return h(
@@ -267,7 +269,7 @@ export default {
                       isResizable
                     },
                     scopedSlots: {
-                      default: () => h(ctor, options, [])
+                      default: () => h(componentConstructor, options, [])
                     }
                   },
                   []
