@@ -1,6 +1,8 @@
+import Vue from "vue";
 import { getTypeFromValue } from "./TypeHelper";
 import { warn } from "@/utils/logger";
 import { stringify } from "@/utils/stringify";
+import consoleSilenter from "@/utils/consoleSilenter";
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 function hasOwn(obj, key) {
@@ -106,4 +108,24 @@ function validateProp(prop, value) {
   return { ok: false, message: "Invalid prop: custom validator" };
 }
 
-export { extractDefaultValue, getTypeForProp, validateProp };
+function getNodeFromSandBox(slot) {
+  const silenter = consoleSilenter(window);
+  const component = {
+    render: slot
+  };
+  const instance = new Vue(component);
+  const mainComponent = instance.$mount().$children[0];
+  silenter();
+  return {
+    node: mainComponent.$vnode,
+    component: mainComponent,
+    options: mainComponent.$options
+  };
+}
+
+export {
+  extractDefaultValue,
+  getTypeForProp,
+  getNodeFromSandBox,
+  validateProp
+};

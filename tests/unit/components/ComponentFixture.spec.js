@@ -16,6 +16,11 @@ const mountComponentWithDefaultSlot = (arg = {}) => {
   return shallowMount(ComponentFixture, {
     slots: {
       default: slot
+    },
+    stubs: {
+      component: true,
+      component1: true,
+      component2: true
     }
   });
 };

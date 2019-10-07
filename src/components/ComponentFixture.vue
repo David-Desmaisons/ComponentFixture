@@ -4,10 +4,10 @@ import splitPane from "vue-splitpane";
 import {
   extractDefaultValue,
   getTypeForProp,
+  getNodeFromSandBox,
   validateProp
 } from "@/utils/VueHelper";
 import compare from "@/utils/compare";
-import consoleSilenter from "@/utils/consoleSilenter";
 import resizable from "./base/Resizable";
 
 function getMethods(methods, getUnderTestComponent) {
@@ -110,10 +110,6 @@ export default {
     },
 
     getUnderTestComponent() {
-      if (this.$stage === 1) {
-        const [component] = this.$children;
-        return component;
-      }
       return this.$refs.cut;
     },
 
@@ -130,13 +126,9 @@ export default {
       return on;
     },
 
-    updateValuesFromCurrrentComponent() {
-      const component = this.getUnderTestComponent();
-      const options =
-        this.$stage === 1 ? this.$children[0].$options : this.ctor.options;
+    updateValuesAndMethod(component, options) {
       this.computedValuesFromProps(component, options);
       this.updateMethods(component, options);
-      this.$nextTick(() => this.updateData());
     },
 
     updateMethods(component, options) {
@@ -152,14 +144,17 @@ export default {
     },
 
     update() {
-      this.$refs.cut.$forceUpdate();
+      this.getUnderTestComponent().$forceUpdate();
     },
 
-    updateData() {
-      if (this.$stage === 1) {
-        return;
-      }
-      this.data = this.getUnderTestComponent().$data;
+    getComponentInformation() {
+      return this.$stage === 1
+        ? {
+            node: this.$slots.default[0],
+            component: this.getUnderTestComponent(),
+            options: this.ctor.options
+          }
+        : getNodeFromSandBox(this.$scopedSlots.default);
     }
   },
 
@@ -169,16 +164,13 @@ export default {
       throw new Error("ComponentFixture should have one unique default slot");
     }
 
-    if (this.$stage == 2) {
-      //Updates (needed for hot-reload)
-      this.updateValuesFromCurrrentComponent();
-    }
+    const {
+      node: slot,
+      component,
+      options: componentOptions
+    } = this.getComponentInformation();
 
-    const [slot] = defaultSlot;
-    if (this.$stage === 0) {
-      this.$consoleSilenter = consoleSilenter(window);
-      return h("div", {}, [slot]);
-    }
+    this.updateValuesAndMethod(component, componentOptions);
 
     const { Ctor: ctor } = slot.componentOptions;
     this.ctor = ctor;
@@ -288,26 +280,17 @@ export default {
     );
   },
 
-  mounted() {
-    if (this.$children.length !== 1) {
+  updated() {
+    if (this.$stage !== 0) {
       return;
     }
     this.$stage = 1;
-    this.updateValuesFromCurrrentComponent();
-    this.$forceUpdate();
-    this.$consoleSilenter();
-  },
-
-  updated() {
-    if (this.$stage !== 1) {
-      return;
-    }
-    this.$stage = 2;
     this.$nextTick(() => {
-      this.updateData();
-      const emit = this.$refs.cut.$emit;
+      const componentUnderTest = this.getUnderTestComponent();
+      this.data = componentUnderTest.$data;
+      const emit = componentUnderTest.$emit;
       const newEmit = (eventName, ...args) => {
-        emit.call(this.$refs.cut, eventName, ...args);
+        emit.call(componentUnderTest, eventName, ...args);
         if (eventName.startsWith("hook:")) {
           return;
         }
@@ -317,7 +300,7 @@ export default {
           instant: new Date()
         });
       };
-      this.$refs.cut.$emit = newEmit;
+      componentUnderTest.$emit = newEmit;
     });
   },
 
