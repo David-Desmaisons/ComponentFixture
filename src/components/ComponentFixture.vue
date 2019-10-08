@@ -209,7 +209,6 @@ export default {
 
     afterMount() {
       const componentUnderTest = this.getUnderTestComponent();
-      this.data = componentUnderTest.$data;
       const emit = componentUnderTest.$emit;
       const newEmit = (eventName, ...args) => {
         emit.call(componentUnderTest, eventName, ...args);
@@ -382,7 +381,7 @@ export default {
       /**
        * This object will contain the component under test data.
        */
-      data: null,
+      data: {},
 
       /**
        * This object will contain the component under test computed.

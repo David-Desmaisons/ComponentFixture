@@ -28,6 +28,10 @@ function compare(o1, o2) {
   }
 
   if (typeof o1 !== "object") {
+    return Number.isNaN(o1) && Number.isNaN(o2);
+  }
+
+  if (typeof o2 !== "object") {
     return false;
   }
 

@@ -22,6 +22,7 @@ describe("compare", () => {
       true
     ],
     [{ a: 78 }, { a: 78 }, true],
+    [NaN, NaN, true],
     [{ a: "78" }, { a: "78" }, true],
     [{ a: 78 }, {}, false],
     [{ a: 78 }, { a: "78" }, false],
@@ -32,7 +33,13 @@ describe("compare", () => {
     [["a"], ["b"], false],
     [[1], [2], false],
     ["abc", "bac", false],
+    ["a", 562, false],
+    [{}, 562, false],
+    [562, {}, false],
+    [{}, 2, false],
+    [2, {}, false],
     [1, 2, false],
+    [NaN, 5, false],
     [undefined, null, false],
     [null, undefined, false]
   ])("compare for %o and %o should return: %o", (arg1, arg2, expected) => {

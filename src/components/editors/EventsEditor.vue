@@ -34,7 +34,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-.events{
+.events {
   margin-top: 10px;
 }
 </style>
