@@ -39,6 +39,14 @@ function buildListener(props, prop) {
   };
 }
 
+function getSafe(valueGetter) {
+  try {
+    return valueGetter();
+  } catch (error) {
+    return error;
+  }
+}
+
 const defaultModel = {
   event: "input",
   prop: "value"
@@ -99,14 +107,11 @@ export default {
     updateComputed(component, { computed }) {
       const { computed: currentComputed } = this;
       const newComputed = Object.keys(computed || {}).reduce((acc, key) => {
-        acc[key] = component[key];
+        acc[key] = getSafe(() => component[key]);
         return acc;
       }, {});
 
-      if (
-        currentComputed !== undefined &&
-        compare(currentComputed, newComputed)
-      ) {
+      if (currentComputed !== null && compare(currentComputed, newComputed)) {
         return;
       }
       this.computed = newComputed;

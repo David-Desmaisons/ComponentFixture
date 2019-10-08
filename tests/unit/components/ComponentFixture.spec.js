@@ -406,7 +406,7 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("calls the control scoped slot initially with computed", () => {
-      expect(lastParameters(control).computed).toEqual({ computed: 100 });
+      expect(lastParameters(control).computed).toEqual({ computed: 100, computedWithError: new Error("Problem here") });
     });
 
     it("renders the control slot", () => {
