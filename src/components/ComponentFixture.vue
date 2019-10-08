@@ -210,7 +210,7 @@ export default {
     const {
       node: {
         componentOptions: { Ctor: componentConstructor },
-        componentInstance: { $scopedSlots: scopedSlots, $slots: childSlots }
+        componentInstance: { $scopedSlots: scopedSlots, $slots: childSlots } = {$scopedSlots: undefined, $slots: undefined}
       },
       component
     } = this.getComponentInformation();
