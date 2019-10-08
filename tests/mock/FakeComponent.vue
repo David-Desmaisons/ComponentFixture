@@ -3,6 +3,9 @@
   </div>
 </template>
 <script>
+function valueWithError() {
+  throw new Error("Problem here");
+}
 export default {
   name: "fake-component",
   props: {
@@ -35,7 +38,7 @@ export default {
       return this.a + 10;
     },
     computedWithError() {
-      throw new Error("Problem here");
+      return valueWithError();
     }
   }
 };
