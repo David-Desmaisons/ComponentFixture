@@ -29,6 +29,11 @@ export default {
     return {
       a: 90
     };
+  },
+  computed: {
+    computed() {
+      return this.a + 10;
+    }
   }
 };
 </script>

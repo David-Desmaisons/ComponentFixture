@@ -3,7 +3,7 @@
     <div class="card card-options">
       <div class="card-body show-options">
         <button
-          v-for="name in ['props','data','methods']"
+          v-for="name in ['props','state','methods']"
           :key="name"
           type="button"
           class="segment"
@@ -37,11 +37,7 @@
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
-        :props="props"
-        :events="events"
-        :methods="methods"
-        :attributes="attributes"
-        :data="data"
+        v-bind="{props, events, methods, attributes, data, computed}"
         @success="success"
         @error="error"
       />
@@ -75,6 +71,10 @@ export default {
       type: Object
     },
     data: {
+      required: false,
+      type: Object
+    },
+    computed: {
       required: false,
       type: Object
     },

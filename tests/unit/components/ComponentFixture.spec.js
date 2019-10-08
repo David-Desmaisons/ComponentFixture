@@ -113,7 +113,7 @@ describe("ComponentFixture.vue", () => {
       });
     });
 
-    it("has an empty data property events", () => {
+    it("has an empty events property events", () => {
       expect(vm.events).toEqual([]);
     });
 
@@ -151,7 +151,7 @@ describe("ComponentFixture.vue", () => {
 
     test.each(propDefinition)(
       "propsDefinition contains props isModel: key: %p value: false",
-      (key) => {
+      key => {
         const { propsDefinition } = vm;
         expect(propsDefinition[key].isModel).toEqual(false);
       }
@@ -364,7 +364,7 @@ describe("ComponentFixture.vue", () => {
       mock: { calls }
     } = fake;
     const length = calls.length;
-    return calls[length - 1];
+    return calls[length - 1][0];
   };
 
   describe("when initialized with a controller slot", () => {
@@ -394,17 +394,15 @@ describe("ComponentFixture.vue", () => {
         }
       };
 
-      expect(lastParameters(control)[0].attributes).toEqual(expectedAttributes);
+      expect(lastParameters(control).attributes).toEqual(expectedAttributes);
     });
 
     it("call the control scoped slot with componentName", () => {
-      expect(lastParameters(control)[0].componentName).toEqual(
-        "fake-component"
-      );
+      expect(lastParameters(control).componentName).toEqual("fake-component");
     });
 
     it("calls the control scoped slot initially with data", () => {
-      expect(lastParameters(control)[0].data).toEqual({ a: 90 });
+      expect(lastParameters(control).data).toEqual({ a: 90 });
     });
 
     it("renders the control slot", () => {

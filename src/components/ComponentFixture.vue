@@ -93,6 +93,23 @@ export default {
     updateValuesAndMethod(component, options) {
       this.computeValuesFromProps(component, options);
       this.updateMethods(component, options);
+      this.updateComputed(component, options);
+    },
+
+    updateComputed(component, { computed }) {
+      const { computed: currentComputed } = this;
+      const newComputed = Object.keys(computed || {}).reduce((acc, key) => {
+        acc[key] = component[key];
+        return acc;
+      }, {});
+
+      if (
+        currentComputed !== undefined &&
+        compare(currentComputed, newComputed)
+      ) {
+        return;
+      }
+      this.computed = newComputed;
     },
 
     computeValuesFromProps(component, { props, name, model }) {
@@ -132,8 +149,7 @@ export default {
       });
     },
 
-    updateMethods(component, options) {
-      const { methods: rawMethods } = options;
+    updateMethods(component, { methods: rawMethods }) {
       const methods = filterMethods(rawMethods);
       const { $methods } = this;
 
@@ -197,6 +213,8 @@ export default {
 
     const {
       dynamicAttributes: props,
+      data,
+      computed,
       componentName,
       componentMethods: methods,
       componentModel,
@@ -257,7 +275,8 @@ export default {
               [
                 control({
                   attributes: props,
-                  data: this.data,
+                  data,
+                  computed,
                   componentName,
                   propsDefinition,
                   methods,
