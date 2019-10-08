@@ -79,6 +79,7 @@ export default {
 <style lang="less">
 .methods {
   width: 100%;
+  margin-top: 10px;
 
   .methods-button {
     margin-top: 5px;

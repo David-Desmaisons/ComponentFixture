@@ -58,7 +58,7 @@ export default {
 .card {
   padding: 0;
   border: 0;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   border-top: 1px solid rgba(0, 0, 0, 0.125);
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   border-radius: 0;

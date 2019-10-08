@@ -1,13 +1,12 @@
 <template>
   <div>
-    <template v-if="events.length>0">
+    <div class="events" v-if="events.length>0">
       <eventDisplayer
-        class="event"
         v-for="(event, idx) in events"
         :key="idx"
         :event="event"
       />
-    </template>
+    </div>
 
     <div
       class="no-info"
@@ -34,3 +33,8 @@ export default {
   props
 };
 </script>
+<style lang="less" scoped>
+.events {
+  margin-top: 10px;
+}
+</style>

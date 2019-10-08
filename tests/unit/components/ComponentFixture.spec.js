@@ -113,7 +113,7 @@ describe("ComponentFixture.vue", () => {
       });
     });
 
-    it("has an empty data property events", () => {
+    it("has an empty events property events", () => {
       expect(vm.events).toEqual([]);
     });
 
@@ -146,6 +146,14 @@ describe("ComponentFixture.vue", () => {
       (key, expected) => {
         const { propsDefinition } = vm;
         expect(propsDefinition[key].definition).toEqual(expected);
+      }
+    );
+
+    test.each(propDefinition)(
+      "propsDefinition contains props isModel: key: %p value: false",
+      key => {
+        const { propsDefinition } = vm;
+        expect(propsDefinition[key].isModel).toEqual(false);
       }
     );
 
@@ -256,15 +264,21 @@ describe("ComponentFixture.vue", () => {
     let wrapper = null;
     let vm = null;
     let dynamicAttributes = null;
+    let propsDefinition = null;
 
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot({ slot: FakeComponentForVModel });
       vm = wrapper.vm;
-      dynamicAttributes = wrapper.vm.dynamicAttributes;
+      dynamicAttributes = vm.dynamicAttributes;
+      propsDefinition = vm.propsDefinition;
     });
 
     it("computes the dynamicAttributes with default value computed when required", () => {
       expect(dynamicAttributes.value).toEqual([]);
+    });
+
+    it("set propsDefinition isModel to true", () => {
+      expect(propsDefinition.value.isModel).toEqual(true);
     });
 
     it("listens to event tracked by v-model and update prop", () => {
@@ -284,17 +298,23 @@ describe("ComponentFixture.vue", () => {
     let wrapper = null;
     let vm = null;
     let dynamicAttributes = null;
+    let propsDefinition = null;
 
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot({
         slot: FakeComponentForCustomVModel
       });
       vm = wrapper.vm;
-      dynamicAttributes = wrapper.vm.dynamicAttributes;
+      dynamicAttributes = vm.dynamicAttributes;
+      propsDefinition = vm.propsDefinition;
     });
 
     it("computes the dynamicAttributes with default value", () => {
       expect(dynamicAttributes.customValue).toEqual("string");
+    });
+
+    it("set propsDefinition isModel to true", () => {
+      expect(propsDefinition.customValue.isModel).toEqual(true);
     });
 
     it("listens to event tracked by v-model ans update prop", () => {
@@ -344,7 +364,7 @@ describe("ComponentFixture.vue", () => {
       mock: { calls }
     } = fake;
     const length = calls.length;
-    return calls[length - 1];
+    return calls[length - 1][0];
   };
 
   describe("when initialized with a controller slot", () => {
@@ -374,17 +394,22 @@ describe("ComponentFixture.vue", () => {
         }
       };
 
-      expect(lastParameters(control)[0].attributes).toEqual(expectedAttributes);
+      expect(lastParameters(control).attributes).toEqual(expectedAttributes);
     });
 
     it("call the control scoped slot with componentName", () => {
-      expect(lastParameters(control)[0].componentName).toEqual(
-        "fake-component"
-      );
+      expect(lastParameters(control).componentName).toEqual("fake-component");
     });
 
     it("calls the control scoped slot initially with data", () => {
-      expect(lastParameters(control)[0].data).toEqual({ a: 90 });
+      expect(lastParameters(control).data).toEqual({ a: 90 });
+    });
+
+    it("calls the control scoped slot initially with computed", () => {
+      expect(lastParameters(control).computed).toEqual({
+        computed: 100,
+        computedWithError: new Error("Problem here")
+      });
     });
 
     it("renders the control slot", () => {

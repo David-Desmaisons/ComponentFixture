@@ -1,14 +1,26 @@
 <template>
   <div>
-    <ObjectDisplayer v-if="hasData" :data="data"/>
+    <h1>{{label}}</h1>
+    <ObjectDisplayer
+      v-if="hasData"
+      :data="data"
+    />
 
-    <div class="no-info" v-else>No data detected.</div>
+    <div
+      class="no-info"
+      v-else
+    >No {{label}} detected.
+    </div>
   </div>
 </template>
 <script>
 import ObjectDisplayer from "@/components/base/ObjectDisplayer";
 
 const props = {
+  label: {
+    type: String,
+    required: true
+  },
   data: {
     type: Object,
     required: false
@@ -16,11 +28,8 @@ const props = {
 };
 
 export default {
-  name: "data-editor",
-  key: "data",
-  display: "Data",
+  name: "information-displayer",
   props,
-  inheritAttrs: false,
   components: {
     ObjectDisplayer
   },
