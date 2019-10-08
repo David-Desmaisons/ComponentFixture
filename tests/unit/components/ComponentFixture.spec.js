@@ -405,6 +405,10 @@ describe("ComponentFixture.vue", () => {
       expect(lastParameters(control).data).toEqual({ a: 90 });
     });
 
+    it("calls the control scoped slot initially with computed", () => {
+      expect(lastParameters(control).computed).toEqual({ computed: 100 });
+    });
+
     it("renders the control slot", () => {
       expect(wrapper.contains(FakeEditor)).toBe(true);
     });
