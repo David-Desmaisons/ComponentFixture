@@ -189,6 +189,14 @@ describe("ComponentFixture.vue", () => {
       ]);
     });
 
+    it("clearEvents clean events", () => {
+      const testComponentVm = vm.$children[0];
+      testComponentVm.$emit("event1", 0);
+      testComponentVm.$emit("event2", "a", "b", true);
+      vm.clearEvents();
+      expect(vm.events).toEqual([]);
+    });
+
     it("does not tracks hook events on component under fixtures", () => {
       const testComponentVm = vm.$children[0];
       testComponentVm.$emit("hook:beforeUpdate", 0);
