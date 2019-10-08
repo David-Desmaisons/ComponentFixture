@@ -41,7 +41,7 @@ function compare(o1, o2) {
     return Number.isNaN(o1) && Number.isNaN(o2);
   }
 
-  return compareObject(o1,o2);
+  return compareObject(o1, o2);
 }
 
 export default compare;
