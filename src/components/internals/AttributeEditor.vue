@@ -4,7 +4,7 @@
     :class="{'is-invalid':!valid}"
   >
     <div class="attribute-column attribute-description">
-      <div class="label">{{attribute}}</div>
+      <h1 class="label">{{attribute}}</h1>
 
       <div class="prop-description">
         <div
@@ -44,6 +44,16 @@
             <i
               class="fa fa-exclamation-triangle"
               v-tooltip.bottom="'required'"
+            />
+          </div>
+
+          <div
+            class="prop-info"
+            v-if="metaData.isModel"
+          >
+            <i
+              class="fa fa-refresh"
+              v-tooltip.bottom="'v-model'"
             />
           </div>
 
@@ -290,7 +300,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  min-width: 110px;
+  min-width: 140px;
   width: 20%;
 
   .label {
@@ -337,7 +347,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 12px;
-  font-weight: normal;
+  font-weight: bold;
   max-width: 150px;
   width: 99%;
 }
