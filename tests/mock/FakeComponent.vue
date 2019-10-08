@@ -33,6 +33,9 @@ export default {
   computed: {
     computed() {
       return this.a + 10;
+    },
+    computedWithError() {
+      throw new Error("Problem here");
     }
   }
 };
