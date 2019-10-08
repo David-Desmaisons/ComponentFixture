@@ -101,20 +101,23 @@ export default {
     updateValuesAndMethod(component, options) {
       this.computeValuesFromProps(component, options);
       this.updateMethods(component, options);
-      this.updateComputed(component, options);
+      this.updateComputed(options);
     },
 
-    updateComputed(component, { computed }) {
-      const { computed: currentComputed } = this;
-      const newComputed = Object.keys(computed || {}).reduce((acc, key) => {
-        acc[key] = getSafe(() => component[key]);
-        return acc;
-      }, {});
+    updateComputed({ computed }) {
+      this.$nextTick(() => {
+        const component = this.getUnderTestComponent();
+        const { computed: currentComputed } = this;
+        const newComputed = Object.keys(computed || {}).reduce((acc, key) => {
+          acc[key] = getSafe(() => component[key]);
+          return acc;
+        }, {});
 
-      if (currentComputed !== null && compare(currentComputed, newComputed)) {
-        return;
-      }
-      this.computed = newComputed;
+        if (currentComputed !== null && compare(currentComputed, newComputed)) {
+          return;
+        }
+        this.computed = newComputed;
+      });
     },
 
     computeValuesFromProps(component, { props, name, model }) {
@@ -210,7 +213,10 @@ export default {
     const {
       node: {
         componentOptions: { Ctor: componentConstructor },
-        componentInstance: { $scopedSlots: scopedSlots, $slots: childSlots } = {$scopedSlots: undefined, $slots: undefined}
+        componentInstance: { $scopedSlots: scopedSlots, $slots: childSlots } = {
+          $scopedSlots: undefined,
+          $slots: undefined
+        }
       },
       component
     } = this.getComponentInformation();
