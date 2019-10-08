@@ -37,12 +37,13 @@ Component is designed to receive any component you want to test as a default slo
   - Respect props type and use custom input for each type
   - Provide input for objects and function
   - Create `v-model` binding if needed
+  - Support of two-way data binding using the [`.sync` modifier pattern](https://vuejs.org/v2/guide/components-custom-events.html#sync-Modifier)
   - Custom props validation when available
   - Support component with slots
   - Display of all events emitted by the component
-  - Display of component $data
-  - exposition of component method as burttons that can be called with display of the produced result
-  - Compatible with hot-reload: automatic update on changes hapening on the tested component
+  - Display of component `data` and `computed` information
+  - Exposition of component method as buttons that can be called with display of the produced result
+  - Compatible with hot-reload: automatic update on changes happening on the tested component
 
 Example using [vue-slider-component](https://github.com/NightCatSama/vue-slider-component):
 
