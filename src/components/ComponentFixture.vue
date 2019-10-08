@@ -98,6 +98,10 @@ export default {
       return on;
     },
 
+    clearEvents() {
+      this.events = [];
+    },
+
     updateValuesAndMethod(component, options) {
       this.computeValuesFromProps(component, options);
       this.updateMethods(component, options);
@@ -244,6 +248,7 @@ export default {
     this.updateValuesAndMethod(component, componentConstructor.options);
 
     const {
+      clearEvents,
       dynamicAttributes: props,
       data,
       computed,
@@ -312,7 +317,8 @@ export default {
                   componentName,
                   propsDefinition,
                   methods,
-                  events
+                  events,
+                  clearEvents
                 })
               ]
             ),
