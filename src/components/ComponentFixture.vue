@@ -101,23 +101,45 @@ export default {
     updateValuesAndMethod(component, options) {
       this.computeValuesFromProps(component, options);
       this.updateMethods(component, options);
-      this.updateComputed(options);
+
+      this.$nextTick(() => {
+        this.updateData();
+        this.updateComputed(options);
+      });
+    },
+
+    updateData() {
+      const { $data } = this.getUnderTestComponent();
+      if (compare(this.data, $data)) {
+        return;
+      }
+      this.data = $data;
     },
 
     updateComputed({ computed }) {
-      this.$nextTick(() => {
-        const component = this.getUnderTestComponent();
-        const { computed: currentComputed } = this;
-        const newComputed = Object.keys(computed || {}).reduce((acc, key) => {
-          acc[key] = getSafe(() => component[key]);
-          return acc;
-        }, {});
+      if (this.$computedWatcher) {
+        this.$computedWatcher();
+      }
 
-        if (currentComputed !== null && compare(currentComputed, newComputed)) {
-          return;
+      this.$computedWatcher = this.$watch(
+        () => {
+          const component = this.getUnderTestComponent();
+          return Object.keys(computed || {}).reduce((acc, key) => {
+            acc[key] = getSafe(() => component[key]);
+            return acc;
+          }, {});
+        },
+        newComputed => {
+          const { computed: currentComputed } = this;
+          if (compare(currentComputed, newComputed)) {
+            return;
+          }
+          this.computed = newComputed;
+        },
+        {
+          immediate: true
         }
-        this.computed = newComputed;
-      });
+      );
     },
 
     computeValuesFromProps(component, { props, name, model }) {
@@ -365,7 +387,7 @@ export default {
       /**
        * This object will contain the component under test computed.
        */
-      computed: null,
+      computed: {},
 
       /**
        * Array of events emitted by the component under test.
