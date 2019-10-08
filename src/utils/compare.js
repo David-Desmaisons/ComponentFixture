@@ -1,5 +1,7 @@
 function compareAttribute(o1, o2, attr) {
-  return o1[attr] === o2[attr];
+  const value1 = o1[attr];
+  const value2 = o2[attr];
+  return compare(value1, value2) ;
 }
 
 function compareArray(o1, o2) {
@@ -26,7 +28,8 @@ function compare(o1, o2) {
   }
 
   const compareKey = key => compareAttribute(o1, o2, key);
-  return Object.keys(o1).every(compareKey) && Object.keys(o2).every(compareKey);
+  const keys1 = Object.keys(o1);
+  return Object.keys(o2).length === keys1.length && keys1.every(compareKey);
 }
 
 export default compare;
