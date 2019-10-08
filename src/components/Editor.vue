@@ -2,15 +2,14 @@
   <div class="main-editor-component-fixture">
     <div class="card card-options">
       <div class="card-body show-options">
+
         <button
-          v-for="name in ['props','state','methods']"
-          :key="name"
           type="button"
           class="segment"
-          :class="{'active': segmentActive === name}"
-          @click="toggleSegment(name)"
+          :class="{'active': segmentActive === 'props'}"
+          @click="toggleSegment('props')"
         >
-          <span>{{name}}</span>
+          <span>Props</span>
         </button>
 
         <button
@@ -25,6 +24,18 @@
             v-if="events.length>0"
           >{{ events.length }}</span>
         </button>
+
+        <button
+          v-for="name in ['methods','state']"
+          :key="name"
+          type="button"
+          class="segment"
+          :class="{'active': segmentActive === name}"
+          @click="toggleSegment(name)"
+        >
+          <span>{{name}}</span>
+        </button>
+
       </div>
     </div>
 
