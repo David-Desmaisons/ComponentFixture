@@ -1,7 +1,10 @@
 import { stringify, parse } from "@/utils/stringify";
 
 function filterFloat(value) {
-  if (value === "") {
+  if (value == null) {
+    return value;
+  }
+  if (value == null || value === "") {
     return null;
   }
   if (/^(-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/.test(value)) {
@@ -40,7 +43,7 @@ function parseFunction(value) {
 
 function getTypeFromValue(value) {
   if (value === null || value === undefined) {
-    return ["Object", "Array", "String", "Number", "Boolean"];
+    return ["Object", "Array", "String", "Number", "Boolean", "Function"];
   }
   if (typeof value === "boolean") {
     return ["Boolean"];
@@ -60,9 +63,23 @@ function getTypeFromValue(value) {
   return ["Object"];
 }
 
+const defaults ={
+  "Object": {},
+  "Array": [], 
+  "String": "", 
+  "Number": 0, 
+  "Boolean": false,
+  "Function": null
+};
+
+function getDefaultForType(type) {
+  return defaults[type];
+}
+
 export {
   filterFloat,
   getTypeFromValue,
+  getDefaultForType,
   parseFunction,
   parseObject,
   stringifyObject

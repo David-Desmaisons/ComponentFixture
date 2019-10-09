@@ -29,8 +29,8 @@ describe("getTypeForProp", () => {
     [{ value: 33 }, ["Object"]],
     [[], ["Array"]],
     [[2, 7], ["Array"]],
-    [null, ["Object", "Array", "String", "Number", "Boolean"]],
-    [undefined, ["Object", "Array", "String", "Number", "Boolean"]]
+    [null, ["Object", "Array", "String", "Number", "Boolean", "Function"]],
+    [undefined, ["Object", "Array", "String", "Number", "Boolean", "Function"]]
   ];
 
   test.each(typesFromValue)(

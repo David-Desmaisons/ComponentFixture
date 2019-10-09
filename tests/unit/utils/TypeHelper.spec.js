@@ -1,6 +1,7 @@
 import {
   filterFloat,
   getTypeFromValue,
+  getDefaultForType,
   parseFunction,
   parseObject,
   stringifyObject
@@ -17,14 +18,33 @@ describe("getTypeFromValue", () => {
     [{ value: 33 }, ["Object"]],
     [[], ["Array"]],
     [[2, 7], ["Array"]],
-    [null, ["Object", "Array", "String", "Number", "Boolean"]],
-    [undefined, ["Object", "Array", "String", "Number", "Boolean"]]
+    [null, ["Object", "Array", "String", "Number", "Boolean", "Function"]],
+    [undefined, ["Object", "Array", "String", "Number", "Boolean", "Function"]]
   ];
 
   test.each(typesFromValue)(
     "returns type from value: %p should return: %p",
     (arg, expected) => {
       const value = getTypeFromValue(arg);
+      expect(value).toEqual(expected);
+    }
+  );
+});
+
+describe("getDefaultForType", () => {
+  const defaultForType = [
+    ["Array", []],
+    ["String", ""],
+    ["Function", null],
+    ["Boolean", false],
+    ["Object", {}],
+    ["Number", 0]
+  ];
+
+  test.each(defaultForType)(
+    "returns type from value: %p should return: %o",
+    (arg, expected) => {
+      const value = getDefaultForType(arg);
       expect(value).toEqual(expected);
     }
   );
@@ -37,7 +57,7 @@ describe("filterFloat", () => {
     "b289",
     "16767.u898",
     "16.767.898"
-  ].map(v => [v]);
+  ];
 
   test.each(notConvertibleToNumber)(
     "returns NaN when input is not a number: %p",
@@ -49,6 +69,8 @@ describe("filterFloat", () => {
 
   const convertibleToNumber = [
     ["", null],
+    [null, null],
+    [undefined, undefined],
     ["25", 25],
     ["-35", -35],
     ["-0.98", -0.98],
