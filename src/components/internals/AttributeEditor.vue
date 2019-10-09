@@ -91,7 +91,7 @@ import stringAttributeEditor from "./StringAttributeEditor";
 import booleanAttributeEditor from "./BooleanAttributeEditor";
 
 import { VTooltip } from "v-tooltip";
-import { getTypeFromValue } from "@/utils/TypeHelper";
+import { getTypeFromValue, getDefaultForType } from "@/utils/TypeHelper";
 import typesDescription from "./typesDescription";
 import compare from "@/utils/compare";
 
@@ -148,6 +148,13 @@ export default {
         this.type = getDefaultType(types, this.object[this.attribute]);
       },
       immediate: true
+    },
+    type(newValue) {
+        const currentTypes = getTypeFromValue(this.object[this.attribute]);
+        if (currentTypes.includes(newValue)){
+          return;
+        }
+        this.object[this.attribute] = getDefaultForType(newValue);
     }
   },
 
