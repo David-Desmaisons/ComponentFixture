@@ -109,7 +109,8 @@ describe("ComponentFixture.vue", () => {
 
     it("computes the dynamicAttributes with default value computed from factory", () => {
       expect(dynamicAttributes.objectWithFactory).toEqual({
-        createdByFactory: true
+        createdByFactory: true,
+        madeBy: "fake-component"
       });
     });
 
@@ -398,7 +399,8 @@ describe("ComponentFixture.vue", () => {
         string: "",
         undefinedString: undefined,
         objectWithFactory: {
-          createdByFactory: true
+          createdByFactory: true,
+          madeBy: "fake-component"
         }
       };
 

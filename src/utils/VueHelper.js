@@ -42,13 +42,9 @@ function getPropDefaultValue(vm, prop, key) {
   return resolveFunctionIfNeeded(def, prop, vm);
 }
 
-function extractDefaultValue(vm, prop, key, proposedValue, fixtureVm) {
+function extractDefaultValue(vm, prop, key, proposedValue) {
   if (proposedValue !== undefined) {
-    const normalizedProposed = resolveFunctionIfNeeded(
-      proposedValue,
-      prop,
-      fixtureVm
-    );
+    const normalizedProposed = resolveFunctionIfNeeded(proposedValue, prop, vm);
     const propTypes = getTypeForProp(prop);
     const proposedTypes = getTypeFromValue(normalizedProposed);
     const typeMatch = propTypes.some(t => proposedTypes.includes(t));

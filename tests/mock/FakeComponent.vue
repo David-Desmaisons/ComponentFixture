@@ -11,9 +11,12 @@ export default {
   props: {
     objectWithFactory: {
       type: Object,
-      default: () => ({
-        createdByFactory: true
-      })
+      default() {
+        return {
+          createdByFactory: true,
+          madeBy: this.$options.name
+        };
+      }
     },
     number: {
       type: Number,
