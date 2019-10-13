@@ -3,17 +3,16 @@
 </template>
 <script>
 import switchComponent from "@/components/base/SwitchComponent";
+import { editorMixin } from "./EditorMixin";
 
 export default {
   name: "boolean-attribute-editor",
 
+  mixins:[editorMixin],
+
   props: {
-    attribute: {
-      required: false,
-      type: String
-    },
     value: {
-      required: true,
+      required: false,
       type: Boolean
     }
   },
@@ -24,7 +23,7 @@ export default {
         return this.value;
       },
       set(value) {
-        this.$emit("changed", { key: this.attribute, value });
+        this.updateIfValid(value);
       }
     }
   },

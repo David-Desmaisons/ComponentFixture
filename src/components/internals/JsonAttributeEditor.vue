@@ -11,19 +11,14 @@ import {
   parseObject,
   stringifyObject
 } from "@/utils/TypeHelper";
+import { editorMixin } from "./EditorMixin";
 
 export default {
   name: "json-attribute-editor",
 
+  mixins:[editorMixin],
+
   props: {
-    attribute: {
-      required: false,
-      type: String
-    },
-    metaData: {
-      required: true,
-      type: Object
-    },
     types: {
       required: true,
       type: Array
@@ -50,13 +45,7 @@ export default {
             );
             return;
           }
-          const validated = this.metaData.validate(newObject);
-          if (!validated.ok) {
-            this.$emit("onError", validated.message);
-            return;
-          }
-          this.$emit("changed", { key: this.attribute, value: newObject });
-          this.$emit("onError", null);
+          this.updateIfValid(newObject);
         } catch (e) {
           this.$emit("onError", "Unable to convert JSON data");
         }

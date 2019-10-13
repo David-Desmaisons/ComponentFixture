@@ -31,24 +31,19 @@
 </template>
 <script>
 import { filterFloat } from "@/utils/TypeHelper";
+import { editorMixin } from "./EditorMixin";
 
 export default {
   name: "number-attribute-editor",
 
   props: {
-    attribute: {
-      required: true,
-      type: String
-    },
-    metaData: {
-      required: true,
-      type: Object
-    },
     value: {
       required: false,
       type: Number
     }
   },
+
+  mixins: [editorMixin],
 
   data() {
     return {
@@ -68,16 +63,7 @@ export default {
           this.$emit("onError", "Provide a valid number");
           return;
         }
-        const validated = this.metaData.validate(numberValue);
-        if (!validated.ok) {
-          this.$emit("onError", validated.message);
-          return;
-        }
-        if (this.NumberValue === numberValue) {
-          return;
-        }
-        this.$emit("changed", { key: this.attribute, value: numberValue });
-        this.$emit("onError", null);
+        this.updateIfValid(numberValue);
       }
     }
   },
