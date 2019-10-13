@@ -16,7 +16,7 @@ import { editorMixin } from "./EditorMixin";
 export default {
   name: "json-attribute-editor",
 
-  mixins:[editorMixin],
+  mixins: [editorMixin],
 
   props: {
     types: {

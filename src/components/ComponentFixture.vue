@@ -4,7 +4,8 @@ import { getNodeFromSandBox } from "@/utils/VueHelper";
 import { dynamicObjectBuilder } from "./introspection/dynamicObject";
 import compare from "@/utils/compare";
 import resizable from "./base/Resizable";
-import { buildStoreModule } from "@/utils/storeUtility";
+import { buildStoreModule, getFullMutationName } from "@/utils/storeUtility";
+
 let id = 1;
 
 function getMethods(methods, getUnderTestComponent) {
@@ -30,9 +31,9 @@ function filterMethods(methods) {
     }, {});
 }
 
-function buildListener(props, prop) {
-  return evt => {
-    props[prop] = evt;
+function buildListener(vm, prop) {
+  return value => {
+    vm.changed({ key: prop, value });
   };
 }
 
@@ -90,18 +91,27 @@ export default {
     setupEventsListeners(props, { event, prop }) {
       const on = {};
       if (props.hasOwnProperty(prop)) {
-        on[event] = buildListener(props, prop);
+        on[event] = buildListener(this, prop);
       }
       Object.keys(props)
         .filter(p => p !== prop)
         .forEach(key => {
-          on[`update:${key}`] = buildListener(props, key);
+          on[`update:${key}`] = buildListener(this, key);
         });
       return on;
     },
 
     clearEvents() {
       this.events = [];
+    },
+
+    changed({ key: prop, value }) {
+      const { storeName } = this;
+      if (storeName === null) {
+        this.attributes[prop] = value;
+        return;
+      }
+      this.$store.commit(getFullMutationName({ prop, storeName }), value);
     },
 
     updateValuesAndMethod(component, options) {
@@ -154,6 +164,7 @@ export default {
       const photo = Object.assign({}, props);
 
       if (this.$photo !== undefined && compare(photo, this.$photo)) {
+        this.registerModuleIfNeeded();
         return;
       }
 
@@ -166,11 +177,24 @@ export default {
       this.dynamicAttributes = dynamicAttributes;
       this.propsDefinition = propsDefinition;
 
-      if (!this.shouldUseStore) {
+      this.registerModule();
+    },
+
+    registerModuleIfNeeded() {
+      const { storeName } = this;
+      if (storeName == null || this.$store.state[storeName]) {
+        return;
+      }
+      this.registerModule();
+    },
+
+    registerModule() {
+      const { storeName, dynamicAttributes } = this;
+      if (storeName == null) {
         return;
       }
       const module = buildStoreModule(dynamicAttributes);
-      this.$store.registerModule(this.storeName, module);
+      this.$store.registerModule(storeName, module);
     },
 
     updateMethods(component, { methods: rawMethods }) {
@@ -223,6 +247,14 @@ export default {
     this.id = id++;
   },
 
+  beforeDestroy() {
+    const { storeName } = this;
+    if (storeName === null) {
+      return;
+    }
+    this.$store.unregisterModule(storeName, module);
+  },
+
   render(h) {
     const { default: defaultSlot } = this.$slots;
     if (!defaultSlot || defaultSlot.length !== 1) {
@@ -255,6 +287,7 @@ export default {
       componentHeight: inicialHeight,
       componentWidth: inicialWidth,
       isResizable,
+      changed,
       storeName
     } = this;
 
@@ -315,7 +348,7 @@ export default {
                   methods,
                   events,
                   clearEvents,
-                  storeName
+                  changed
                 })
               ]
             ),

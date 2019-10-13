@@ -48,9 +48,10 @@
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
-        v-bind="{props, events, methods, attributes, data, computed, clearEvents, storeName}"
+        v-bind="{props, events, methods, attributes, data, computed, clearEvents}"
         @success="success"
         @error="error"
+        @changed="changed"
       />
     </transition-group>
   </div>
@@ -100,10 +101,6 @@ export default {
     methods: {
       required: true,
       type: Array
-    },
-    storeName: {
-      type: String,
-      required: false
     }
   },
 
@@ -135,6 +132,10 @@ export default {
 
     error(message) {
       this.$emit("error", message);
+    },
+
+    changed(arg) {
+      this.$emit("changed", arg);
     }
   }
 };

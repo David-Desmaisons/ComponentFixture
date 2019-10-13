@@ -27,6 +27,7 @@
               v-bind="scope"
               @success="success"
               @error="error"
+              @changed="scope.changed"
             />
           </template>
         </component-fixture>

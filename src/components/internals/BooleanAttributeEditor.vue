@@ -8,7 +8,7 @@ import { editorMixin } from "./EditorMixin";
 export default {
   name: "boolean-attribute-editor",
 
-  mixins:[editorMixin],
+  mixins: [editorMixin],
 
   props: {
     value: {

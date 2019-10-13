@@ -205,8 +205,8 @@ export default {
       return typesDescription[type].display;
     },
     toDefault() {
-      const { $default, attribute } = this;
-      this.type = this.$defaultType;
+      const { $defaultType, $default, attribute } = this;
+      this.type = $defaultType;
       this.changed({ key: attribute, value: $default });
       this.$emit(
         "success",
