@@ -1,7 +1,7 @@
 <script>
 import splitPane from "vue-splitpane";
 import { getNodeFromSandBox } from "@/utils/VueHelper";
-import { dynamicObjectBuilder } from "./introspection/dynamicObject";
+import { dynamicObjectBuilder } from "@/utils/dynamicObject";
 import compare from "@/utils/compare";
 import resizable from "./base/Resizable";
 import { buildStoreModule, getFullMutationName } from "@/utils/storeUtility";
