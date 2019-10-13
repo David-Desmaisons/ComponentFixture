@@ -13,16 +13,14 @@ import {
 } from "@/utils/TypeHelper";
 
 export default {
+  name: "json-attribute-editor",
+
   props: {
     attribute: {
       required: false,
       type: String
     },
     metaData: {
-      required: true,
-      type: Object
-    },
-    object: {
       required: true,
       type: Object
     },
@@ -35,51 +33,35 @@ export default {
     }
   },
 
-  data() {
-    return {
-      textValue: ""
-    };
-  },
-
-  watch: {
-    textValue(value) {
-      try {
-        const newObject = parseObject(value);
-        const types = getTypeFromValue(newObject);
-        const valid = types.find(t => this.types.find(st => st === t));
-        if (!valid) {
-          this.$emit(
-            "onError",
-            `types: ${types} not compatible with ${this.types}`
-          );
-          return;
-        }
-        const validated = this.metaData.validate(newObject);
-        if (!validated.ok) {
-          this.$emit("onError", validated.message);
-          return;
-        }
-        this.object[this.attribute] = newObject;
-        this.$emit("onError", null);
-      } catch (e) {
-        this.$emit("onError", "Unable to convert JSON data");
-      }
-    },
-    value: {
-      handler(value) {
-        this.textValue = stringifyObject(value);
-        this.$emit("onError", null);
+  computed: {
+    textValue: {
+      get() {
+        return stringifyObject(this.value);
       },
-      immediate: true
-    }
-  },
-
-  methods: {
-    reset() {
-      this.textValue = this.value;
+      set(value) {
+        try {
+          const newObject = parseObject(value);
+          const types = getTypeFromValue(newObject);
+          const valid = types.find(t => this.types.find(st => st === t));
+          if (!valid) {
+            this.$emit(
+              "onError",
+              `types: ${types} not compatible with ${this.types}`
+            );
+            return;
+          }
+          const validated = this.metaData.validate(newObject);
+          if (!validated.ok) {
+            this.$emit("onError", validated.message);
+            return;
+          }
+          this.$emit("changed", { key: this.attribute, value: newObject });
+          this.$emit("onError", null);
+        } catch (e) {
+          this.$emit("onError", "Unable to convert JSON data");
+        }
+      }
     }
   }
 };
 </script>
-<style lang="less" scoped>
-</style>

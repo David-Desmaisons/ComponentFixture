@@ -4,10 +4,11 @@
       <attributeEditor
         v-for="prop in props"
         :key="prop.key"
-        :object="attributes"
+        :value="attributes[prop.key]"
         :attribute="prop.key"
         :metaData="prop.metaData"
         @success="success"
+        @changed="changed"
       />
     </template>
 
@@ -43,6 +44,9 @@ export default {
   methods: {
     success(message) {
       this.$emit("success", message);
+    },
+    changed({ key: prop, value }) {
+      this.attributes[prop] = value;
     }
   }
 };

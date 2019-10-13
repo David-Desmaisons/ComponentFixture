@@ -74,11 +74,11 @@
       <div class="error-feedback">{{error}}</div>
 
       <component
-        ref="editor"
         :is="componentType"
         class="component-input"
         @onError="error = $event"
-        v-bind="{object, attribute, metaData, types, value}"
+        @changed="changed"
+        v-bind="{attribute, metaData, types, value}"
       />
     </div>
   </div>
@@ -117,9 +117,8 @@ export default {
   },
 
   props: {
-    object: {
-      required: true,
-      type: Object
+    value: {
+      required: false
     },
     metaData: {
       required: true,
@@ -145,16 +144,16 @@ export default {
         if (types.includes(this.type)) {
           return;
         }
-        this.type = getDefaultType(types, this.object[this.attribute]);
+        this.type = getDefaultType(types, this.value);
       },
       immediate: true
     },
     type(newValue) {
-        const currentTypes = getTypeFromValue(this.object[this.attribute]);
-        if (currentTypes.includes(newValue)){
-          return;
-        }
-        this.object[this.attribute] = getDefaultForType(newValue);
+      const currentTypes = getTypeFromValue(this.value);
+      if (currentTypes.includes(newValue)) {
+        return;
+      }
+      this.changed({ key: this.attribute, value: getDefaultForType(newValue) });
     }
   },
 
@@ -165,9 +164,6 @@ export default {
   },
 
   computed: {
-    value() {
-      return this.object[this.attribute];
-    },
     canBeDefaulted() {
       return (
         this.error !== null ||
@@ -202,17 +198,19 @@ export default {
   },
 
   methods: {
+    changed(arg) {
+      this.$emit("changed", arg);
+    },
     convert(type) {
       return typesDescription[type].display;
     },
     toDefault() {
-      const { $default } = this;
+      const { $default, attribute } = this;
       this.type = this.$defaultType;
-      this.object[this.attribute] = $default;
-      this.$refs.editor.reset($default);
+      this.changed({ key: attribute, value: $default });
       this.$emit(
         "success",
-        `Update property "${this.attribute}" to default value: ${JSON.stringify(
+        `Update property "${attribute}" to default value: ${JSON.stringify(
           $default,
           null,
           2

@@ -1,27 +1,36 @@
 <template>
-  <switch-component v-model="object[attribute]" />
+  <switch-component v-model="boolValue" />
 </template>
 <script>
 import switchComponent from "@/components/base/SwitchComponent";
 
 export default {
+  name: "boolean-attribute-editor",
+
   props: {
     attribute: {
       required: false,
       type: String
     },
-    object: {
+    value: {
       required: true,
-      type: Object
+      type: Boolean
+    }
+  },
+
+  computed: {
+    boolValue: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.$emit("changed", { key: this.attribute, value });
+      }
     }
   },
 
   components: {
     switchComponent
-  },
-
-  methods: {
-    reset() {}
   }
 };
 </script>

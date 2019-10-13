@@ -9,6 +9,8 @@
 import { parseFunction } from "@/utils/TypeHelper";
 
 export default {
+  name: "function-attribute-editor",
+
   props: {
     attribute: {
       required: true,
@@ -18,44 +20,32 @@ export default {
       required: true,
       type: Object
     },
-    object: {
-      required: true,
-      type: Object
+    value: {
+      required: false,
+      type: Function
     }
   },
 
-  data() {
-    const textValue = String(this.object[this.attribute]);
-    return {
-      textValue,
-      functionValue: this.object[this.attribute]
-    };
-  },
-
-  watch: {
-    textValue(value) {
-      try {
-        const functionValue = parseFunction(value);
-        const validated = this.metaData.validate(functionValue);
-        if (!validated.ok) {
-          this.$emit("onError", validated.message);
-          return;
+  computed: {
+    textValue: {
+      get() {
+        return String(this.value);
+      },
+      set(value) {
+        try {
+          const functionValue = parseFunction(value);
+          const validated = this.metaData.validate(functionValue);
+          if (!validated.ok) {
+            this.$emit("onError", validated.message);
+            return;
+          }
+          this.$emit("changed", { key: this.attribute, value: functionValue });
+          this.$emit("onError", null);
+        } catch (e) {
+          this.$emit("onError", "Provide a valid function");
         }
-        this.functionValue = functionValue;
-        this.object[this.attribute] = functionValue;
-        this.$emit("onError", null);
-      } catch (e) {
-        this.$emit("onError", "Provide a valid function");
       }
-    }
-  },
-
-  methods: {
-    reset(value) {
-      this.textValue = String(value);
     }
   }
 };
 </script>
-<style lang="less" scoped>
-</style>

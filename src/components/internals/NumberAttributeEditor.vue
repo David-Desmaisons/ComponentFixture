@@ -1,10 +1,17 @@
 <template>
   <div class="main-control">
     <div class="input-control">
-      <input class="range min" v-model.number="min">
-      <input class="range max" v-model.number="max">
+      <input
+        class="range min"
+        v-model.number="min"
+      >
+      <input
+        class="range max"
+        v-model.number="max"
+      >
     </div>
     <div class="inputs">
+
       <input
         :min="min"
         :max="max"
@@ -14,7 +21,11 @@
         class="range form-control"
       >
 
-      <input class="value form-control" :id="'attribute-2-'+attribute" v-model="textValue">
+      <input
+        class="value form-control"
+        :id="'attribute-2-'+attribute"
+        v-model="textValue"
+      >
     </div>
   </div>
 </template>
@@ -22,11 +33,9 @@
 import { filterFloat } from "@/utils/TypeHelper";
 
 export default {
+  name: "number-attribute-editor",
+
   props: {
-    object: {
-      required: true,
-      type: Object
-    },
     attribute: {
       required: true,
       type: String
@@ -43,36 +52,40 @@ export default {
 
   data() {
     return {
-      textValue: null,
       min: 0,
-      max: 100,
-      NumberValue: this.object[this.attribute]
+      max: 100
     };
   },
 
+  computed: {
+    textValue: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        const numberValue = filterFloat(value);
+        if (isNaN(numberValue)) {
+          this.$emit("onError", "Provide a valid number");
+          return;
+        }
+        const validated = this.metaData.validate(numberValue);
+        if (!validated.ok) {
+          this.$emit("onError", validated.message);
+          return;
+        }
+        if (this.NumberValue === numberValue) {
+          return;
+        }
+        this.$emit("changed", { key: this.attribute, value: numberValue });
+        this.$emit("onError", null);
+      }
+    }
+  },
+
   watch: {
-    textValue(value) {
-      const numberValue = filterFloat(value);
-      if (isNaN(numberValue)) {
-        this.$emit("onError", "Provide a valid number");
-        return;
-      }
-      const validated = this.metaData.validate(numberValue);
-      if (!validated.ok) {
-        this.$emit("onError", validated.message);
-        return;
-      }
-      this.NumberValue = numberValue;
-      this.object[this.attribute] = numberValue;
-      this.$emit("onError", null);
-    },
     value: {
       handler(value) {
-        this.NumberValue = value;
         this.$emit("onError", null);
-        if (filterFloat(this.textValue) != value) {
-          this.textValue = value;
-        }
         if (value > this.max) {
           this.max = value * 2;
         }
@@ -81,12 +94,6 @@ export default {
         }
       },
       immediate: true
-    }
-  },
-
-  methods: {
-    reset(value) {
-      this.textValue = value;
     }
   }
 };

@@ -1,17 +1,11 @@
 <template>
-  <input
-    :id="'attribute-'+attribute"
-    v-model="textValue"
-    class="form-control"
-  />
+  <input :id="'attribute-'+attribute" v-model="textValue" class="form-control" />
 </template>
 <script>
 export default {
+  name: "string-attribute-editor",
+
   props: {
-    object: {
-      required: true,
-      type: Object
-    },
     attribute: {
       required: true,
       type: String
@@ -26,35 +20,21 @@ export default {
     }
   },
 
-  data() {
-    const textValue = this.value;
-    return {
-      textValue
-    };
-  },
-
-  watch: {
-    textValue(value) {
-      const validated = this.metaData.validate(value);
-      if (!validated.ok) {
-        this.$emit("onError", validated.message);
-        return;
+  computed: {
+    textValue: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        const validated = this.metaData.validate(value);
+        if (!validated.ok) {
+          this.$emit("onError", validated.message);
+          return;
+        }
+        this.$emit("changed", { key: this.attribute, value });
+        this.$emit("onError", null);
       }
-      this.object[this.attribute] = value;
-      this.$emit("onError", null);
-    },
-    value(value) {
-      this.textValue = value;
-      this.$emit("onError", null);
-    }
-  },
-
-  methods: {
-    reset(value) {
-      this.textValue = value;
     }
   }
 };
 </script>
-<style lang="less" scoped>
-</style>
