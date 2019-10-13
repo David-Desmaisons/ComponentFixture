@@ -108,7 +108,7 @@ export default {
     changed({ key: prop, value }) {
       const { storeName } = this;
       if (storeName === null) {
-        this.attributes[prop] = value;
+        this.dynamicAttributes[prop] = value;
         return;
       }
       this.$store.commit(getFullMutationName({ prop, storeName }), value);
