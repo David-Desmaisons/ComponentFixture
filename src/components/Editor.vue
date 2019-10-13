@@ -48,7 +48,7 @@
       <component
         :is="`${segmentActive}-editor`"
         :key="segmentActive"
-        v-bind="{props, events, methods, attributes, data, computed, clearEvents}"
+        v-bind="{props, events, methods, attributes, data, computed, clearEvents, storeName}"
         @success="success"
         @error="error"
       />
@@ -100,6 +100,10 @@ export default {
     methods: {
       required: true,
       type: Array
+    },
+    storeName: {
+      type: String,
+      required: false
     }
   },
 

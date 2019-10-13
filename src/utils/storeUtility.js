@@ -2,25 +2,30 @@ function capitalize(value) {
   return value.replace(/^\w/, c => c.toUpperCase());
 }
 
+function getFullMutationName({ prop, storeName }) {
+  return `${storeName}/${getMutationName(prop)}`;
+}
+
 function getMutationName(prop) {
   return `update${capitalize(prop)}`;
 }
 
 function updateMutation(prop) {
-  return (state, payload) => state[prop] = payload;
+  return (state, payload) => {
+    state[prop] = payload;
+  };
 }
 
-function buildStore(initialState) {
+function buildStoreModule(initialState) {
   const mutations = Object.keys(initialState).reduce((acc, key) => {
     acc[getMutationName(key)] = updateMutation(key);
     return acc;
   }, {});
   return {
-    state: { ...initialState },
+    namespaced: true,
+    state: () => ({ ...initialState }),
     mutations
-  }
+  };
 }
 
-export {
-  buildStore
-}
+export { buildStoreModule, getFullMutationName };

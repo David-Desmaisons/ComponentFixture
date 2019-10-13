@@ -1,14 +1,11 @@
 <script>
-import Vue from "vue";
 import splitPane from "vue-splitpane";
-import {
-  extractDefaultValue,
-  getTypeForProp,
-  getNodeFromSandBox,
-  validateProp
-} from "@/utils/VueHelper";
+import { getNodeFromSandBox } from "@/utils/VueHelper";
+import { dynamicObjectBuilder } from "./introspection/dynamicObject";
 import compare from "@/utils/compare";
 import resizable from "./base/Resizable";
+import { buildStoreModule } from "@/utils/storeUtility";
+let id = 1;
 
 function getMethods(methods, getUnderTestComponent) {
   return Object.keys(methods).map(name => ({
@@ -75,6 +72,11 @@ export default {
       required: false,
       type: Boolean,
       default: false
+    },
+    useStore: {
+      required: false,
+      type: Boolean,
+      default: true
     }
   },
 
@@ -156,31 +158,19 @@ export default {
       }
 
       this.$photo = photo;
-      this.dynamicAttributes = {};
-      this.propsDefinition = {};
-      const { dynamicAttributes, propsDefinition } = this;
-      if (!props) {
+      const { defaults, componentModel } = this;
+      const { dynamicAttributes, propsDefinition } = dynamicObjectBuilder(
+        props,
+        { component, defaults, componentModel }
+      );
+      this.dynamicAttributes = dynamicAttributes;
+      this.propsDefinition = propsDefinition;
+
+      if (!this.shouldUseStore) {
         return;
       }
-      Object.keys(props).forEach(key => {
-        const propsValue = props[key];
-        const proposedValue = this.defaults[key];
-        const defaultValue = extractDefaultValue(
-          component,
-          propsValue,
-          key,
-          proposedValue,
-          this
-        );
-        Vue.set(dynamicAttributes, key, defaultValue);
-        Vue.set(propsDefinition, key, {
-          defaultValue,
-          definition: propsValue,
-          types: getTypeForProp(propsValue, defaultValue),
-          validate: validateProp.bind(null, propsValue),
-          isModel: key === this.componentModel.prop
-        });
-      });
+      const module = buildStoreModule(dynamicAttributes);
+      this.$store.registerModule(this.storeName, module);
     },
 
     updateMethods(component, { methods: rawMethods }) {
@@ -229,6 +219,10 @@ export default {
     }
   },
 
+  created() {
+    this.id = id++;
+  },
+
   render(h) {
     const { default: defaultSlot } = this.$slots;
     if (!defaultSlot || defaultSlot.length !== 1) {
@@ -249,7 +243,7 @@ export default {
 
     const {
       clearEvents,
-      dynamicAttributes: props,
+      dynamicAttributes,
       data,
       computed,
       componentName,
@@ -260,9 +254,11 @@ export default {
       update,
       componentHeight: inicialHeight,
       componentWidth: inicialWidth,
-      isResizable
+      isResizable,
+      storeName
     } = this;
 
+    const props = storeName ? this.$store.state[storeName] : dynamicAttributes;
     const options = {
       props,
       scopedSlots,
@@ -318,7 +314,8 @@ export default {
                   propsDefinition,
                   methods,
                   events,
-                  clearEvents
+                  clearEvents,
+                  storeName
                 })
               ]
             ),
@@ -359,10 +356,26 @@ export default {
     this.$nextTick(() => this.afterMount());
   },
 
+  computed: {
+    storeName() {
+      const { shouldUseStore, componentName, id } = this;
+      return shouldUseStore ? `componentFixture-${componentName}-${id}` : null;
+    },
+    shouldUseStore() {
+      const { $store, useStore } = this;
+      return $store && useStore;
+    }
+  },
+
   data() {
     this.$stage = 0;
     this.$photo == null;
     return {
+      /**
+       * The component id.
+       */
+      id: 0,
+
       /**
        * The component under test name.
        */

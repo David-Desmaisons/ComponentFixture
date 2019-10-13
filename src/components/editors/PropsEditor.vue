@@ -20,12 +20,17 @@
   </div>
 </template>
 <script>
+import { getFullMutationName } from "@/utils/storeUtility";
 import attributeEditor from "../internals/AttributeEditor";
 
 const props = {
   props: {
     type: Array,
     required: true
+  },
+  storeName: {
+    type: String,
+    required: false
   },
   attributes: {
     type: Object,
@@ -46,7 +51,12 @@ export default {
       this.$emit("success", message);
     },
     changed({ key: prop, value }) {
-      this.attributes[prop] = value;
+      const { storeName } = this;
+      if (storeName === null) {
+        this.attributes[prop] = value;
+        return;
+      }
+      this.$store.commit(getFullMutationName({ prop, storeName }), value);
     }
   }
 };

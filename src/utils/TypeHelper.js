@@ -63,13 +63,13 @@ function getTypeFromValue(value) {
   return ["Object"];
 }
 
-const defaults ={
-  "Object": {},
-  "Array": [], 
-  "String": "", 
-  "Number": 0, 
-  "Boolean": false,
-  "Function": null
+const defaults = {
+  Object: {},
+  Array: [],
+  String: "",
+  Number: 0,
+  Boolean: false,
+  Function: null
 };
 
 function getDefaultForType(type) {
