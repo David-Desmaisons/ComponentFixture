@@ -4,7 +4,12 @@ import { getNodeFromSandBox } from "@/utils/VueHelper";
 import { dynamicObjectBuilder } from "@/utils/dynamicObject";
 import compare from "@/utils/compare";
 import resizable from "./base/Resizable";
-import { buildStoreModule, getFullMutationName } from "@/utils/storeUtility";
+import {
+  registerModuleIfNeeded,
+  registerModule,
+  unregisterModule,
+  commit
+} from "@/utils/storeUtility";
 
 let id = 1;
 
@@ -106,12 +111,12 @@ export default {
     },
 
     changed({ key: prop, value }) {
-      const { storeName } = this;
-      if (storeName === null) {
-        this.dynamicAttributes[prop] = value;
+      const { $store, storeName } = this;
+      const commited = commit({ $store, prop, storeName, value });
+      if (commited) {
         return;
       }
-      this.$store.commit(getFullMutationName({ prop, storeName }), value);
+      this.dynamicAttributes[prop] = value;
     },
 
     updateValuesAndMethod(component, options) {
@@ -162,9 +167,14 @@ export default {
       this.componentName = name;
       this.componentModel = model || defaultModel;
       const photo = Object.assign({}, props);
+      const { $store, storeName } = this;
 
       if (this.$photo !== undefined && compare(photo, this.$photo)) {
-        this.registerModuleIfNeeded();
+        registerModuleIfNeeded({
+          $store,
+          storeName,
+          dynamicAttributes: this.dynamicAttributes
+        });
         return;
       }
 
@@ -177,24 +187,7 @@ export default {
       this.dynamicAttributes = dynamicAttributes;
       this.propsDefinition = propsDefinition;
 
-      this.registerModule();
-    },
-
-    registerModuleIfNeeded() {
-      const { storeName } = this;
-      if (storeName == null || this.$store.state[storeName]) {
-        return;
-      }
-      this.registerModule();
-    },
-
-    registerModule() {
-      const { storeName, dynamicAttributes } = this;
-      if (storeName == null) {
-        return;
-      }
-      const module = buildStoreModule(dynamicAttributes);
-      this.$store.registerModule(storeName, module);
+      registerModule({ $store, storeName, dynamicAttributes });
     },
 
     updateMethods(component, { methods: rawMethods }) {
@@ -248,11 +241,8 @@ export default {
   },
 
   beforeDestroy() {
-    const { storeName } = this;
-    if (storeName === null) {
-      return;
-    }
-    this.$store.unregisterModule(storeName, module);
+    const { $store, storeName } = this;
+    unregisterModule({ $store, storeName });
   },
 
   render(h) {

@@ -28,4 +28,34 @@ function buildStoreModule(initialState) {
   };
 }
 
-export { buildStoreModule, getFullMutationName };
+function registerModuleIfNeeded({ $store, storeName, dynamicAttributes }) {
+  if (storeName == null || $store.state[storeName]) {
+    return;
+  }
+  registerModule({ $store, storeName, dynamicAttributes });
+}
+
+function registerModule({ $store, storeName, dynamicAttributes }) {
+  if (storeName == null) {
+    return;
+  }
+  const module = buildStoreModule(dynamicAttributes);
+  $store.registerModule(storeName, module);
+}
+
+function unregisterModule({ $store, storeName }) {
+  if (storeName === null) {
+    return;
+  }
+  $store.unregisterModule(storeName);
+}
+
+function commit({ $store, prop, storeName, value }) {
+  if (storeName === null) {
+    return false;
+  }
+  $store.commit(getFullMutationName({ prop, storeName }), value);
+  return true;
+}
+
+export { registerModuleIfNeeded, registerModule, unregisterModule, commit };
