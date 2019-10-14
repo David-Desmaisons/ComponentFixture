@@ -60,7 +60,7 @@ export default {
       set(value) {
         const numberValue = filterFloat(value);
         if (isNaN(numberValue)) {
-          this.$emit("onError", "Provide a valid number");
+          this.$emit("error", "Provide a valid number");
           return;
         }
         this.updateIfValid(numberValue);
@@ -71,7 +71,7 @@ export default {
   watch: {
     value: {
       handler(value) {
-        this.$emit("onError", null);
+        this.$emit("error", null);
         if (value > this.max) {
           this.max = value * 2;
         }

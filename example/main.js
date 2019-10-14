@@ -10,7 +10,9 @@ Vue.use(VueSvgGauge);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
-const store = new Vuex.Store({});
+const store = new Vuex.Store({
+  strict: true
+});
 
 Vue.config.productionTip = false;
 

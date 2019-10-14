@@ -57,6 +57,8 @@
   </div>
 </template>
 <script>
+import { delegateEvents } from "@/utils/delegateEvents";
+
 const requireContext = require.context("./editors/", false, /\.vue$/);
 const components = requireContext.keys().reduce((acc, key) => {
   const component = requireContext(key).default;
@@ -125,18 +127,7 @@ export default {
     toggleSegment(segment) {
       this.segmentActive = segment;
     },
-
-    success(message) {
-      this.$emit("success", message);
-    },
-
-    error(message) {
-      this.$emit("error", message);
-    },
-
-    changed(arg) {
-      this.$emit("changed", arg);
-    }
+    ...delegateEvents(["changed", "success", "error"])
   }
 };
 </script>

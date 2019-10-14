@@ -21,6 +21,7 @@
 </template>
 <script>
 import attributeEditor from "../internals/AttributeEditor";
+import { delegateEvents } from "@/utils/delegateEvents";
 
 const props = {
   props: {
@@ -42,12 +43,7 @@ export default {
   },
   props,
   methods: {
-    success(message) {
-      this.$emit("success", message);
-    },
-    changed(arg) {
-      this.$emit("changed", arg);
-    }
+    ...delegateEvents(["success", "changed"])
   }
 };
 </script>

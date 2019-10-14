@@ -31,7 +31,7 @@ export default {
           const functionValue = parseFunction(value);
           this.updateIfValid(functionValue);
         } catch (e) {
-          this.$emit("onError", "Provide a valid function");
+          this.$emit("error", "Provide a valid function");
         }
       }
     }

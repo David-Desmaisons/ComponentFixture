@@ -74,9 +74,10 @@
       <div class="error-feedback">{{error}}</div>
 
       <component
+        ref="editor"
         :is="componentType"
         class="component-input"
-        @onError="error = $event"
+        @error="error = $event"
         @changed="changed"
         v-bind="{attribute, metaData, types, value}"
       />
@@ -94,6 +95,7 @@ import { VTooltip } from "v-tooltip";
 import { getTypeFromValue, getDefaultForType } from "@/utils/TypeHelper";
 import typesDescription from "./typesDescription";
 import compare from "@/utils/compare";
+import { delegateEvents } from "@/utils/delegateEvents";
 
 function getDefaultType(types, defaultValue) {
   if (types.length === 1) {
@@ -198,15 +200,15 @@ export default {
   },
 
   methods: {
-    changed(arg) {
-      this.$emit("changed", arg);
-    },
+    ...delegateEvents(["changed"]),
     convert(type) {
       return typesDescription[type].display;
     },
     toDefault() {
       const { $defaultType, $default, attribute } = this;
       this.type = $defaultType;
+      this.$refs.editor.clear();
+      this.error = null;
       this.changed({ key: attribute, value: $default });
       this.$emit(
         "success",

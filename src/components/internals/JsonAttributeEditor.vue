@@ -40,14 +40,14 @@ export default {
           const valid = types.find(t => this.types.find(st => st === t));
           if (!valid) {
             this.$emit(
-              "onError",
+              "error",
               `types: ${types} not compatible with ${this.types}`
             );
             return;
           }
           this.updateIfValid(newObject);
         } catch (e) {
-          this.$emit("onError", "Unable to convert JSON data");
+          this.$emit("error", "Unable to convert JSON data");
         }
       }
     }
