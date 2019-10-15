@@ -16,6 +16,21 @@ function updateMutation(prop) {
   };
 }
 
+function registerModuleIfNeeded({ $store, storeName, state }) {
+  if (storeName == null || $store.state[storeName]) {
+    return;
+  }
+  registerModule({ $store, storeName, state });
+}
+
+function registerModule({ $store, storeName, state }) {
+  if (storeName == null) {
+    return;
+  }
+  const module = buildStoreModule(state);
+  $store.registerModule(storeName, module);
+}
+
 function buildStoreModule(initialState) {
   const mutations = Object.keys(initialState).reduce((acc, key) => {
     acc[getMutationName(key)] = updateMutation(key);
@@ -26,21 +41,6 @@ function buildStoreModule(initialState) {
     state: () => ({ ...initialState }),
     mutations
   };
-}
-
-function registerModuleIfNeeded({ $store, storeName, dynamicAttributes }) {
-  if (storeName == null || $store.state[storeName]) {
-    return;
-  }
-  registerModule({ $store, storeName, dynamicAttributes });
-}
-
-function registerModule({ $store, storeName, dynamicAttributes }) {
-  if (storeName == null) {
-    return;
-  }
-  const module = buildStoreModule(dynamicAttributes);
-  $store.registerModule(storeName, module);
 }
 
 function unregisterModule({ $store, storeName }) {

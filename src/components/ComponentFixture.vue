@@ -82,7 +82,7 @@ export default {
     useStore: {
       required: false,
       type: Boolean,
-      default: true
+      default: false
     }
   },
 
@@ -173,7 +173,7 @@ export default {
         registerModuleIfNeeded({
           $store,
           storeName,
-          dynamicAttributes: this.dynamicAttributes
+          state: this.dynamicAttributes
         });
         return;
       }
@@ -187,7 +187,7 @@ export default {
       this.dynamicAttributes = dynamicAttributes;
       this.propsDefinition = propsDefinition;
 
-      registerModule({ $store, storeName, dynamicAttributes });
+      registerModule({ $store, storeName, state: dynamicAttributes });
     },
 
     updateMethods(component, { methods: rawMethods }) {
