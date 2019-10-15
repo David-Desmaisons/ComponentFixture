@@ -386,7 +386,7 @@ export default {
     },
     shouldUseStore() {
       const { $store, useStore } = this;
-      return $store && useStore;
+      return !!$store && useStore;
     }
   },
 
