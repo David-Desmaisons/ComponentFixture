@@ -5,38 +5,37 @@ import {
 } from "@/utils/VueHelper";
 import Vue from "vue";
 
-function dynamicObjectBuilder(props, { defaults, component, componentModel }) {
-  const dynamicAttributes = {};
-  const propsDefinition = {};
-  if (!props) {
-    return {
-      dynamicAttributes,
-      propsDefinition
-    };
-  }
-  Object.keys(props).forEach(key => {
-    const propsValue = props[key];
-    const proposedValue = defaults[key];
-    const defaultValue = extractDefaultValue(
-      component,
-      propsValue,
-      key,
-      proposedValue
-    );
-    Vue.set(dynamicAttributes, key, defaultValue);
-    Vue.set(propsDefinition, key, {
-      defaultValue,
-      definition: propsValue,
-      types: getTypeForProp(propsValue, defaultValue),
-      validate: validateProp.bind(null, propsValue),
-      isModel: key === componentModel.prop
-    });
+function createProperty(props, key, { defaults, component, componentModel }, { dynamicAttributes, propsDefinition }) {
+  const propsValue = props[key];
+  const proposedValue = defaults[key];
+  const defaultValue = extractDefaultValue(
+    component,
+    propsValue,
+    key,
+    proposedValue
+  );
+  Vue.set(dynamicAttributes, key, defaultValue);
+  Vue.set(propsDefinition, key, {
+    defaultValue,
+    definition: propsValue,
+    types: getTypeForProp(propsValue, defaultValue),
+    validate: validateProp.bind(null, propsValue),
+    isModel: key === componentModel.prop
   });
+}
 
-  return {
-    dynamicAttributes,
-    propsDefinition
+function dynamicObjectBuilder(props, context) {
+  const result = {
+    dynamicAttributes: {},
+    propsDefinition: {}
   };
+  if (!props) {
+    return result;
+  }
+  Object.keys(props).forEach(key =>
+    createProperty(props, key, context, result)
+  );
+  return result;
 }
 
 export { dynamicObjectBuilder };
