@@ -9,13 +9,29 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
-const mountComponentWithDefaultSlot = (arg = {}) => {
-  const { slot = FakeComponent } = arg;
+const mountComponentWithDefaultSlot = ({ slot = FakeComponent } = {}) => {
   return shallowMount(ComponentFixture, {
     slots: {
       default: slot
+    },
+    stubs: {
+      component: true,
+      component1: true,
+      component2: true
+    }
+  });
+};
+
+const mountComponentWithStore = ({ slot = FakeComponent, propsData = {}, store = null } = {}) => {
+  return shallowMount(ComponentFixture, {
+    propsData,
+    slots: {
+      default: slot
+    },
+    mocks: {
+      $store: store,
     },
     stubs: {
       component: true,
@@ -36,7 +52,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function(props) {
+  return jest.fn(function (props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -90,6 +106,14 @@ describe("ComponentFixture.vue", () => {
       expect(vm.componentName).toEqual("fake-component");
     });
 
+    it("sets useStore to false", () => {
+      expect(vm.useStore).toEqual(false);
+    });
+
+    it("sets shouldUseStore to false", () => {
+      expect(vm.useStore).toEqual(false);
+    });
+
     it("computes the dynamicAttributes number with all props", () => {
       expect(Object.keys(dynamicAttributes).length).toEqual(4);
     });
@@ -109,7 +133,8 @@ describe("ComponentFixture.vue", () => {
 
     it("computes the dynamicAttributes with default value computed from factory", () => {
       expect(dynamicAttributes.objectWithFactory).toEqual({
-        createdByFactory: true
+        createdByFactory: true,
+        madeBy: "fake-component"
       });
     });
 
@@ -398,7 +423,8 @@ describe("ComponentFixture.vue", () => {
         string: "",
         undefinedString: undefined,
         objectWithFactory: {
-          createdByFactory: true
+          createdByFactory: true,
+          madeBy: "fake-component"
         }
       };
 
@@ -424,4 +450,114 @@ describe("ComponentFixture.vue", () => {
       expect(wrapper.contains(FakeEditor)).toBe(true);
     });
   });
+
+  describe("when instantiated with a store", () => {
+    let store;
+    beforeEach(() => {
+      store = {
+        registerModule: jest.fn(function (name, module) {
+          this.state[name] = module.state();
+        }),
+        unregisterModule: jest.fn(),
+        commit: jest.fn(),
+        state: {}
+      };
+    });
+
+    let wrapper = null;
+    let vm = null;
+    let dynamicAttributes = null;
+
+    describe("without useStore", () => {
+      beforeEach(() => {
+        wrapper = mountComponentWithStore({ store });
+        vm = wrapper.vm;
+      });
+
+      it("sets useStore to false", () => {
+        expect(vm.useStore).toEqual(false);
+      });
+
+      it("sets shouldUseStore to false", () => {
+        expect(vm.shouldUseStore).toEqual(false);
+      });
+    });
+
+    describe("without useStore false", () => {
+      beforeEach(() => {
+        wrapper = mountComponentWithStore({
+          propsData: {
+            useStore: false
+          },
+          store
+        });
+        vm = wrapper.vm;
+      });
+
+      it("sets useStore to false", () => {
+        expect(vm.useStore).toEqual(false);
+      });
+
+      it("sets shouldUseStore to false", () => {
+        expect(vm.shouldUseStore).toEqual(false);
+      });
+    })
+
+    describe("without useStore true", () => {
+      beforeEach(() => {
+        wrapper = mountComponentWithStore({
+          propsData: {
+            useStore: true
+          },
+          store
+        });
+        vm = wrapper.vm;
+      });
+
+      it("sets useStore to true", () => {
+        expect(vm.useStore).toEqual(true);
+      });
+
+      it("sets shouldUseStore to true", () => {
+        expect(vm.shouldUseStore).toEqual(true);
+      });
+
+      it("sets storeName to componentFixture-fake-component-{id}", () => {
+        expect(vm.storeName).toEqual(`componentFixture-fake-component-${vm.id}`);
+      });
+
+      it("sets register data as module state", () => {
+        expect(store.state[`componentFixture-fake-component-${vm.id}`]).toEqual(vm.dynamicAttributes);
+      });
+
+      it("unregister module on destroy", () => {
+        wrapper.destroy();
+        expect(store.unregisterModule).toHaveBeenCalledWith(`componentFixture-fake-component-${vm.id}`);
+      })
+    });
+
+    describe("without useStore true and with v-model", () => {
+      beforeEach(() => {
+        wrapper = mountComponentWithStore({
+          slot: FakeComponentForVModel,
+          propsData: {
+            useStore: true
+          },
+          store
+        });
+        vm = wrapper.vm;
+        dynamicAttributes = vm.dynamicAttributes;
+      });
+
+      it("computes the dynamicAttributes with default value computed when required", () => {
+        expect(dynamicAttributes.value).toEqual([]);
+      });
+
+      it("listens to event tracked by v-model and commit changes", () => {
+        const testVm = vm.$children[0];
+        testVm.$emit("input", [1, 2, 3]);
+        expect(store.commit).toHaveBeenCalledWith(`componentFixture-fake-component-vmodel-${vm.id}/updateValue`, [1, 2, 3]);
+      });
+    });
+  })
 });

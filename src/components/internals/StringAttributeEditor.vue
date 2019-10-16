@@ -6,55 +6,29 @@
   />
 </template>
 <script>
+import { editorMixin } from "./EditorMixin";
+
 export default {
+  name: "string-attribute-editor",
+
   props: {
-    object: {
-      required: true,
-      type: Object
-    },
-    attribute: {
-      required: true,
-      type: String
-    },
-    metaData: {
-      required: true,
-      type: Object
-    },
     value: {
       required: false,
       type: String
     }
   },
 
-  data() {
-    const textValue = this.value;
-    return {
-      textValue
-    };
-  },
+  mixins: [editorMixin],
 
-  watch: {
-    textValue(value) {
-      const validated = this.metaData.validate(value);
-      if (!validated.ok) {
-        this.$emit("onError", validated.message);
-        return;
+  computed: {
+    textValue: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.updateIfValid(value);
       }
-      this.object[this.attribute] = value;
-      this.$emit("onError", null);
-    },
-    value(value) {
-      this.textValue = value;
-      this.$emit("onError", null);
-    }
-  },
-
-  methods: {
-    reset(value) {
-      this.textValue = value;
     }
   }
 };
 </script>
-<style lang="less" scoped>
-</style>

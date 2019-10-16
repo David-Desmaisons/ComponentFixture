@@ -147,11 +147,10 @@ describe("extractDefaultValue", () => {
     "returns proposedDefault overriding default from prop, props: %p received: %p should return: %p",
     (prop, proposedDefaultValue, expected) => {
       const value = extractDefaultValue(
-        { $options: {} },
+        { $options: {}, vmValue: "fixtureVmValue" },
         prop,
         "key",
-        proposedDefaultValue,
-        { vmValue: "fixtureVmValue" }
+        proposedDefaultValue
       );
       expect(value).toEqual(expected);
     }

@@ -4,10 +4,11 @@
       <attributeEditor
         v-for="prop in props"
         :key="prop.key"
-        :object="attributes"
+        :value="attributes[prop.key]"
         :attribute="prop.key"
         :metaData="prop.metaData"
         @success="success"
+        @changed="changed"
       />
     </template>
 
@@ -20,6 +21,7 @@
 </template>
 <script>
 import attributeEditor from "../internals/AttributeEditor";
+import { delegateEvents } from "@/utils/delegateEvents";
 
 const props = {
   props: {
@@ -41,9 +43,7 @@ export default {
   },
   props,
   methods: {
-    success(message) {
-      this.$emit("success", message);
-    }
+    ...delegateEvents(["success", "changed"])
   }
 };
 </script>

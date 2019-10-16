@@ -1,5 +1,5 @@
 <template>
-  <sandbox>
+  <sandbox :useStore="true">
     <VueSvgGauge></VueSvgGauge>
   </sandbox>
 </template>

@@ -51,11 +51,14 @@
         v-bind="{props, events, methods, attributes, data, computed, clearEvents}"
         @success="success"
         @error="error"
+        @changed="changed"
       />
     </transition-group>
   </div>
 </template>
 <script>
+import { delegateEvents } from "@/utils/delegateEvents";
+
 const requireContext = require.context("./editors/", false, /\.vue$/);
 const components = requireContext.keys().reduce((acc, key) => {
   const component = requireContext(key).default;
@@ -124,14 +127,7 @@ export default {
     toggleSegment(segment) {
       this.segmentActive = segment;
     },
-
-    success(message) {
-      this.$emit("success", message);
-    },
-
-    error(message) {
-      this.$emit("error", message);
-    }
+    ...delegateEvents(["changed", "success", "error"])
   }
 };
 </script>

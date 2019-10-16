@@ -1,5 +1,5 @@
 <template>
-  <sandbox>
+  <sandbox :useStore="true">
     <hello-world></hello-world>
   </sandbox>
 </template>
