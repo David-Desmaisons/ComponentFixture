@@ -117,6 +117,10 @@ export default {
 
     Style to be applied to the component under-test width. Default to null.
 
+- `useStore` ***Boolean*** (*default: false*) 
+
+    If true and vuex is being used, a store module is automatically created and its state is bound to component props.
+
 
 ## Installation
 
