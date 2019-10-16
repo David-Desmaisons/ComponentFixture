@@ -5,7 +5,14 @@ import {
 } from "@/utils/VueHelper";
 import Vue from "vue";
 
-function createProperty(props, key, { defaults, component, componentModel }, { dynamicAttributes, propsDefinition }) {
+function normalizeToArray(value) {
+  if (!value || Array.isArray(value)) {
+    return value;
+  }
+  return [value];
+}
+
+function createProperty(props, key, { defaults, component, componentModel, possibleValues }, { dynamicAttributes, propsDefinition }) {
   const propsValue = props[key];
   const proposedValue = defaults[key];
   const defaultValue = extractDefaultValue(
@@ -20,6 +27,7 @@ function createProperty(props, key, { defaults, component, componentModel }, { d
     definition: propsValue,
     types: getTypeForProp(propsValue, defaultValue),
     validate: validateProp.bind(null, propsValue),
+    possibleValues: normalizeToArray(possibleValues[key]),
     isModel: key === componentModel.prop
   });
 }

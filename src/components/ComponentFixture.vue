@@ -64,6 +64,11 @@ export default {
       type: Object,
       default: () => ({})
     },
+    possibleValues: {
+      required: false,
+      type: Object,
+      default: () => ({})
+    },
     componentHeight: {
       required: false,
       type: String,
@@ -179,10 +184,10 @@ export default {
       }
 
       this.$photo = photo;
-      const { defaults, componentModel } = this;
+      const { defaults, componentModel, possibleValues } = this;
       const { dynamicAttributes, propsDefinition } = dynamicObjectBuilder(
         props,
-        { component, defaults, componentModel }
+        { component, defaults, componentModel, possibleValues }
       );
       this.dynamicAttributes = dynamicAttributes;
       this.propsDefinition = propsDefinition;

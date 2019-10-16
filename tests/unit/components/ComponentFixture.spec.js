@@ -9,13 +9,14 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
-const mountComponentWithDefaultSlot = ({ slot = FakeComponent } = {}) => {
+const mountComponentWithDefaultSlot = ({ slot = FakeComponent, propsData = {} } = {}) => {
   return shallowMount(ComponentFixture, {
     slots: {
       default: slot
     },
+    propsData,
     stubs: {
       component: true,
       component1: true,
@@ -56,7 +57,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function(props) {
+  return jest.fn(function (props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -103,7 +104,7 @@ describe("ComponentFixture.vue", () => {
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot();
       vm = wrapper.vm;
-      dynamicAttributes = wrapper.vm.dynamicAttributes;
+      dynamicAttributes = vm.dynamicAttributes;
     });
 
     it("sets the component name", () => {
@@ -250,6 +251,46 @@ describe("ComponentFixture.vue", () => {
         expect(testedComponent.$forceUpdate).toHaveBeenCalled();
       });
     });
+  });
+
+  describe("when initialized with defaults and possibleValues", () => {
+    let wrapper = null;
+    let dynamicAttributes = null;
+    let propsDefinition = null;
+    const propsData = {
+      defaults: {
+        number: 45
+      },
+      possibleValues: {
+        string: [
+          "a",
+          "b",
+          "c"
+        ],
+        undefinedString: "new string"
+      }
+    };
+
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot({ propsData });
+      const vm = wrapper.vm;
+      dynamicAttributes = vm.dynamicAttributes;
+      propsDefinition = vm.propsDefinition;
+    });
+
+    it("computes the dynamicAttributes number with default value provided by defaults prop", () => {
+      expect(dynamicAttributes.number).toEqual(propsData.defaults.number);
+    });
+
+    test.each([
+      ["string", ["a", "b", "c"]],
+      ["undefinedString", ["new string"]],
+      ["number", undefined]
+    ])
+      ("computes propsDefinition %s with possibleValues %o",
+        (prop, expected) => {
+          expect(propsDefinition[prop].possibleValues).toEqual(expected);
+        });
   });
 
   describe.each([
@@ -459,7 +500,7 @@ describe("ComponentFixture.vue", () => {
     let store;
     beforeEach(() => {
       store = {
-        registerModule: jest.fn(function(name, module) {
+        registerModule: jest.fn(function (name, module) {
           this.state[name] = module.state();
         }),
         unregisterModule: jest.fn(),
