@@ -15,7 +15,7 @@ import { get } from "axios";
 export default {
   name: "vue-ajax-handler",
   meta: {
-    display: "Vue ajax handler"
+    display: "Ajax handler"
   },
   provide: {
     get

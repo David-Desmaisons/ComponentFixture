@@ -9,7 +9,7 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = ({ slot = FakeComponent } = {}) => {
   return shallowMount(ComponentFixture, {
@@ -24,14 +24,18 @@ const mountComponentWithDefaultSlot = ({ slot = FakeComponent } = {}) => {
   });
 };
 
-const mountComponentWithStore = ({ slot = FakeComponent, propsData = {}, store = null } = {}) => {
+const mountComponentWithStore = ({
+  slot = FakeComponent,
+  propsData = {},
+  store = null
+} = {}) => {
   return shallowMount(ComponentFixture, {
     propsData,
     slots: {
       default: slot
     },
     mocks: {
-      $store: store,
+      $store: store
     },
     stubs: {
       component: true,
@@ -52,7 +56,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -455,7 +459,7 @@ describe("ComponentFixture.vue", () => {
     let store;
     beforeEach(() => {
       store = {
-        registerModule: jest.fn(function (name, module) {
+        registerModule: jest.fn(function(name, module) {
           this.state[name] = module.state();
         }),
         unregisterModule: jest.fn(),
@@ -501,7 +505,7 @@ describe("ComponentFixture.vue", () => {
       it("sets shouldUseStore to false", () => {
         expect(vm.shouldUseStore).toEqual(false);
       });
-    })
+    });
 
     describe("without useStore true", () => {
       beforeEach(() => {
@@ -523,17 +527,23 @@ describe("ComponentFixture.vue", () => {
       });
 
       it("sets storeName to componentFixture-fake-component-{id}", () => {
-        expect(vm.storeName).toEqual(`componentFixture-fake-component-${vm.id}`);
+        expect(vm.storeName).toEqual(
+          `componentFixture-fake-component-${vm.id}`
+        );
       });
 
       it("sets register data as module state", () => {
-        expect(store.state[`componentFixture-fake-component-${vm.id}`]).toEqual(vm.dynamicAttributes);
+        expect(store.state[`componentFixture-fake-component-${vm.id}`]).toEqual(
+          vm.dynamicAttributes
+        );
       });
 
       it("unregister module on destroy", () => {
         wrapper.destroy();
-        expect(store.unregisterModule).toHaveBeenCalledWith(`componentFixture-fake-component-${vm.id}`);
-      })
+        expect(store.unregisterModule).toHaveBeenCalledWith(
+          `componentFixture-fake-component-${vm.id}`
+        );
+      });
     });
 
     describe("without useStore true and with v-model", () => {
@@ -556,8 +566,11 @@ describe("ComponentFixture.vue", () => {
       it("listens to event tracked by v-model and commit changes", () => {
         const testVm = vm.$children[0];
         testVm.$emit("input", [1, 2, 3]);
-        expect(store.commit).toHaveBeenCalledWith(`componentFixture-fake-component-vmodel-${vm.id}/updateValue`, [1, 2, 3]);
+        expect(store.commit).toHaveBeenCalledWith(
+          `componentFixture-fake-component-vmodel-${vm.id}/updateValue`,
+          [1, 2, 3]
+        );
       });
     });
-  })
+  });
 });

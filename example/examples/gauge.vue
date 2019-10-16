@@ -9,7 +9,7 @@ import {Sandbox} from "@/index";
 export default {
   name: "vue-svg-gauge-example",
   meta: {
-    display: "Vue Svg Gauge"
+    display: "Svg Gauge"
   },
   components: {
     Sandbox

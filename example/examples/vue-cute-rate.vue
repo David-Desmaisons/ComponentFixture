@@ -10,7 +10,7 @@ import VueCuteRate from "vue-cute-rate";
 export default {
   name: "vue-cute-rate",
   meta: {
-    display: "Vue cute rate"
+    display: "Cute rate"
   },
   components: {
     Sandbox,

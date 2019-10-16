@@ -11,7 +11,7 @@ import {Sandbox} from "@/index";
 export default {
   name: "multiselect-example",
   meta: {
-    display: "Vue Multiselect"
+    display: "Multiselect"
   },
   components: {
     Sandbox,

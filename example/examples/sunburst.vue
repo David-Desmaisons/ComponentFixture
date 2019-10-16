@@ -13,7 +13,7 @@ import {Sandbox} from "@/index";
 export default {
   name: "sunburst-example",
   meta: {
-    display: "Vue sunburst"
+    display: "Sunburst"
   },
   components: {
     Sandbox,

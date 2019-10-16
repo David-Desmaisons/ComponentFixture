@@ -10,7 +10,7 @@ import { VueTyper } from "vue-typer";
 export default {
   name: "vue-typer-example",
   meta: {
-    display: "Vue typer"
+    display: "Typer"
   },
   components: {
     Sandbox,
