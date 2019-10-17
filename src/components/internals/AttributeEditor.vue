@@ -90,6 +90,7 @@ import functionAttributeEditor from "./FunctionAttributeEditor";
 import numberAttributeEditor from "./NumberAttributeEditor";
 import stringAttributeEditor from "./StringAttributeEditor";
 import booleanAttributeEditor from "./BooleanAttributeEditor";
+import selectedValuesEditor from "./SelectedValuesEditor";
 
 import { VTooltip } from "v-tooltip";
 import { getTypeFromValue, getDefaultForType } from "@/utils/TypeHelper";
@@ -115,7 +116,8 @@ export default {
     functionAttributeEditor,
     numberAttributeEditor,
     stringAttributeEditor,
-    booleanAttributeEditor
+    booleanAttributeEditor,
+    selectedValuesEditor
   },
 
   props: {
@@ -189,6 +191,9 @@ export default {
         }));
     },
     componentType() {
+      if (this.metaData.possibleValues !== undefined) {
+        return "selectedValuesEditor";
+      }
       return typesDescription[this.type].component;
     },
     badge() {
