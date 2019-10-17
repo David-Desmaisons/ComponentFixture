@@ -2,7 +2,10 @@
   <header class="app__header">
     <div class="start-items">
       <h1 class="app__name">
-        <img src="../assets/logo.png" alt>
+        <img
+          src="../assets/logo.png"
+          alt
+        >
         Component Fixture
       </h1>
 
@@ -20,13 +23,19 @@
           searchable
           hideSelected
         >
-          <template slot="singleLabel" slot-scope="props">
+          <template
+            slot="singleLabel"
+            slot-scope="props"
+          >
             <span class="option__placeholder">Current Component:</span>
             <div class="option__desc">
               <strong class="option__title">{{ props.option.meta.display }}</strong>
             </div>
           </template>
-          <template slot="option" slot-scope="props">
+          <template
+            slot="option"
+            slot-scope="props"
+          >
             <div class="option__desc">
               <strong class="option__title">{{ props.option.meta.display }}</strong>
             </div>
@@ -49,6 +58,16 @@
 <script>
 import Multiselect from "vue-multiselect";
 
+function compare(a, b) {
+  if (a > b) {
+    return 1;
+  }
+  if (a < b) {
+    return -1;
+  }
+  return 0;
+}
+
 export default {
   components: {
     Multiselect
@@ -62,8 +81,11 @@ export default {
     this.setInitComponentByRoute();
   },
   methods: {
-    setInitComponentByRoute(){
-      const { path, meta: { display } } = this.$route;
+    setInitComponentByRoute() {
+      const {
+        path,
+        meta: { display }
+      } = this.$route;
 
       this.value = {
         component: {},
@@ -73,13 +95,15 @@ export default {
         path
       };
     },
-    changeComponent(routerEvent){
-      this.$router.push({ path: routerEvent.path })
+    changeComponent(routerEvent) {
+      this.$router.push({ path: routerEvent.path });
     }
   },
   computed: {
     options() {
-      return this.$router.options.routes.filter(r => r.meta);
+      return this.$router.options.routes
+        .filter(r => r.meta)
+        .sort((a, b) => compare(a.meta.display,b.meta.display));
     }
   }
 };
@@ -177,7 +201,6 @@ export default {
   }
 
   .multiselect--active {
-
     /deep/ .multiselect__tags {
       border-bottom: 1px solid #e8e8e8;
     }
@@ -191,18 +214,21 @@ export default {
       border-radius: 2px;
       padding: 6px 8px;
 
-      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      &::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: #999;
         opacity: 1; /* Firefox */
         font-size: 14px;
       }
 
-      &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+      &:-ms-input-placeholder {
+        /* Internet Explorer 10-11 */
         color: #999;
         font-size: 14px;
       }
 
-      &::-ms-input-placeholder { /* Microsoft Edge */
+      &::-ms-input-placeholder {
+        /* Microsoft Edge */
         color: #999;
         font-size: 14px;
       }
