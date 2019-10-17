@@ -42,30 +42,38 @@ function getPropDefaultValue(vm, prop, key) {
   return resolveFunctionIfNeeded(def, prop, vm);
 }
 
+function validateProposedValue(proposedValue, prop) {
+  if (proposedValue === undefined) {
+    return false;
+  }
+  const propTypes = getTypeForProp(prop);
+  const proposedTypes = getTypeFromValue(proposedValue);
+  const typeMatch = propTypes.some(t => proposedTypes.includes(t));
+  if (!typeMatch) {
+    warn(
+      `defaults: ${stringify(
+        proposedValue
+      )} will be discarded because type is not matching props type`
+    );
+    return false;
+  }
+
+  const validation = validateProp(prop, proposedValue);
+  if (validation.ok) {
+    return true;
+  }
+
+  warn(
+    `defaults: ${stringify(proposedValue)} will be discarded because ${
+      validation.message
+    }.`
+  );
+  return false;
+}
+
 function extractDefaultValue(vm, prop, key, proposedValue) {
-  if (proposedValue !== undefined) {
-    const normalizedProposed = resolveFunctionIfNeeded(proposedValue, prop, vm);
-    const propTypes = getTypeForProp(prop);
-    const proposedTypes = getTypeFromValue(normalizedProposed);
-    const typeMatch = propTypes.some(t => proposedTypes.includes(t));
-    if (!typeMatch) {
-      warn(
-        `defaults: ${stringify(
-          normalizedProposed
-        )} will be discarded because type is not matching props type`
-      );
-    } else {
-      const validation = validateProp(prop, normalizedProposed);
-      if (!validation.ok) {
-        warn(
-          `defaults: ${stringify(
-            normalizedProposed
-          )} will be discarded because ${validation.message}.`
-        );
-      } else {
-        return normalizedProposed;
-      }
-    }
+  if (validateProposedValue(proposedValue, prop)) {
+    return proposedValue;
   }
   const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
