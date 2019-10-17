@@ -12,7 +12,12 @@ function normalizeToArray(value) {
   return [value];
 }
 
-function createProperty(props, key, { defaults, component, componentModel, possibleValues }, { dynamicAttributes, propsDefinition }) {
+function createProperty(
+  props,
+  key,
+  { defaults, component, componentModel, possibleValues },
+  { dynamicAttributes, propsDefinition }
+) {
   const propsValue = props[key];
   const proposedValue = defaults[key];
   const defaultValue = extractDefaultValue(

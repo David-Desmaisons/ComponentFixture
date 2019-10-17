@@ -9,9 +9,12 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
-const mountComponentWithDefaultSlot = ({ slot = FakeComponent, propsData = {} } = {}) => {
+const mountComponentWithDefaultSlot = ({
+  slot = FakeComponent,
+  propsData = {}
+} = {}) => {
   return shallowMount(ComponentFixture, {
     slots: {
       default: slot
@@ -57,7 +60,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -262,11 +265,7 @@ describe("ComponentFixture.vue", () => {
         number: 45
       },
       possibleValues: {
-        string: [
-          "a",
-          "b",
-          "c"
-        ],
+        string: ["a", "b", "c"],
         undefinedString: "new string"
       }
     };
@@ -286,11 +285,12 @@ describe("ComponentFixture.vue", () => {
       ["string", ["a", "b", "c"]],
       ["undefinedString", ["new string"]],
       ["number", undefined]
-    ])
-      ("computes propsDefinition %s with possibleValues %o",
-        (prop, expected) => {
-          expect(propsDefinition[prop].possibleValues).toEqual(expected);
-        });
+    ])(
+      "computes propsDefinition %s with possibleValues %o",
+      (prop, expected) => {
+        expect(propsDefinition[prop].possibleValues).toEqual(expected);
+      }
+    );
   });
 
   describe.each([
@@ -500,7 +500,7 @@ describe("ComponentFixture.vue", () => {
     let store;
     beforeEach(() => {
       store = {
-        registerModule: jest.fn(function (name, module) {
+        registerModule: jest.fn(function(name, module) {
           this.state[name] = module.state();
         }),
         unregisterModule: jest.fn(),
