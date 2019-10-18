@@ -3,85 +3,89 @@
     class="main"
     :class="{'is-invalid':!valid}"
   >
-    <div class="attribute-column attribute-description">
-      <h1 class="label">{{attribute}}</h1>
 
-      <div class="prop-description">
-        <div
-          class="badge type-descriptor"
-          v-tooltip="{content:type,placement:'bottom'}"
-          :class="badge"
-        >
-          <template v-if="types.length === 1">{{convert(type)}}</template>
+    <div class="main-info-block">
+      <div
+        class="badge type-descriptor"
+        v-tooltip="{content:type,placement:'bottom'}"
+        :class="badge"
+      >
+        <template v-if="types.length === 1">{{convert(type)}}</template>
 
-          <template v-else>
-            <select v-model="type">
-              <option
-                v-for="typeDescription in avalaibleTypes"
-                :value="typeDescription.value"
-                :key="typeDescription.value"
-              >{{typeDescription.display}}</option>
-            </select>
-          </template>
-        </div>
+        <template v-else>
+          <select v-model="type">
+            <option
+              v-for="typeDescription in avalaibleTypes"
+              :value="typeDescription.value"
+              :key="typeDescription.value"
+            >{{typeDescription.value}}</option>
+          </select>
+        </template>
+      </div>
 
-        <div class="btn-group actions">
-          <button
-            v-if="metaData.definition.default !== undefined"
-            type="button"
-            class="btn prop-info btn-outline-info"
-            v-tooltip.bottom="'Reset to default'"
-            :disabled="!canBeDefaulted"
-            @click="toDefault"
-          >
-            <i class="fa fa-home" />
-          </button>
-
-          <div
-            class="prop-info"
-            v-if="metaData.definition.required"
-          >
-            <i
-              class="fa fa-exclamation-triangle"
-              v-tooltip.bottom="'required'"
-            />
-          </div>
-
-          <div
-            class="prop-info"
-            v-if="metaData.isModel"
-          >
-            <i
-              class="fa fa-refresh"
-              v-tooltip.bottom="'v-model'"
-            />
-          </div>
-
-          <div
-            class="prop-info"
-            v-if="metaData.definition.validator"
-          >
-            <i
-              class="fa fa-lock"
-              v-tooltip.bottom="'has validator'"
-            />
-          </div>
-        </div>
+      <div>
+        <h1 class="label">{{attribute}}</h1>
       </div>
     </div>
 
-    <div class="attribute-column attribute-input">
-      <div class="error-feedback">{{error}}</div>
+    <div class="editor-flag">
 
-      <component
-        ref="editor"
-        :is="componentType"
-        class="component-input"
-        @error="error = $event"
-        @changed="changed"
-        v-bind="{attribute, metaData, types, value}"
-      />
+      <div class="btn-group actions">
+
+        <button
+          v-if="metaData.definition.default !== undefined"
+          type="button"
+          class="btn prop-info btn-outline-info"
+          v-tooltip.bottom="'Reset to default'"
+          :disabled="!canBeDefaulted"
+          @click="toDefault"
+        >
+          <i class="fa fa-home" />
+        </button>
+
+        <div
+          class="prop-info"
+          v-if="metaData.definition.required"
+        >
+          <i
+            class="fa fa-exclamation-triangle"
+            v-tooltip.bottom="'required'"
+          />
+        </div>
+
+        <div
+          class="prop-info"
+          v-show="metaData.isModel"
+        >
+          <i
+            class="fa fa-refresh"
+            v-tooltip.bottom="'v-model'"
+          />
+        </div>
+
+        <div
+          class="prop-info"
+          v-show="metaData.definition.validator"
+        >
+          <i
+            class="fa fa-lock"
+            v-tooltip.bottom="'has validator'"
+          />
+        </div>
+
+      </div>
+      <div class="component-editor">
+        <component
+          ref="editor"
+          :is="componentType"
+          class="component-input"
+          @error="onError"
+          @changed="changed"
+          v-bind="{attribute, metaData, types, value}"
+        />
+      </div>
     </div>
+
   </div>
 </template> 
 <script>
@@ -209,6 +213,17 @@ export default {
     convert(type) {
       return typesDescription[type].display;
     },
+    onError(arg) {
+      if (this.error === arg) {
+        return;
+      }
+      this.error = arg;
+      if (arg === null) {
+        this.$emit("success", `Update property ${this.attribute}`);
+        return;
+      }
+      this.$emit("error", arg);
+    },
     toDefault() {
       const { $defaultType, $default, attribute } = this;
       this.type = $defaultType;
@@ -228,28 +243,74 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@badge-size: 24px;
 .main {
-  padding: 10px;
+  padding: 5px 10px;
   border-bottom: 1px solid #ced4da;
   border-radius: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   margin: 3px;
+
+  .main-info-block {
+    display: flex;
+    flex-direction: row;
+    width: 130px;
+    min-width: 130px;
+  }
+
+  .editor-flag {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    /deep/ input {
+      font-size: 12px;
+      height: 18px;
+    }
+
+    .btn-group.actions {
+      margin: 0 5px;
+      width: 80px;
+      height: 28px;
+      display: flex;
+      flex-direction: row-reverse;
+      color: gray;
+
+      .prop-info {
+        font-size: @icon-size;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+
+        .fa-unlock-alt {
+          opacity: 0.7;
+        }
+      }
+    }
+
+    .component-editor {
+      flex-grow: 1;
+    }
+  }
 
   .is-invalid {
     box-shadow: 0 0 0 0.2rem red;
   }
 
   .badge.type-descriptor {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: @type-descriptor-width;
-    max-width: @type-descriptor-width;
-    height: 24px;
-    text-transform: uppercase;
+    min-width: @badge-size;
+    max-width: @badge-size;
+    height: @badge-size;
+    border-radius: 50%;
+    width: @badge-size;
 
     select {
       background: transparent;
@@ -258,7 +319,7 @@ export default {
       padding: 0;
       outline: transparent;
       text-transform: uppercase;
-      width: @type-descriptor-width;
+      width: @badge-size;
 
       option {
         background: #555;
@@ -275,84 +336,6 @@ export default {
   }
 }
 
-.attribute-column {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-height: 32px;
-  color: @icon-color;
-
-  .prop-info {
-    font-size: @icon-size;
-    padding: 0 5px;
-    display: flex;
-    align-items: center;
-
-    .fa-unlock-alt {
-      opacity: 0.7;
-    }
-  }
-
-  .actions {
-    padding: 0 5px;
-    border-color: #ced4da;
-    height: 32px;
-
-    .btn-outline-info {
-      color: @icon-color;
-      background: transparent;
-      :disabled {
-        color: #17a2b8;
-      }
-    }
-  }
-}
-
-.attribute-description {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 140px;
-  width: 20%;
-
-  .label {
-    color: black;
-    margin: 0 0 5px;
-  }
-}
-
-.prop-description {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.attribute-input {
-  flex-grow: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  .error-feedback {
-    color: red;
-    font-weight: bold;
-    display: inline;
-    font-size: 100%;
-    height: 21px;
-  }
-}
-
-.attribute-component {
-  div {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-}
-
-.type-select {
-  width: 80px;
-}
-
 .label {
   margin-left: 5px;
   white-space: nowrap;
@@ -362,11 +345,6 @@ export default {
   font-weight: bold;
   max-width: 150px;
   width: 99%;
-}
-.custom-control.custom-switch {
-  .custom-control-label {
-    right: calc(100% - 32px);
-  }
 }
 </style>
 <style lang="less">
