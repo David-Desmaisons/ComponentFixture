@@ -365,10 +365,34 @@ describe("ComponentFixture.vue", () => {
       expect(dynamicAttributes.value).toEqual([1, 2, 3]);
     });
 
+    it("listens to event tracked by v-model and emit success event", () => {
+      const testVm = vm.$children[0];
+      testVm.$emit("input", 1);
+      expect(wrapper.emitted()).toEqual({
+        success:[
+          [
+            'Updated props "value" to 1 based on v-model'
+          ]
+        ]
+      });
+    });
+
     it("listens to two-way binding events to update properties", () => {
       const testVm = vm.$children[0];
       testVm.$emit("update:int", 25);
       expect(dynamicAttributes.int).toEqual(25);
+    });
+
+    it("listens to two-way binding events and emit success event", () => {
+      const testVm = vm.$children[0];
+      testVm.$emit("update:int", 25);
+      expect(wrapper.emitted()).toEqual({
+        success:[
+          [
+            'Updated props "int" to 25 based on update event'
+          ]
+        ]
+      });
     });
   });
 

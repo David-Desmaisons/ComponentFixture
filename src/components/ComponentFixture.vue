@@ -10,6 +10,7 @@ import {
   unregisterModule,
   commit
 } from "@/utils/storeUtility";
+import { stringify } from "@/utils/stringify";
 
 let id = 1;
 
@@ -36,9 +37,15 @@ function filterMethods(methods) {
     }, {});
 }
 
-function buildListener(vm, prop) {
+function buildListener(vm, prop, vModel) {
   return value => {
     vm.changed({ key: prop, value });
+    vm.$emit(
+      "success",
+      `Updated props "${prop}" to ${stringify(value)} based on ${
+        vModel ? "v-model" : "update event"
+      }`
+    );
   };
 }
 
@@ -101,12 +108,12 @@ export default {
     setupEventsListeners(props, { event, prop }) {
       const on = {};
       if (props.hasOwnProperty(prop)) {
-        on[event] = buildListener(this, prop);
+        on[event] = buildListener(this, prop, true);
       }
       Object.keys(props)
         .filter(p => p !== prop)
         .forEach(key => {
-          on[`update:${key}`] = buildListener(this, key);
+          on[`update:${key}`] = buildListener(this, key, false);
         });
       return on;
     },
