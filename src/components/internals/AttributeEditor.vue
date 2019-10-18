@@ -201,7 +201,7 @@ export default {
       return typesDescription[this.type].component;
     },
     badge() {
-      return typesDescription[this.type].badge;
+      return [this.type.replace(/^\w/, c => c.toLowerCase())];
     },
     valid() {
       return this.error === null;
@@ -243,7 +243,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@badge-size: 24px;
+@badge-size: 22px;
 .main {
   padding: 5px 10px;
   border-bottom: 1px solid #ced4da;
@@ -311,6 +311,36 @@ export default {
     height: @badge-size;
     border-radius: 50%;
     width: @badge-size;
+
+    &.string {
+      color: #fff;
+      background-color: #4e79a7;
+    }
+
+    &.boolean {
+      color: #fff;
+      background-color: #f28e2c;
+    }
+
+    &.number {
+      color: #fff;
+      background-color: #e15759;
+    }
+
+    &.object {
+      color: #fff;
+      background-color: #76b7b2;
+    }
+
+    &.array {
+      color: #fff;
+      background-color: #59a14f;
+    }
+
+    &.function {
+      color: #fff;
+      background-color: #edc949;
+    }
 
     select {
       background: transparent;
