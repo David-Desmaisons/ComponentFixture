@@ -369,11 +369,7 @@ describe("ComponentFixture.vue", () => {
       const testVm = vm.$children[0];
       testVm.$emit("input", 1);
       expect(wrapper.emitted()).toEqual({
-        success:[
-          [
-            'Updated props "value" to 1 based on v-model'
-          ]
-        ]
+        success: [['Updated props "value" to 1 based on v-model']]
       });
     });
 
@@ -387,11 +383,7 @@ describe("ComponentFixture.vue", () => {
       const testVm = vm.$children[0];
       testVm.$emit("update:int", 25);
       expect(wrapper.emitted()).toEqual({
-        success:[
-          [
-            'Updated props "int" to 25 based on update event'
-          ]
-        ]
+        success: [['Updated props "int" to 25 based on update event']]
       });
     });
   });

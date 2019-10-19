@@ -170,7 +170,7 @@ describe("validateProp", () => {
   const required = { ok: false, message: "Prop is required" };
   const notValidated = {
     ok: false,
-    message: "Invalid prop: custom validator"
+    message: "Custom validation failed"
   };
 
   const propsData = [

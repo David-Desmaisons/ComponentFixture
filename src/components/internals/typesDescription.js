@@ -1,27 +1,27 @@
 const typesDescription = {
   Object: {
     display: "{}",
-    component: "jsonAttributeEditor",
+    component: "jsonAttributeEditor"
   },
   Array: {
     display: "[]",
-    component: "jsonAttributeEditor",
+    component: "jsonAttributeEditor"
   },
   Number: {
     display: "#",
-    component: "numberAttributeEditor",
+    component: "numberAttributeEditor"
   },
   String: {
     display: "T",
-    component: "stringAttributeEditor",
+    component: "stringAttributeEditor"
   },
   Boolean: {
     display: `\u2713`,
-    component: "booleanAttributeEditor",
+    component: "booleanAttributeEditor"
   },
   Function: {
     display: `\u0192` + "(x)",
-    component: "functionAttributeEditor",
+    component: "functionAttributeEditor"
   }
 };
 

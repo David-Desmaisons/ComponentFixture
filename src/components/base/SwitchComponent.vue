@@ -36,9 +36,8 @@ export default {
   }
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .custom-switch {
-  margin: 0 20px;
   cursor: pointer;
 
   label {

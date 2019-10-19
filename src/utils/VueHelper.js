@@ -109,7 +109,7 @@ function validateProp(prop, value) {
   if (!validator || validator(value)) {
     return { ok: true };
   }
-  return { ok: false, message: "Invalid prop: custom validator" };
+  return { ok: false, message: "Custom validation failed" };
 }
 
 function getNodeFromSandBox(slot) {

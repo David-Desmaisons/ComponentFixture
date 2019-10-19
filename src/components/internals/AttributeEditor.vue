@@ -26,22 +26,8 @@
       <div>
         <h1 class="label">{{attribute}}</h1>
       </div>
-    </div>
-
-    <div class="editor-flag">
 
       <div class="btn-group actions">
-
-        <button
-          v-if="metaData.definition.default !== undefined"
-          type="button"
-          class="btn prop-info btn-outline-info"
-          v-tooltip.bottom="'Reset to default'"
-          :disabled="!canBeDefaulted"
-          @click="toDefault"
-        >
-          <i class="fa fa-home" />
-        </button>
 
         <div
           class="prop-info"
@@ -55,7 +41,7 @@
 
         <div
           class="prop-info"
-          v-show="metaData.isModel"
+          v-if="metaData.isModel"
         >
           <i
             class="fa fa-refresh"
@@ -65,7 +51,7 @@
 
         <div
           class="prop-info"
-          v-show="metaData.definition.validator"
+          v-if="metaData.definition.validator"
         >
           <i
             class="fa fa-lock"
@@ -74,16 +60,28 @@
         </div>
 
       </div>
-      <div class="component-editor">
-        <component
-          ref="editor"
-          :is="componentType"
-          class="component-input"
-          @error="onError"
-          @changed="changed"
-          v-bind="{attribute, metaData, types, value}"
-        />
-      </div>
+    </div>
+
+    <div class="component-editor">
+      <component
+        ref="editor"
+        :is="componentType"
+        class="component-input"
+        @error="onError"
+        @changed="changed"
+        v-bind="{attribute, metaData, types, value}"
+      />
+
+      <button
+        v-if="metaData.definition.default !== undefined"
+        type="button"
+        class="btn prop-info btn-outline-info"
+        v-tooltip.bottom="'Reset to default'"
+        :disabled="!canBeDefaulted"
+        @click="toDefault"
+      >
+        <i class="fa fa-home" />
+      </button>
     </div>
 
   </div>
@@ -219,7 +217,7 @@ export default {
       }
       this.error = arg;
       if (arg === null) {
-        this.$emit("success", `Update property ${this.attribute}`);
+        this.$emit("success", `Property "${this.attribute}" updated`);
         return;
       }
       this.$emit("error", arg);
@@ -257,26 +255,15 @@ export default {
   .main-info-block {
     display: flex;
     flex-direction: row;
-    width: 130px;
-    min-width: 130px;
-  }
-
-  .editor-flag {
-    display: flex;
-    flex-direction: row;
     align-items: center;
-    flex-grow: 1;
-    /deep/ input {
-      font-size: 12px;
-      height: 18px;
-    }
+    width: 200px;
+    min-width: 200px;
 
     .btn-group.actions {
-      margin: 0 5px;
       width: 80px;
       height: 28px;
       display: flex;
-      flex-direction: row-reverse;
+      flex-direction: row;
       color: gray;
 
       .prop-info {
@@ -290,9 +277,25 @@ export default {
         }
       }
     }
+  }
 
-    .component-editor {
-      flex-grow: 1;
+  .component-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 165px;
+    /deep/ input {
+      font-size: 12px;
+      height: 18px;
+    }
+
+    button {
+      margin: 1px 2px;
+      padding: 4px 6px;
+      font-size: 16px;
+      text-align: center;
     }
   }
 
