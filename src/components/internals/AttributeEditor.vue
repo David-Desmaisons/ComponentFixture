@@ -8,17 +8,28 @@
       <div
         class="badge type-descriptor"
         v-tooltip="{content:type,placement:'bottom'}"
-        :class="badge"
+        :class="{[badge]:true,'multi-option':!monoOption}"
       >
-        <template v-if="types.length === 1">{{convert(type)}}</template>
+        <template v-if="monoOption">{{convert(type)}}</template>
 
         <template v-else>
-          <select v-model="type">
+          <select
+            v-model="type"
+            class="type-select"
+          >
             <option
               v-for="typeDescription in avalaibleTypes"
               :value="typeDescription.value"
               :key="typeDescription.value"
-            >{{typeDescription.value}}</option>
+            >
+              <template v-if="typeDescription.value === type">
+                {{typeDescription.display}}
+              </template>
+              <template v-else>
+                {{typeDescription.value}}
+              </template>
+
+            </option>
           </select>
         </template>
       </div>
@@ -176,6 +187,9 @@ export default {
         (this.metaData.definition.default !== undefined && this.isNotDefaulted)
       );
     },
+    monoOption() {
+      return this.types.length === 1;
+    },
     isNotDefaulted() {
       return (
         this.$defaultType !== this.type || !compare(this.value, this.$default)
@@ -242,6 +256,8 @@ export default {
 </script>
 <style lang="less" scoped>
 @badge-size: 22px;
+@select-badge-size: 42px;
+
 .main {
   padding: 5px 10px;
   border-bottom: 1px solid #ced4da;
@@ -258,6 +274,38 @@ export default {
     align-items: center;
     width: 200px;
     min-width: 200px;
+
+    .badge.type-descriptor {
+      &.multi-option {
+        width: @select-badge-size;
+        min-width: @select-badge-size;
+        max-width: @select-badge-size;
+      }
+
+      select {
+        background: transparent;
+        color: white;
+        border: transparent;
+        padding: 0;
+        outline: transparent;
+        width: @select-badge-size;
+        min-width: @select-badge-size;
+        max-width: @select-badge-size;
+        text-align: right;
+
+        option {
+          background: white;
+          color: black;
+          text-align: center;
+          font-size: 12px;
+        }
+
+        option:hover {
+          background: black;
+          color: white;
+        }
+      }
+    }
 
     .btn-group.actions {
       width: 80px;
@@ -343,28 +391,6 @@ export default {
     &.function {
       color: #fff;
       background-color: #edc949;
-    }
-
-    select {
-      background: transparent;
-      color: white;
-      border: transparent;
-      padding: 0;
-      outline: transparent;
-      text-transform: uppercase;
-      width: @badge-size;
-
-      option {
-        background: #555;
-        color: white;
-        text-align: center;
-        font-size: 12px;
-      }
-
-      option:hover {
-        background: black;
-        color: white;
-      }
     }
   }
 }
