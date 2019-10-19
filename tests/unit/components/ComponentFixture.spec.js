@@ -9,7 +9,7 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => {};
+const nullFunction = () => { };
 
 const mountComponentWithDefaultSlot = ({
   slot = FakeComponent,
@@ -60,7 +60,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function(props) {
+  return jest.fn(function (props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -123,7 +123,7 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("computes the dynamicAttributes number with all props", () => {
-      expect(Object.keys(dynamicAttributes).length).toEqual(4);
+      expect(Object.keys(dynamicAttributes).length).toEqual(5);
     });
 
     it("computes the dynamicAttributes number with default value", () => {
@@ -195,13 +195,16 @@ describe("ComponentFixture.vue", () => {
         number: ["Number"],
         string: ["String"],
         undefinedString: ["String"],
-        objectWithFactory: ["Object"]
+        objectWithFactory: ["Object"],
+        oddNumber: ["Number"]
       };
 
       const { propsDefinition } = vm;
-      Object.keys(propsDefinition).forEach(key => {
-        expect(propsDefinition[key].types).toEqual(expectedTypes[key]);
-      });
+      const actualTypes = Object.keys(propsDefinition).reduce((acc, key) => {
+        acc[key] = propsDefinition[key].types;
+        return acc;
+      }, {});
+      expect(actualTypes).toEqual(expectedTypes);
     });
 
     it("tracks events on component under fixtures", () => {
@@ -486,7 +489,8 @@ describe("ComponentFixture.vue", () => {
         objectWithFactory: {
           createdByFactory: true,
           madeBy: "fake-component"
-        }
+        },
+        oddNumber: 2
       };
 
       expect(lastParameters(control).attributes).toEqual(expectedAttributes);
@@ -516,7 +520,7 @@ describe("ComponentFixture.vue", () => {
     let store;
     beforeEach(() => {
       store = {
-        registerModule: jest.fn(function(name, module) {
+        registerModule: jest.fn(function (name, module) {
           this.state[name] = module.state();
         }),
         unregisterModule: jest.fn(),

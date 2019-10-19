@@ -29,6 +29,12 @@ export default {
     undefinedString: {
       type: String,
       required: false
+    },
+    oddNumber: {
+      type: Number,
+      required: false,
+      default: 2,
+      validator: (value) => value % 2 === 0
     }
   },
   data() {
