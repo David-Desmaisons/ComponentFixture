@@ -34,7 +34,7 @@ export default {
       type: Number,
       required: false,
       default: 2,
-      validator: (value) => value % 2 === 0
+      validator: value => value % 2 === 0
     }
   },
   data() {

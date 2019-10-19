@@ -42,17 +42,15 @@ function getPropDefaultValue(vm, prop, key) {
   return resolveFunctionIfNeeded(def, prop, vm);
 }
 
-function typeIsCompatible(proposedValue, prop){
+function typeIsCompatible(proposedValue, prop) {
   const propTypes = getTypeForProp(prop);
   const proposedTypes = getTypeFromValue(proposedValue);
   return propTypes.some(t => proposedTypes.includes(t));
 }
 
-function warnDiscarded(proposedValue, reason){
+function warnDiscarded(proposedValue, reason) {
   warn(
-    `defaults: ${stringify(
-      proposedValue
-    )} will be discarded because ${reason}`
+    `defaults: ${stringify(proposedValue)} will be discarded because ${reason}`
   );
 }
 
