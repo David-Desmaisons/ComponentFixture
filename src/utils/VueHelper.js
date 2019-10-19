@@ -42,19 +42,27 @@ function getPropDefaultValue(vm, prop, key) {
   return resolveFunctionIfNeeded(def, prop, vm);
 }
 
+function typeIsCompatible(proposedValue, prop){
+  const propTypes = getTypeForProp(prop);
+  const proposedTypes = getTypeFromValue(proposedValue);
+  return propTypes.some(t => proposedTypes.includes(t));
+}
+
+function warnDiscarded(proposedValue, reason){
+  warn(
+    `defaults: ${stringify(
+      proposedValue
+    )} will be discarded because ${reason}`
+  );
+}
+
 function validateProposedValue(proposedValue, prop) {
   if (proposedValue === undefined) {
     return false;
   }
-  const propTypes = getTypeForProp(prop);
-  const proposedTypes = getTypeFromValue(proposedValue);
-  const typeMatch = propTypes.some(t => proposedTypes.includes(t));
+  const typeMatch = typeIsCompatible(proposedValue, prop);
   if (!typeMatch) {
-    warn(
-      `defaults: ${stringify(
-        proposedValue
-      )} will be discarded because type is not matching props type`
-    );
+    warnDiscarded(proposedValue, "type is not matching props type");
     return false;
   }
 
@@ -63,11 +71,7 @@ function validateProposedValue(proposedValue, prop) {
     return true;
   }
 
-  warn(
-    `defaults: ${stringify(proposedValue)} will be discarded because ${
-      validation.message
-    }.`
-  );
+  warnDiscarded(proposedValue, validation.message);
   return false;
 }
 
