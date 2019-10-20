@@ -1,7 +1,7 @@
 <template>
   <div
     class="main"
-    :class="{'is-invalid':!valid}"
+    :class="{'is-invalid':!valid, 'is-dirty':dirty}"
   >
 
     <div class="main-info-block">
@@ -195,6 +195,9 @@ export default {
         this.$defaultType !== this.type || !compare(this.value, this.$default)
       );
     },
+    dirty(){
+      return this.canBeDefaulted;
+    },
     types() {
       return this.metaData.types;
     },
@@ -259,14 +262,17 @@ export default {
 @select-badge-size: 42px;
 
 .main {
-  padding: 5px 10px;
+  padding: 5px 5px;
   border-bottom: 1px solid #ced4da;
   border-radius: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin: 3px;
+
+  &.is-dirty{
+    background:  #f5f5f5;
+  }
 
   .main-info-block {
     display: flex;
@@ -291,12 +297,11 @@ export default {
         width: @select-badge-size;
         min-width: @select-badge-size;
         max-width: @select-badge-size;
-        text-align: right;
+        text-align-last: center;
 
         option {
           background: white;
           color: black;
-          text-align: center;
           font-size: 12px;
         }
 
@@ -341,7 +346,7 @@ export default {
 
     button {
       margin: 1px 2px;
-      padding: 4px 6px;
+      padding: 1px 6px;
       font-size: 16px;
       text-align: center;
     }
