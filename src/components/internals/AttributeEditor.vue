@@ -195,7 +195,7 @@ export default {
         this.$defaultType !== this.type || !compare(this.value, this.$default)
       );
     },
-    dirty(){
+    dirty() {
       return this.canBeDefaulted;
     },
     types() {
@@ -270,8 +270,8 @@ export default {
   align-items: center;
   justify-content: space-between;
 
-  &.is-dirty{
-    background:  #f5f5f5;
+  &.is-dirty {
+    background: #f5f5f5;
   }
 
   .main-info-block {
