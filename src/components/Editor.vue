@@ -221,11 +221,6 @@ export default {
     }
   }
 
-  /deep/ input {
-    font-size: 12px;
-    height: @standard-height;
-  }
-
   /deep/ .event {
     z-index: 0;
   }

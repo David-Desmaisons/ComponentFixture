@@ -128,26 +128,14 @@ describe("extractDefaultValue", () => {
     [{ default: "gg", type: [String, Number] }, 23, 23],
     [{ default: true }, false, false],
     [{ default: false }, true, true],
-    [{ default: () => 22 }, () => 56, 56],
-    [
-      { default: "" },
-      function() {
-        return this.vmValue;
-      },
-      "fixtureVmValue"
-    ],
-    [
-      { default: () => ({ fromProps: true }) },
-      () => ({ fromFactory: true }),
-      { fromFactory: true }
-    ]
+    [{ default: () => 22 }, 56, 56]
   ];
 
   test.each(proposedDefaults)(
     "returns proposedDefault overriding default from prop, props: %p received: %p should return: %p",
     (prop, proposedDefaultValue, expected) => {
       const value = extractDefaultValue(
-        { $options: {}, vmValue: "fixtureVmValue" },
+        { $options: {} },
         prop,
         "key",
         proposedDefaultValue
@@ -182,7 +170,7 @@ describe("validateProp", () => {
   const required = { ok: false, message: "Prop is required" };
   const notValidated = {
     ok: false,
-    message: "Invalid prop: custom validator"
+    message: "Custom validation failed"
   };
 
   const propsData = [

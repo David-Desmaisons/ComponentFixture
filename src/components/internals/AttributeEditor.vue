@@ -1,87 +1,100 @@
 <template>
   <div
     class="main"
-    :class="{'is-invalid':!valid}"
+    :class="{'is-invalid':!valid, 'is-dirty':dirty}"
   >
-    <div class="attribute-column attribute-description">
-      <h1 class="label">{{attribute}}</h1>
 
-      <div class="prop-description">
+    <div class="main-info-block">
+      <div
+        class="badge type-descriptor"
+        v-tooltip="{content:type,placement:'bottom'}"
+        :class="{[badge]:true,'multi-option':!monoOption}"
+      >
+        <template v-if="monoOption">{{convert(type)}}</template>
+
+        <template v-else>
+          <select
+            v-model="type"
+            class="type-select"
+          >
+            <option
+              v-for="typeDescription in avalaibleTypes"
+              :value="typeDescription.value"
+              :key="typeDescription.value"
+            >
+              <template v-if="typeDescription.value === type">
+                {{typeDescription.display}}
+              </template>
+              <template v-else>
+                {{typeDescription.value}}
+              </template>
+
+            </option>
+          </select>
+        </template>
+      </div>
+
+      <div>
+        <h1 class="label">{{attribute}}</h1>
+      </div>
+
+      <div class="btn-group actions">
+
         <div
-          class="badge type-descriptor"
-          v-tooltip="{content:type,placement:'bottom'}"
-          :class="badge"
+          class="prop-info"
+          v-if="metaData.definition.required"
         >
-          <template v-if="types.length === 1">{{convert(type)}}</template>
-
-          <template v-else>
-            <select v-model="type">
-              <option
-                v-for="typeDescription in avalaibleTypes"
-                :value="typeDescription.value"
-                :key="typeDescription.value"
-              >{{typeDescription.display}}</option>
-            </select>
-          </template>
+          <i
+            class="fa fa-exclamation-triangle"
+            v-tooltip.bottom="'required'"
+          />
         </div>
 
-        <div class="btn-group actions">
-          <button
-            v-if="metaData.definition.default !== undefined"
-            type="button"
-            class="btn prop-info btn-outline-info"
-            v-tooltip.bottom="'Reset to default'"
-            :disabled="!canBeDefaulted"
-            @click="toDefault"
-          >
-            <i class="fa fa-home" />
-          </button>
-
-          <div
-            class="prop-info"
-            v-if="metaData.definition.required"
-          >
-            <i
-              class="fa fa-exclamation-triangle"
-              v-tooltip.bottom="'required'"
-            />
-          </div>
-
-          <div
-            class="prop-info"
-            v-if="metaData.isModel"
-          >
-            <i
-              class="fa fa-refresh"
-              v-tooltip.bottom="'v-model'"
-            />
-          </div>
-
-          <div
-            class="prop-info"
-            v-if="metaData.definition.validator"
-          >
-            <i
-              class="fa fa-lock"
-              v-tooltip.bottom="'has validator'"
-            />
-          </div>
+        <div
+          class="prop-info"
+          v-if="metaData.isModel"
+        >
+          <i
+            class="fa fa-refresh"
+            v-tooltip.bottom="'v-model'"
+          />
         </div>
+
+        <div
+          class="prop-info"
+          v-if="metaData.definition.validator"
+        >
+          <i
+            class="fa fa-lock"
+            v-tooltip.bottom="'has validator'"
+          />
+        </div>
+
       </div>
     </div>
 
-    <div class="attribute-column attribute-input">
-      <div class="error-feedback">{{error}}</div>
-
+    <div class="component-editor">
       <component
         ref="editor"
         :is="componentType"
         class="component-input"
-        @error="error = $event"
+        @error="onError"
         @changed="changed"
         v-bind="{attribute, metaData, types, value}"
       />
+
+      <button
+        v-if="metaData.definition.default !== undefined"
+        type="button"
+        class="btn prop-info btn-outline-info"
+        v-tooltip.bottom="'Reset to default'"
+        :disabled="!canBeDefaulted"
+        @click="toDefault"
+      >
+        <i class="fa fa-home" />
+      </button>
     </div>
+
   </div>
 </template> 
 <script>
@@ -90,6 +103,7 @@ import functionAttributeEditor from "./FunctionAttributeEditor";
 import numberAttributeEditor from "./NumberAttributeEditor";
 import stringAttributeEditor from "./StringAttributeEditor";
 import booleanAttributeEditor from "./BooleanAttributeEditor";
+import selectedValuesEditor from "./SelectedValuesEditor";
 
 import { VTooltip } from "v-tooltip";
 import { getTypeFromValue, getDefaultForType } from "@/utils/TypeHelper";
@@ -115,7 +129,8 @@ export default {
     functionAttributeEditor,
     numberAttributeEditor,
     stringAttributeEditor,
-    booleanAttributeEditor
+    booleanAttributeEditor,
+    selectedValuesEditor
   },
 
   props: {
@@ -172,10 +187,16 @@ export default {
         (this.metaData.definition.default !== undefined && this.isNotDefaulted)
       );
     },
+    monoOption() {
+      return this.types.length === 1;
+    },
     isNotDefaulted() {
       return (
         this.$defaultType !== this.type || !compare(this.value, this.$default)
       );
+    },
+    dirty() {
+      return this.canBeDefaulted;
     },
     types() {
       return this.metaData.types;
@@ -189,10 +210,13 @@ export default {
         }));
     },
     componentType() {
+      if (this.metaData.possibleValues !== undefined) {
+        return "selectedValuesEditor";
+      }
       return typesDescription[this.type].component;
     },
     badge() {
-      return typesDescription[this.type].badge;
+      return [this.type.replace(/^\w/, c => c.toLowerCase())];
     },
     valid() {
       return this.error === null;
@@ -203,6 +227,17 @@ export default {
     ...delegateEvents(["changed"]),
     convert(type) {
       return typesDescription[type].display;
+    },
+    onError(arg) {
+      if (this.error === arg) {
+        return;
+      }
+      this.error = arg;
+      if (arg === null) {
+        this.$emit("success", `Property "${this.attribute}" updated`);
+        return;
+      }
+      this.$emit("error", arg);
     },
     toDefault() {
       const { $defaultType, $default, attribute } = this;
@@ -223,129 +258,146 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+@badge-size: 22px;
+@select-badge-size: 42px;
+
 .main {
-  padding: 10px;
+  padding: 5px 5px;
   border-bottom: 1px solid #ced4da;
   border-radius: 0;
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 3px;
+  justify-content: space-between;
+
+  &.is-dirty {
+    background: #f5f5f5;
+  }
+
+  .main-info-block {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 200px;
+    min-width: 200px;
+
+    .badge.type-descriptor {
+      &.multi-option {
+        width: @select-badge-size;
+        min-width: @select-badge-size;
+        max-width: @select-badge-size;
+      }
+
+      select {
+        background: transparent;
+        color: white;
+        border: transparent;
+        padding: 0;
+        outline: transparent;
+        width: @select-badge-size;
+        min-width: @select-badge-size;
+        max-width: @select-badge-size;
+        text-align-last: center;
+
+        option {
+          background: white;
+          color: black;
+          font-size: 12px;
+        }
+
+        option:hover {
+          background: black;
+          color: white;
+        }
+      }
+    }
+
+    .btn-group.actions {
+      width: 80px;
+      height: 28px;
+      display: flex;
+      flex-direction: row;
+      color: gray;
+
+      .prop-info {
+        font-size: @icon-size;
+        padding: 0 5px;
+        display: flex;
+        align-items: center;
+
+        .fa-unlock-alt {
+          opacity: 0.7;
+        }
+      }
+    }
+  }
+
+  .component-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 165px;
+    /deep/ input {
+      font-size: 12px;
+      height: 18px;
+    }
+
+    button {
+      margin: 1px 2px;
+      padding: 1px 6px;
+      font-size: 16px;
+      text-align: center;
+    }
+  }
 
   .is-invalid {
     box-shadow: 0 0 0 0.2rem red;
   }
 
   .badge.type-descriptor {
-    font-size: 10px;
+    font-size: 12px;
+    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: @type-descriptor-width;
-    max-width: @type-descriptor-width;
-    height: 24px;
-    text-transform: uppercase;
+    min-width: @badge-size;
+    max-width: @badge-size;
+    height: @badge-size;
+    border-radius: 50%;
+    width: @badge-size;
 
-    select {
-      background: transparent;
-      color: white;
-      border: transparent;
-      padding: 0;
-      outline: transparent;
-      text-transform: uppercase;
-      width: @type-descriptor-width;
+    &.string {
+      color: #fff;
+      background-color: #4e79a7;
+    }
 
-      option {
-        background: #555;
-        color: white;
-        text-align: center;
-        font-size: 12px;
-      }
+    &.boolean {
+      color: #fff;
+      background-color: #f28e2c;
+    }
 
-      option:hover {
-        background: black;
-        color: white;
-      }
+    &.number {
+      color: #fff;
+      background-color: #e15759;
+    }
+
+    &.object {
+      color: #fff;
+      background-color: #76b7b2;
+    }
+
+    &.array {
+      color: #fff;
+      background-color: #59a14f;
+    }
+
+    &.function {
+      color: #fff;
+      background-color: #edc949;
     }
   }
-}
-
-.attribute-column {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  min-height: 32px;
-  color: @icon-color;
-
-  .prop-info {
-    font-size: @icon-size;
-    padding: 0 5px;
-    display: flex;
-    align-items: center;
-
-    .fa-unlock-alt {
-      opacity: 0.7;
-    }
-  }
-
-  .actions {
-    padding: 0 5px;
-    border-color: #ced4da;
-    height: 32px;
-
-    .btn-outline-info {
-      color: @icon-color;
-      background: transparent;
-      :disabled {
-        color: #17a2b8;
-      }
-    }
-  }
-}
-
-.attribute-description {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 140px;
-  width: 20%;
-
-  .label {
-    color: black;
-    margin: 0 0 5px;
-  }
-}
-
-.prop-description {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.attribute-input {
-  flex-grow: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  .error-feedback {
-    color: red;
-    font-weight: bold;
-    display: inline;
-    font-size: 100%;
-    height: 21px;
-  }
-}
-
-.attribute-component {
-  div {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-}
-
-.type-select {
-  width: 80px;
 }
 
 .label {
@@ -357,11 +409,6 @@ export default {
   font-weight: bold;
   max-width: 150px;
   width: 99%;
-}
-.custom-control.custom-switch {
-  .custom-control-label {
-    right: calc(100% - 32px);
-  }
 }
 </style>
 <style lang="less">

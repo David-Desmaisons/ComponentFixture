@@ -9,6 +9,7 @@
         :metaData="prop.metaData"
         @success="success"
         @changed="changed"
+        @error="error"
       />
     </template>
 
@@ -43,7 +44,7 @@ export default {
   },
   props,
   methods: {
-    ...delegateEvents(["success", "changed"])
+    ...delegateEvents(["success", "changed", "error"])
   }
 };
 </script>

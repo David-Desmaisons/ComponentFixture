@@ -9,13 +9,17 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
-const mountComponentWithDefaultSlot = ({ slot = FakeComponent } = {}) => {
+const mountComponentWithDefaultSlot = ({
+  slot = FakeComponent,
+  propsData = {}
+} = {}) => {
   return shallowMount(ComponentFixture, {
     slots: {
       default: slot
     },
+    propsData,
     stubs: {
       component: true,
       component1: true,
@@ -24,14 +28,18 @@ const mountComponentWithDefaultSlot = ({ slot = FakeComponent } = {}) => {
   });
 };
 
-const mountComponentWithStore = ({ slot = FakeComponent, propsData = {}, store = null } = {}) => {
+const mountComponentWithStore = ({
+  slot = FakeComponent,
+  propsData = {},
+  store = null
+} = {}) => {
   return shallowMount(ComponentFixture, {
     propsData,
     slots: {
       default: slot
     },
     mocks: {
-      $store: store,
+      $store: store
     },
     stubs: {
       component: true,
@@ -52,7 +60,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -99,7 +107,7 @@ describe("ComponentFixture.vue", () => {
     beforeEach(() => {
       wrapper = mountComponentWithDefaultSlot();
       vm = wrapper.vm;
-      dynamicAttributes = wrapper.vm.dynamicAttributes;
+      dynamicAttributes = vm.dynamicAttributes;
     });
 
     it("sets the component name", () => {
@@ -115,7 +123,7 @@ describe("ComponentFixture.vue", () => {
     });
 
     it("computes the dynamicAttributes number with all props", () => {
-      expect(Object.keys(dynamicAttributes).length).toEqual(4);
+      expect(Object.keys(dynamicAttributes).length).toEqual(5);
     });
 
     it("computes the dynamicAttributes number with default value", () => {
@@ -187,13 +195,16 @@ describe("ComponentFixture.vue", () => {
         number: ["Number"],
         string: ["String"],
         undefinedString: ["String"],
-        objectWithFactory: ["Object"]
+        objectWithFactory: ["Object"],
+        oddNumber: ["Number"]
       };
 
       const { propsDefinition } = vm;
-      Object.keys(propsDefinition).forEach(key => {
-        expect(propsDefinition[key].types).toEqual(expectedTypes[key]);
-      });
+      const actualTypes = Object.keys(propsDefinition).reduce((acc, key) => {
+        acc[key] = propsDefinition[key].types;
+        return acc;
+      }, {});
+      expect(actualTypes).toEqual(expectedTypes);
     });
 
     it("tracks events on component under fixtures", () => {
@@ -246,6 +257,43 @@ describe("ComponentFixture.vue", () => {
         expect(testedComponent.$forceUpdate).toHaveBeenCalled();
       });
     });
+  });
+
+  describe("when initialized with defaults and possibleValues", () => {
+    let wrapper = null;
+    let dynamicAttributes = null;
+    let propsDefinition = null;
+    const propsData = {
+      defaults: {
+        number: 45
+      },
+      possibleValues: {
+        string: ["a", "b", "c"],
+        undefinedString: "new string"
+      }
+    };
+
+    beforeEach(() => {
+      wrapper = mountComponentWithDefaultSlot({ propsData });
+      const vm = wrapper.vm;
+      dynamicAttributes = vm.dynamicAttributes;
+      propsDefinition = vm.propsDefinition;
+    });
+
+    it("computes the dynamicAttributes number with default value provided by defaults prop", () => {
+      expect(dynamicAttributes.number).toEqual(propsData.defaults.number);
+    });
+
+    test.each([
+      ["string", ["a", "b", "c"]],
+      ["undefinedString", ["new string"]],
+      ["number", undefined]
+    ])(
+      "computes propsDefinition %s with possibleValues %o",
+      (prop, expected) => {
+        expect(propsDefinition[prop].possibleValues).toEqual(expected);
+      }
+    );
   });
 
   describe.each([
@@ -320,10 +368,26 @@ describe("ComponentFixture.vue", () => {
       expect(dynamicAttributes.value).toEqual([1, 2, 3]);
     });
 
+    it("listens to event tracked by v-model and emit success event", () => {
+      const testVm = vm.$children[0];
+      testVm.$emit("input", 1);
+      expect(wrapper.emitted()).toEqual({
+        success: [['Updated props "value" to 1 based on v-model']]
+      });
+    });
+
     it("listens to two-way binding events to update properties", () => {
       const testVm = vm.$children[0];
       testVm.$emit("update:int", 25);
       expect(dynamicAttributes.int).toEqual(25);
+    });
+
+    it("listens to two-way binding events and emit success event", () => {
+      const testVm = vm.$children[0];
+      testVm.$emit("update:int", 25);
+      expect(wrapper.emitted()).toEqual({
+        success: [['Updated props "int" to 25 based on update event']]
+      });
     });
   });
 
@@ -425,7 +489,8 @@ describe("ComponentFixture.vue", () => {
         objectWithFactory: {
           createdByFactory: true,
           madeBy: "fake-component"
-        }
+        },
+        oddNumber: 2
       };
 
       expect(lastParameters(control).attributes).toEqual(expectedAttributes);
@@ -455,7 +520,7 @@ describe("ComponentFixture.vue", () => {
     let store;
     beforeEach(() => {
       store = {
-        registerModule: jest.fn(function (name, module) {
+        registerModule: jest.fn(function(name, module) {
           this.state[name] = module.state();
         }),
         unregisterModule: jest.fn(),
@@ -501,7 +566,7 @@ describe("ComponentFixture.vue", () => {
       it("sets shouldUseStore to false", () => {
         expect(vm.shouldUseStore).toEqual(false);
       });
-    })
+    });
 
     describe("without useStore true", () => {
       beforeEach(() => {
@@ -523,17 +588,23 @@ describe("ComponentFixture.vue", () => {
       });
 
       it("sets storeName to componentFixture-fake-component-{id}", () => {
-        expect(vm.storeName).toEqual(`componentFixture-fake-component-${vm.id}`);
+        expect(vm.storeName).toEqual(
+          `componentFixture-fake-component-${vm.id}`
+        );
       });
 
       it("sets register data as module state", () => {
-        expect(store.state[`componentFixture-fake-component-${vm.id}`]).toEqual(vm.dynamicAttributes);
+        expect(store.state[`componentFixture-fake-component-${vm.id}`]).toEqual(
+          vm.dynamicAttributes
+        );
       });
 
       it("unregister module on destroy", () => {
         wrapper.destroy();
-        expect(store.unregisterModule).toHaveBeenCalledWith(`componentFixture-fake-component-${vm.id}`);
-      })
+        expect(store.unregisterModule).toHaveBeenCalledWith(
+          `componentFixture-fake-component-${vm.id}`
+        );
+      });
     });
 
     describe("without useStore true and with v-model", () => {
@@ -556,8 +627,11 @@ describe("ComponentFixture.vue", () => {
       it("listens to event tracked by v-model and commit changes", () => {
         const testVm = vm.$children[0];
         testVm.$emit("input", [1, 2, 3]);
-        expect(store.commit).toHaveBeenCalledWith(`componentFixture-fake-component-vmodel-${vm.id}/updateValue`, [1, 2, 3]);
+        expect(store.commit).toHaveBeenCalledWith(
+          `componentFixture-fake-component-vmodel-${vm.id}/updateValue`,
+          [1, 2, 3]
+        );
       });
     });
-  })
+  });
 });

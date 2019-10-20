@@ -1,33 +1,27 @@
 const typesDescription = {
   Object: {
-    display: "Obj",
-    component: "jsonAttributeEditor",
-    badge: "badge-info"
+    display: "{}",
+    component: "jsonAttributeEditor"
   },
   Array: {
-    display: "Arr",
-    component: "jsonAttributeEditor",
-    badge: "badge-warning"
+    display: "[]",
+    component: "jsonAttributeEditor"
   },
   Number: {
-    display: "Num",
-    component: "numberAttributeEditor",
-    badge: "badge-secondary"
+    display: "#",
+    component: "numberAttributeEditor"
   },
   String: {
-    display: "Str",
-    component: "stringAttributeEditor",
-    badge: "badge-success"
+    display: "T",
+    component: "stringAttributeEditor"
   },
   Boolean: {
-    display: "Bool",
-    component: "booleanAttributeEditor",
-    badge: "badge-primary"
+    display: `\u2713`,
+    component: "booleanAttributeEditor"
   },
   Function: {
-    display: "Func",
-    component: "functionAttributeEditor",
-    badge: "badge-danger"
+    display: `\u0192` + "(x)",
+    component: "functionAttributeEditor"
   }
 };
 

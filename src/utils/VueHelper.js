@@ -42,30 +42,40 @@ function getPropDefaultValue(vm, prop, key) {
   return resolveFunctionIfNeeded(def, prop, vm);
 }
 
+function typeIsCompatible(proposedValue, prop) {
+  const propTypes = getTypeForProp(prop);
+  const proposedTypes = getTypeFromValue(proposedValue);
+  return propTypes.some(t => proposedTypes.includes(t));
+}
+
+function warnDiscarded(proposedValue, reason) {
+  warn(
+    `defaults: ${stringify(proposedValue)} will be discarded because ${reason}`
+  );
+}
+
+function validateProposedValue(proposedValue, prop) {
+  if (proposedValue === undefined) {
+    return false;
+  }
+  const typeMatch = typeIsCompatible(proposedValue, prop);
+  if (!typeMatch) {
+    warnDiscarded(proposedValue, "type is not matching props type");
+    return false;
+  }
+
+  const validation = validateProp(prop, proposedValue);
+  if (validation.ok) {
+    return true;
+  }
+
+  warnDiscarded(proposedValue, validation.message);
+  return false;
+}
+
 function extractDefaultValue(vm, prop, key, proposedValue) {
-  if (proposedValue !== undefined) {
-    const normalizedProposed = resolveFunctionIfNeeded(proposedValue, prop, vm);
-    const propTypes = getTypeForProp(prop);
-    const proposedTypes = getTypeFromValue(normalizedProposed);
-    const typeMatch = propTypes.some(t => proposedTypes.includes(t));
-    if (!typeMatch) {
-      warn(
-        `defaults: ${stringify(
-          normalizedProposed
-        )} will be discarded because type is not matching props type`
-      );
-    } else {
-      const validation = validateProp(prop, normalizedProposed);
-      if (!validation.ok) {
-        warn(
-          `defaults: ${stringify(
-            normalizedProposed
-          )} will be discarded because ${validation.message}.`
-        );
-      } else {
-        return normalizedProposed;
-      }
-    }
+  if (validateProposedValue(proposedValue, prop)) {
+    return proposedValue;
   }
   const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
@@ -101,7 +111,7 @@ function validateProp(prop, value) {
   if (!validator || validator(value)) {
     return { ok: true };
   }
-  return { ok: false, message: "Invalid prop: custom validator" };
+  return { ok: false, message: "Custom validation failed" };
 }
 
 function getNodeFromSandBox(slot) {

@@ -10,7 +10,7 @@ import VueSlideBar from "vue-slide-bar";
 export default {
   name: "vue-slide-bar",
   meta: {
-    display: "Vue slide bar"
+    display: "Slide bar"
   },
   components: {
     Sandbox,

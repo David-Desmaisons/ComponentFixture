@@ -14,11 +14,15 @@ const editorMixin = {
     updateIfValid(value) {
       const validated = this.metaData.validate(value);
       if (!validated.ok) {
-        this.$emit("error", validated.message);
+        this.emitErrorForAttribute(validated.message);
         return;
       }
       this.$emit("changed", { key: this.attribute, value });
       this.$emit("error", null);
+    },
+
+    emitErrorForAttribute(message) {
+      this.$emit("error", `Update of "${this.attribute}" failed: ${message}`);
     },
 
     clear() {

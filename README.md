@@ -107,7 +107,17 @@ export default {
 
 - `defaults` ***Object*** (*optional*) 
 
-   Object that will be set to default the component under-test props. For example if you want to default the props value with 46, just use:  `:defaults="{value: 46}"`
+  Value: `{[propName]: defaultValue}`
+
+   Object sets to default the component under-test props. For example if you want to default the props value with 46, use:  `:defaults="{value: 46}"`
+
+- `possibleValues` ***Object*** (*optional*) 
+
+  Value: `{[propName]: [...values]}`
+
+   Object used to predefined the possible values for a given props.
+   The values defined by `possibleValues` will be used to create a select from the provided values for the given props.
+   For example if you want to limit the props value to 1,2, 3 or 4, use:  `:possibleValues="{value: [1,2,3,4]}"`
 
 - `componentHeight` ***String*** (*optional*) 
 

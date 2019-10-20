@@ -11,7 +11,7 @@ import {Sandbox} from "@/index";
 export default {
   name: "tree-example",
   meta: {
-    display: "Vue D3 tree"
+    display: "D3 tree"
   },
   data() {
     return {

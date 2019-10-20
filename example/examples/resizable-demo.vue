@@ -14,7 +14,7 @@ import {Sandbox} from "@/index";
 export default {
   name: "resizable-demo",
   meta: {
-    display: "resizable"
+    display: "Resizable"
   },
   components: {
     Sandbox,
