@@ -61,6 +61,13 @@ describe("getTypeForProp", () => {
   );
 });
 
+function buildFromMetadataOnly(value) {
+  return {
+    fromMetadata: value,
+    default: value
+  };
+}
+
 describe("extractDefaultValue", () => {
   const defaults = [
     ["ab", "ab"],
@@ -84,7 +91,7 @@ describe("extractDefaultValue", () => {
         { default: defaultValue },
         "key"
       );
-      expect(value).toEqual(expected);
+      expect(value).toEqual(buildFromMetadataOnly(expected));
     }
   );
 
@@ -95,7 +102,7 @@ describe("extractDefaultValue", () => {
       { type: Function, default: defaultFunction },
       "key"
     );
-    expect(value).toBe(defaultFunction);
+    expect(value).toEqual(buildFromMetadataOnly(defaultFunction));
   });
 
   const typesFromProp = [
@@ -111,7 +118,7 @@ describe("extractDefaultValue", () => {
     "returns default from type if there is no default defined in prop and prop is required, received: %p should return: %p",
     (type, expected) => {
       const value = extractDefaultValue({}, { required: true, type }, "key");
-      expect(value).toEqual(expected);
+      expect(value).toEqual(buildFromMetadataOnly(expected));
     }
   );
 
@@ -119,16 +126,24 @@ describe("extractDefaultValue", () => {
     "returns undefined if there is no default defined in prop and prop is not required, received: %p should return: undefined",
     type => {
       const value = extractDefaultValue({}, { required: false, type }, "key");
-      expect(value).toBe(undefined);
+      expect(value).toEqual(buildFromMetadataOnly(undefined));
     }
   );
 
   const proposedDefaults = [
-    [{ default: "gg", type: String }, "ab", "ab"],
-    [{ default: "gg", type: [String, Number] }, 23, 23],
-    [{ default: true }, false, false],
-    [{ default: false }, true, true],
-    [{ default: () => 22 }, 56, 56]
+    [
+      { default: "gg", type: String },
+      "ab",
+      { fromMetadata: "gg", default: "ab" }
+    ],
+    [
+      { default: "gg", type: [String, Number] },
+      23,
+      { fromMetadata: "gg", default: 23 }
+    ],
+    [{ default: true }, false, { fromMetadata: true, default: false }],
+    [{ default: false }, true, { fromMetadata: false, default: true }],
+    [{ default: () => 22 }, 56, { fromMetadata: 22, default: 56 }]
   ];
 
   test.each(proposedDefaults)(
@@ -145,9 +160,17 @@ describe("extractDefaultValue", () => {
   );
 
   const proposedDefaultsWithValidation = [
-    [{ type: Number, default: 26 }, "ab", 26],
-    [{ type: String, default: "tintin" }, false, "tintin"],
-    [{ type: Number, default: 56, validator: v => v === 56 }, 33, 56]
+    [{ type: Number, default: 26 }, "ab", { fromMetadata: 26, default: 26 }],
+    [
+      { type: String, default: "tintin" },
+      false,
+      { fromMetadata: "tintin", default: "tintin" }
+    ],
+    [
+      { type: Number, default: 56, validator: v => v === 56 },
+      33,
+      { fromMetadata: 56, default: 56 }
+    ]
   ];
 
   test.each(proposedDefaultsWithValidation)(

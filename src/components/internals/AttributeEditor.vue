@@ -116,7 +116,7 @@ function getDefaultType(types, defaultValue) {
     return types[0];
   }
   const fromDefault = getTypeFromValue(defaultValue);
-  return types.find(type => fromDefault.indexOf(type) !== -1);
+  return types.find(type => fromDefault.includes(type));
 }
 
 export default {
@@ -175,9 +175,12 @@ export default {
   },
 
   created() {
-    const { defaultValue: _default } = this.metaData;
-    this.$default = _default;
-    this.$defaultType = getTypeFromValue(_default)[0];
+    const { defaultValue, defaultValueFromMetadata } = this.metaData;
+    this.$default = defaultValue;
+    this.$defaultValueFromMetadata = defaultValueFromMetadata;
+    this.$defaultType =
+      getDefaultType(this.metaData.types, defaultValue) ||
+      getTypeFromValue(defaultValue)[0];
   },
 
   computed: {
@@ -196,7 +199,7 @@ export default {
       );
     },
     dirty() {
-      return this.canBeDefaulted;
+      return compare(this.value, this.$defaultValueFromMetadata) === false;
     },
     types() {
       return this.metaData.types;
