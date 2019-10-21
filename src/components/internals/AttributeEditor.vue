@@ -277,6 +277,11 @@ export default {
     background: #f5f5f5;
   }
 
+  &.is-invalid {
+    border: 3px solid red;
+    padding: 2px 2px;
+  }
+
   .main-info-block {
     display: flex;
     flex-direction: row;
@@ -353,10 +358,6 @@ export default {
       font-size: 16px;
       text-align: center;
     }
-  }
-
-  .is-invalid {
-    box-shadow: 0 0 0 0.2rem red;
   }
 
   .badge.type-descriptor {
