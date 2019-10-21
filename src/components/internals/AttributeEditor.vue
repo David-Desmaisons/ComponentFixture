@@ -199,10 +199,7 @@ export default {
       );
     },
     dirty() {
-      return (
-        this.$defaultType !== this.type ||
-        !compare(this.value, this.$defaultValueFromMetadata)
-      );
+      return compare(this.value, this.$defaultValueFromMetadata) === false;
     },
     types() {
       return this.metaData.types;
