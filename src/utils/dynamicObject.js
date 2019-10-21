@@ -20,14 +20,13 @@ function createProperty(
 ) {
   const propsValue = props[key];
   const proposedValue = defaults[key];
-  const defaultValue = extractDefaultValue(
-    component,
-    propsValue,
-    key,
-    proposedValue
-  );
+  const {
+    fromMetadata: defaultValueFromMetadata,
+    default: defaultValue
+  } = extractDefaultValue(component, propsValue, key, proposedValue);
   Vue.set(dynamicAttributes, key, defaultValue);
   Vue.set(propsDefinition, key, {
+    defaultValueFromMetadata,
     defaultValue,
     definition: propsValue,
     types: getTypeForProp(propsValue, defaultValue),

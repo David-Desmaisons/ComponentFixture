@@ -73,10 +73,7 @@ function validateProposedValue(proposedValue, prop) {
   return false;
 }
 
-function extractDefaultValue(vm, prop, key, proposedValue) {
-  if (validateProposedValue(proposedValue, prop)) {
-    return proposedValue;
-  }
+function getDefaultFromMetadata(vm, prop, key) {
   const defaultValue = getPropDefaultValue(vm, prop, key);
   if (defaultValue !== undefined) {
     return defaultValue;
@@ -89,6 +86,14 @@ function extractDefaultValue(vm, prop, key, proposedValue) {
     return {};
   }
   return !Array.isArray(type) ? type() : type[0]();
+}
+
+function extractDefaultValue(vm, prop, key, proposedValue) {
+  const fromMetadata = getDefaultFromMetadata(vm, prop, key);
+  const _default = validateProposedValue(proposedValue, prop)
+    ? proposedValue
+    : fromMetadata;
+  return { fromMetadata, default: _default };
 }
 
 function getTypeForProp(prop, defaultValue) {
