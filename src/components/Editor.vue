@@ -26,7 +26,7 @@
         </button>
 
         <button
-          v-for="name in ['methods','state']"
+          v-for="name in ['methods','state','monkey']"
           :key="name"
           type="button"
           class="segment"
