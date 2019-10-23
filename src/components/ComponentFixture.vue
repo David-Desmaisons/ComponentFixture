@@ -284,6 +284,7 @@ export default {
       componentMethods: methods,
       componentModel,
       events,
+      getUnderTestComponent,
       propsDefinition,
       update,
       componentHeight: inicialHeight,
@@ -350,6 +351,7 @@ export default {
                   methods,
                   events,
                   clearEvents,
+                  getUnderTestComponent,
                   changed
                 })
               ]

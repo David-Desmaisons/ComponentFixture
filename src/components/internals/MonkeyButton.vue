@@ -1,5 +1,45 @@
 <template>
-  <button>
+  <button :class="{'monkey-activated': activated}">
+
+    <svg
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 -5 100 100"
+      xml:space="preserve"
+      transform="scale(0.8)"
+      class="ready"
+    >
+      <g>
+        <circle
+          cx="40.374"
+          cy="37.662"
+          r="5.885"
+        />
+        <circle
+          cx="59.628"
+          cy="37.662"
+          r="5.885"
+        />
+        <g>
+          <path d="M86.31,25.354c-0.984,0-1.941,0.108-2.867,0.306C76.075,15.105,63.849,8.195,50,8.195
+			c-13.847,0-26.075,6.912-33.441,17.466c-0.925-0.198-1.883-0.306-2.866-0.306c-7.562,0-13.691,6.129-13.691,13.689
+			c0,6.046,3.924,11.167,9.361,12.981C10.93,73.105,28.519,89.725,50,89.725c21.482,0,39.071-16.619,40.641-37.7
+			c5.437-1.814,9.361-6.935,9.361-12.981C100,31.483,93.87,25.354,86.31,25.354z M10.042,45.449c-3.332,0-6.033-2.701-6.033-6.034
+			c0-3.332,2.701-6.033,6.033-6.033c3.333,0,6.034,2.702,6.034,6.033C16.076,42.749,13.375,45.449,10.042,45.449z M50,83.465
+			c-14.44,0-26.544-7.747-29.805-18.175c6.848,3.496,17.722,5.651,29.804,5.651c12.083,0,22.958-2.155,29.806-5.651
+			C76.544,75.718,64.441,83.465,50,83.465z M80.664,60.055c-4.868,3.614-16.003,6.84-30.665,6.84
+			c-14.659,0-25.796-3.226-30.663-6.839c-0.002-0.132-0.013-0.263-0.013-0.396c0-5.861,2.734-11.225,7.261-15.373
+			c-1.683-2.343-2.683-5.21-2.683-8.315c0-7.893,6.397-14.291,14.29-14.291c4.907,0,9.235,2.476,11.808,6.244
+			c2.573-3.768,6.899-6.244,11.808-6.244c7.894,0,14.291,6.398,14.291,14.291c0,3.105-1.001,5.972-2.683,8.315
+			c4.526,4.148,7.261,9.511,7.261,15.373C80.676,59.792,80.666,59.924,80.664,60.055z M89.958,45.449
+			c-3.334,0-6.033-2.701-6.033-6.034c0-3.332,2.699-6.033,6.033-6.033c3.331,0,6.033,2.702,6.033,6.033
+			C95.991,42.749,93.289,45.449,89.958,45.449z" />
+        </g>
+      </g>
+    </svg>
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -9,6 +49,7 @@
       viewBox="0 0 100 100"
       enable-background="new 0 0 100 100"
       xml:space="preserve"
+      class="on-fire"
     >
       <g>
         <g>
@@ -52,7 +93,13 @@
 </template>
 <script>
 export default {
-  name: "monkey-button"
+  name: "monkey-button",
+  props: {
+    activated: {
+      type: Boolean,
+      default: false
+    }
+  }
 };
 </script>
 <style lang="less" scoped>
@@ -76,15 +123,38 @@ export default {
       width: @button-size;
       height: @button-size;
 
+      &.on-fire {
+        display: none;
+      }
+      &.ready {
+        display: inline;
+      }
+
       &:hover {
         fill: @button-color-hover;
       }
     }
     &:hover {
       border-color: @button-color-hover;
-      background: lightgray;
       svg {
         fill: @button-color-hover;
+        &.on-fire {
+          display: inline;
+        }
+        &.ready {
+          display: none;
+        }
+      }
+    }
+    &.monkey-activated {
+      svg {
+        fill: @button-color-hover;
+        &.on-fire {
+          display: inline;
+        }
+        &.ready {
+          display: none;
+        }
       }
     }
   }

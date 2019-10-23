@@ -1,6 +1,7 @@
 <template>
   <div class="monkey-attack-editor">
 
+    <span v-if="isUnderAttack">{{completion}}%</span>
     <div
       v-for="(p,idx) in props"
       :key="idx"
@@ -9,6 +10,8 @@
     </div>
 
     <MonkeyButton
+      :disabled="isUnderAttack"
+      :activated="isUnderAttack"
       v-tooltip.left="'Run monkey attack'"
       @click.native="run"
     />
@@ -17,11 +20,17 @@
 <script>
 import { VTooltip } from "v-tooltip";
 import MonkeyButton from "../internals/MonkeyButton";
+import gremlins from "gremlins.js/src/main";
+import { createGremlins } from "@/utils/gremlinBuilder";
 
 const props = {
   props: {
     type: Array,
     required: true
+  },
+  getUnderTestComponent: {
+    required: true,
+    type: Function
   }
 };
 
@@ -37,45 +46,59 @@ export default {
   },
   inheritAttrs: false,
   props,
+  data() {
+    return {
+      horde: null,
+      action: 0,
+      delay: 100,
+      maxOperation: 500
+    };
+  },
   methods: {
     run() {
-      window.console.log("monkey attack!!!");
+      const {
+        isUnderAttack,
+        getUnderTestComponent,
+        props,
+        delay,
+        maxOperation: nb,
+        onGremlinAction,
+        onEnded
+      } = this;
+      if (isUnderAttack) {
+        return;
+      }
+      const options = { props, element: getUnderTestComponent().$el, delay };
+      const horde = createGremlins(gremlins, options, onGremlinAction);
+      this.horde = horde;
+      horde.before(() => (this.action = 0));
+      horde.after(onEnded);
+      horde.unleash({ nb });
+    },
+    onEnded() {
+      this.horde = null;
+    },
+    stop() {
+      const { horde } = this;
+      if (!horde) {
+        return;
+      }
+      horde.stop();
+    },
+    onGremlinAction() {
+      this.action++;
+    }
+  },
+  computed: {
+    isUnderAttack() {
+      return this.horde !== null;
+    },
+    completion() {
+      if (!this.isUnderAttack) {
+        return null;
+      }
+      return Math.min(100, (100 * this.action) / this.maxOperation);
     }
   }
 };
 </script>
-<style lang="less" scoped>
-@button-color: black;
-@button-color-hover: black;
-@button-size: 40px;
-
-.monkey-attack-editor {
-  button {
-    padding: 0;
-    background: white;
-    border: 0;
-    border: 2px solid @button-color;
-    border-radius: 40%;
-    box-shadow: 0;
-    &:focus {
-      outline: 0;
-    }
-    svg {
-      fill: @button-color;
-      width: @button-size;
-      height: @button-size;
-
-      &:hover {
-        fill: @button-color-hover;
-      }
-    }
-    &:hover {
-      border-color: @button-color-hover;
-      background: lightgray;
-      svg {
-        fill: @button-color-hover;
-      }
-    }
-  }
-}
-</style>

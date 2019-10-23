@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import { getOffset } from "@/utils/htmlHelper";
 export default {
   props: {
     isResizable: {
@@ -68,13 +69,7 @@ export default {
       if (!this.active) {
         return;
       }
-      let target = this.$el;
-      const offset = { x: 0, y: 0 };
-      while (target) {
-        offset.x += target.offsetLeft;
-        offset.y += target.offsetTop;
-        target = target.offsetParent;
-      }
+      const offset = getOffset(this.$el);
       const style = {
         width: e.pageX - offset.x + "px",
         height: e.pageY - offset.y + "px"

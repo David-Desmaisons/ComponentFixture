@@ -39,21 +39,16 @@
       </div>
     </div>
 
-    <transition-group
-      type="transition"
-      name="flip-list"
-      tag="div"
-      class="editor"
-    >
-      <component
-        :is="`${segmentActive}-editor`"
-        :key="segmentActive"
-        v-bind="{props, events, methods, attributes, data, computed, clearEvents}"
-        @success="success"
-        @error="error"
-        @changed="changed"
-      />
-    </transition-group>
+      <keep-alive>
+        <component
+          :is="`${segmentActive}-editor`"
+          :key="segmentActive"
+          v-bind="{props, events, methods, attributes, data, computed, clearEvents, getUnderTestComponent}"
+          @success="success"
+          @error="error"
+          @changed="changed"
+        />
+      </keep-alive>
   </div>
 </template>
 <script>
@@ -103,6 +98,10 @@ export default {
     methods: {
       required: true,
       type: Array
+    },
+    getUnderTestComponent: {
+      required: true,
+      type: Function
     }
   },
 
