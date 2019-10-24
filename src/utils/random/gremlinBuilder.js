@@ -1,8 +1,9 @@
 import gremlins from "gremlins.js/src/main";
 import { getOffset } from "../htmlHelper";
-import { randomUpdateForProp } from "./VuePropRandom";
 import { range } from "./randomHelper";
 import { log, warn, info, error } from "@/utils/logger";
+import { randomUpdateForProp } from "./VuePropRandom";
+import * as random from "./randomHelper";
 
 function repeat(count, value) {
   return Array(count).fill(value);
@@ -25,7 +26,7 @@ function addClickGremlin(horde, element, callback) {
 }
 
 function addPropsGremlin(horde, { prop, changeProp, maxTentative }, callback) {
-  const updater = randomUpdateForProp({ prop, changeProp, maxTentative });
+  const updater = randomUpdateForProp({ prop, changeProp, maxTentative }, random);
   if (!updater) {
     return false;
   }

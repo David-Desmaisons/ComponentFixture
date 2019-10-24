@@ -1,5 +1,3 @@
-import { getRandomTypes, oneOf, randomByTypes } from "./randomHelper";
-
 function getCompatibleValue(getRandom, validate, maxTentative) {
   let value;
   let success = false;
@@ -16,9 +14,9 @@ function randomUpdateFromPossibleValues({
   validate,
   changeProp,
   possibleValues
-}) {
+},random) {
   return () => {
-    const value = oneOf(possibleValues);
+    const value = random.oneOf(possibleValues);
     if (!validate(value).ok) {
       return;
     }
@@ -32,10 +30,10 @@ function randomUpdateFromPureRandom({
   validate,
   changeProp,
   maxTentative
-}) {
+}, random) {
   return () => {
-    const type = oneOf(compatibleTypes);
-    const getRandom = randomByTypes[type];
+    const type = random.oneOf(compatibleTypes);
+    const getRandom = random.randomByTypes[type];
     const { success, value } = getCompatibleValue(
       getRandom,
       validate,
@@ -51,7 +49,7 @@ function randomUpdateForProp({
   prop: { key, metaData },
   changeProp,
   maxTentative
-}) {
+}, random) {
   const { possibleValues, types, validate } = metaData;
   if (possibleValues) {
     return randomUpdateFromPossibleValues({
@@ -59,9 +57,9 @@ function randomUpdateForProp({
       validate,
       changeProp,
       possibleValues
-    });
+    }, random);
   }
-  const compatibleTypes = getRandomTypes(types);
+  const compatibleTypes = random.getRandomTypes(types, random);
   if (compatibleTypes.length === 0) {
     return null;
   }
@@ -71,7 +69,7 @@ function randomUpdateForProp({
     validate,
     changeProp,
     maxTentative
-  });
+  }, random);
 }
 
 export { randomUpdateForProp };
