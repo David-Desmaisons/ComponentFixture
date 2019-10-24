@@ -2,13 +2,9 @@ import { log, warn, info, error } from "@/utils/logger";
 
 const suffix = "ComponentFixture:";
 
-describe.each([
-  ["log", log],
-  ["warn", warn],
-  ["info", info],
-  ["error", error]
-])
-  ("%s", (name, logFunction) => {
+describe.each([["log", log], ["warn", warn], ["info", info], ["error", error]])(
+  "%s",
+  (name, logFunction) => {
     let native;
     let mockedLog;
     beforeEach(() => {
@@ -29,4 +25,5 @@ describe.each([
       logFunction.apply(null, arg);
       expect(mockedLog).toHaveBeenCalledWith(...expected);
     });
-  });
+  }
+);

@@ -20,8 +20,11 @@
 <script>
 import { VTooltip } from "v-tooltip";
 import MonkeyButton from "../internals/MonkeyButton";
-import gremlins from "gremlins.js/src/main";
-import { createGremlins } from "@/utils/gremlinBuilder";
+import { createGremlins } from "@/utils/random/gremlinBuilder";
+
+function format(value) {
+  return Math.round(value * 100) / 100;
+}
 
 const props = {
   props: {
@@ -50,7 +53,7 @@ export default {
     return {
       horde: null,
       action: 0,
-      delay: 100,
+      delay: 50,
       maxOperation: 500
     };
   },
@@ -68,8 +71,14 @@ export default {
       if (isUnderAttack) {
         return;
       }
-      const options = { props, element: getUnderTestComponent().$el, delay };
-      const horde = createGremlins(gremlins, options, onGremlinAction);
+      const changeProp = (key, value) => this.$emit("changed", { key, value });
+      const options = {
+        props,
+        element: getUnderTestComponent().$el,
+        delay,
+        changeProp
+      };
+      const horde = createGremlins(options, onGremlinAction);
       this.horde = horde;
       horde.before(() => (this.action = 0));
       horde.after(onEnded);
@@ -93,11 +102,14 @@ export default {
     isUnderAttack() {
       return this.horde !== null;
     },
+    realMax() {
+      return this.maxOperation + this.delay;
+    },
     completion() {
       if (!this.isUnderAttack) {
         return null;
       }
-      return Math.min(100, (100 * this.action) / this.maxOperation);
+      return format(Math.min(100, (100 * this.action) / this.realMax));
     }
   }
 };
