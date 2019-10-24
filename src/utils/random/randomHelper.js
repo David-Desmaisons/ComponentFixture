@@ -1,30 +1,42 @@
+import Chance from "chance";
+
 const randomByTypes = {
-  String() {
-    return "a";
+  String(chance) {
+    return chance.string();
   },
-  Number() {
-    return 78;
+  Number(chance) {
+    return chance.integer({ min: 0, max: 100 });
   },
-  Boolean() {
-    return false;
+  Boolean(chance) {
+    return chance.bool();
   }
 };
 
 const typesWithRandom = Object.keys(randomByTypes);
 
-function getRandomTypes(types) {
-  return types.filter(t => typesWithRandom.includes(t));
-}
-
-function oneOf(array) {
-  if (!array || array.length === 0) {
-    return undefined;
+class RandomGenerator {
+  constructor(seed) {
+    this._chance = new Chance(seed);
   }
-  return array[0];
+
+  getRandomForType(type) {
+    return () => randomByTypes[type](this._chance);
+  }
+
+  getRandomTypes(types) {
+    return types.filter(t => typesWithRandom.includes(t));
+  }
+
+  oneOf(array) {
+    if (!array || array.length === 0) {
+      return undefined;
+    }
+    return this._chance.pickone(array);
+  }
+
+  range(min, max) {
+    return Math.random() * max + min;
+  }
 }
 
-function range(min, max) {
-  return Math.random() * max + min;
-}
-
-export { randomByTypes, getRandomTypes, oneOf, range };
+export { RandomGenerator };

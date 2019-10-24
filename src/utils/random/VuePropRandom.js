@@ -9,12 +9,10 @@ function getCompatibleValue(getRandom, validate, maxTentative) {
   return { value, success };
 }
 
-function randomUpdateFromPossibleValues({
-  key,
-  validate,
-  changeProp,
-  possibleValues
-},random) {
+function randomUpdateFromPossibleValues(
+  { key, validate, changeProp, possibleValues },
+  random
+) {
   return () => {
     const value = random.oneOf(possibleValues);
     if (!validate(value).ok) {
@@ -24,16 +22,13 @@ function randomUpdateFromPossibleValues({
   };
 }
 
-function randomUpdateFromPureRandom({
-  key,
-  compatibleTypes,
-  validate,
-  changeProp,
-  maxTentative
-}, random) {
+function randomUpdateFromPureRandom(
+  { key, compatibleTypes, validate, changeProp, maxTentative },
+  random
+) {
   return () => {
     const type = random.oneOf(compatibleTypes);
-    const getRandom = random.randomByTypes[type];
+    const getRandom = random.getRandomForType(type);
     const { success, value } = getCompatibleValue(
       getRandom,
       validate,
@@ -45,31 +40,36 @@ function randomUpdateFromPureRandom({
   };
 }
 
-function randomUpdateForProp({
-  prop: { key, metaData },
-  changeProp,
-  maxTentative
-}, random) {
+function randomUpdateForProp(
+  { prop: { key, metaData }, changeProp, maxTentative },
+  random
+) {
   const { possibleValues, types, validate } = metaData;
   if (possibleValues) {
-    return randomUpdateFromPossibleValues({
-      key,
-      validate,
-      changeProp,
-      possibleValues
-    }, random);
+    return randomUpdateFromPossibleValues(
+      {
+        key,
+        validate,
+        changeProp,
+        possibleValues
+      },
+      random
+    );
   }
   const compatibleTypes = random.getRandomTypes(types, random);
   if (compatibleTypes.length === 0) {
     return null;
   }
-  return randomUpdateFromPureRandom({
-    key,
-    compatibleTypes,
-    validate,
-    changeProp,
-    maxTentative
-  }, random);
+  return randomUpdateFromPureRandom(
+    {
+      key,
+      compatibleTypes,
+      validate,
+      changeProp,
+      maxTentative
+    },
+    random
+  );
 }
 
 export { randomUpdateForProp };

@@ -1,15 +1,14 @@
 import gremlins from "gremlins.js/src/main";
 import { getOffset } from "../htmlHelper";
-import { range } from "./randomHelper";
 import { log, warn, info, error } from "@/utils/logger";
 import { randomUpdateForProp } from "./VuePropRandom";
-import * as random from "./randomHelper";
+import { RandomGenerator } from "./randomHelper";
 
 function repeat(count, value) {
   return Array(count).fill(value);
 }
 
-function addClickGremlin(horde, element, callback) {
+function addClickGremlin(horde, element, random, callback) {
   if (!element) {
     return horde;
   }
@@ -18,15 +17,23 @@ function addClickGremlin(horde, element, callback) {
       var offset = getOffset(element);
       callback();
       return [
-        parseInt(range(0, element.clientWidth) + offset.x),
-        parseInt(range(0, element.clientHeight) + offset.y)
+        parseInt(random.range(0, element.clientWidth) + offset.x),
+        parseInt(random.range(0, element.clientHeight) + offset.y)
       ];
     })
   );
 }
 
-function addPropsGremlin(horde, { prop, changeProp, maxTentative }, callback) {
-  const updater = randomUpdateForProp({ prop, changeProp, maxTentative }, random);
+function addPropsGremlin(
+  horde,
+  { prop, changeProp, maxTentative },
+  random,
+  callback
+) {
+  const updater = randomUpdateForProp(
+    { prop, changeProp, maxTentative },
+    random
+  );
   if (!updater) {
     return false;
   }
@@ -55,9 +62,9 @@ function computeDistribution(successCount, clickProbability) {
   return successCount === 0
     ? [1]
     : [
-      ...repeat(successCount, (1 - clickProbability) / successCount),
-      clickProbability
-    ];
+        ...repeat(successCount, (1 - clickProbability) / successCount),
+        clickProbability
+      ];
 }
 
 function createGremlins(
@@ -71,24 +78,28 @@ function createGremlins(
   },
   callback
 ) {
+  const randomGenerator = new RandomGenerator();
   const horde = gremlins.createHorde().logger({ log, warn, info, error });
   addFpsMogwai(horde, callback);
   let successCount = 0;
 
   if (props) {
     props.forEach(prop => {
-      if (addPropsGremlin(
-        horde,
-        { prop, changeProp, maxTentative },
-        callback
-      )) {
+      if (
+        addPropsGremlin(
+          horde,
+          { prop, changeProp, maxTentative },
+          randomGenerator,
+          callback
+        )
+      ) {
         successCount++;
       }
     });
   }
 
   const distribution = computeDistribution(successCount, clickProbability);
-  return addClickGremlin(horde, element, callback).strategy(
+  return addClickGremlin(horde, element, randomGenerator, callback).strategy(
     gremlins.strategies
       .distribution()
       .delay(delay)
