@@ -57,6 +57,9 @@ export default {
       maxOperation: 500
     };
   },
+  beforeDestroy() {
+    this.stop();
+  },
   methods: {
     run() {
       const {
