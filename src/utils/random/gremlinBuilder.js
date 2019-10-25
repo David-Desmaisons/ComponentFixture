@@ -3,6 +3,7 @@ import { getOffset } from "../htmlHelper";
 import { log, warn, info, error } from "@/utils/logger";
 import { randomUpdateForProp } from "./VuePropRandom";
 import { RandomGenerator } from "./randomHelper";
+import Chance from "chance";
 
 function repeat(count, value) {
   return Array(count).fill(value);
@@ -62,9 +63,9 @@ function computeDistribution(successCount, clickProbability) {
   return successCount === 0
     ? [1]
     : [
-        ...repeat(successCount, (1 - clickProbability) / successCount),
-        clickProbability
-      ];
+      ...repeat(successCount, (1 - clickProbability) / successCount),
+      clickProbability
+    ];
 }
 
 function createGremlins(
@@ -74,12 +75,17 @@ function createGremlins(
     delay,
     changeProp,
     clickProbability = 0.5,
-    maxTentative = 10
+    maxTentative = 10,
+    seed = null
   },
   callback
 ) {
-  const randomGenerator = new RandomGenerator();
-  const horde = gremlins.createHorde().logger({ log, warn, info, error });
+  if (seed === null) {
+    seed = Math.floor(Math.random() * 100000);
+  }
+  const chance = new Chance(seed);
+  const randomGenerator = new RandomGenerator(chance);
+  const horde = gremlins.createHorde().logger({ log, warn, info, error }).randomizer(chance);
   addFpsMogwai(horde, callback);
   let successCount = 0;
 

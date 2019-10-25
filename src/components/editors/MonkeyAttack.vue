@@ -54,7 +54,9 @@ export default {
       horde: null,
       action: 0,
       delay: 50,
-      maxOperation: 500
+      maxOperation: 500,
+      seed: null,
+      usedSeed: null
     };
   },
   beforeDestroy() {
@@ -69,7 +71,8 @@ export default {
         delay,
         maxOperation: nb,
         onGremlinAction,
-        onEnded
+        onEnded,
+        seed
       } = this;
       if (isUnderAttack) {
         return;
@@ -79,9 +82,11 @@ export default {
         props,
         element: getUnderTestComponent().$el,
         delay,
+        seed,
         changeProp
       };
       const horde = createGremlins(options, onGremlinAction);
+      this.usedSeed = horde.randomizer().seed;
       this.horde = horde;
       horde.before(() => (this.action = 0));
       horde.after(onEnded);

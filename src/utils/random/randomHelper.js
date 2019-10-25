@@ -1,5 +1,3 @@
-import Chance from "chance";
-
 const randomByTypes = {
   String(chance) {
     return chance.string();
@@ -15,8 +13,12 @@ const randomByTypes = {
 const typesWithRandom = Object.keys(randomByTypes);
 
 class RandomGenerator {
-  constructor(seed) {
-    this._chance = new Chance(seed);
+  constructor(chance) {
+    this._chance = chance;
+  }
+
+  get chance(){
+    return this._chance
   }
 
   getRandomForType(type) {
