@@ -55,7 +55,7 @@
           v-if="metaData.isModel"
         >
           <i
-            class="fa fa-refresh"
+            class="fa fa-arrows-h"
             v-tooltip.bottom="'v-model'"
           />
         </div>

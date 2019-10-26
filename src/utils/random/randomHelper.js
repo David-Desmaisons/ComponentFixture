@@ -17,8 +17,8 @@ class RandomGenerator {
     this._chance = chance;
   }
 
-  get chance(){
-    return this._chance
+  get chance() {
+    return this._chance;
   }
 
   getRandomForType(type) {

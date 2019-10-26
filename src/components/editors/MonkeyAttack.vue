@@ -1,13 +1,7 @@
 <template>
   <div class="monkey-attack-editor">
 
-    <span v-if="isUnderAttack">{{completion}}%</span>
-    <div
-      v-for="(p,idx) in props"
-      :key="idx"
-    >
-      {{p.key}}
-    </div>
+    <span v-if="isUnderAttack">{{completion | decimal}}%</span>
 
     <MonkeyButton
       :disabled="isUnderAttack"
@@ -15,16 +9,20 @@
       v-tooltip.left="'Run monkey attack'"
       @click.native="run"
     />
+
+    <AttackResult
+      v-for="(result,idx) in attacks"
+      :key="idx"
+      :result="result"
+    />
   </div>
 </template>
 <script>
 import { VTooltip } from "v-tooltip";
-import MonkeyButton from "../internals/MonkeyButton";
+import MonkeyButton from "../internals/monkey/MonkeyButton";
+import AttackResult from "../internals/monkey/AttackResult";
 import { createGremlins } from "@/utils/random/gremlinBuilder";
-
-function format(value) {
-  return Math.round(value * 100) / 100;
-}
+import { listenToError } from "../../utils/htmlHelper";
 
 const props = {
   props: {
@@ -44,8 +42,14 @@ export default {
   directives: {
     tooltip: VTooltip
   },
+  filters: {
+    decimal(value) {
+      return Math.round(value * 100) / 100;
+    }
+  },
   components: {
-    MonkeyButton
+    MonkeyButton,
+    AttackResult
   },
   inheritAttrs: false,
   props,
@@ -56,7 +60,7 @@ export default {
       delay: 50,
       maxOperation: 500,
       seed: null,
-      usedSeed: null
+      attacks: []
     };
   },
   beforeDestroy() {
@@ -70,8 +74,10 @@ export default {
         props,
         delay,
         maxOperation: nb,
-        onGremlinAction,
+        onGremlin,
+        onStart,
         onEnded,
+        fpsWatcher,
         seed
       } = this;
       if (isUnderAttack) {
@@ -85,15 +91,41 @@ export default {
         seed,
         changeProp
       };
-      const horde = createGremlins(options, onGremlinAction);
-      this.usedSeed = horde.randomizer().seed;
+      const horde = createGremlins(options, { onGremlin, fpsWatcher });
+
       this.horde = horde;
-      horde.before(() => (this.action = 0));
+      horde.before(onStart);
       horde.after(onEnded);
       horde.unleash({ nb });
     },
+    onStart() {
+      const { delay, maxOperation } = this;
+      this._currentAttack = {
+        fps: [],
+        error: [],
+        delay: delay,
+        maxOperation,
+        seed: this.horde.randomizer().seed,
+        attackNumber: 0
+      };
+      this._listener = listenToError(this.onError);
+    },
     onEnded() {
+      if (this._listener) {
+        this._listener();
+        this._listener = null;
+      }
       this.horde = null;
+      const { _currentAttack } = this;
+      _currentAttack.attackNumber = this.action;
+      this.attacks.push(_currentAttack);
+      this.action = 0;
+    },
+    onError(error) {
+      this._currentAttack.error.push(error);
+    },
+    fpsWatcher(fps) {
+      this._currentAttack.fps.push(fps);
     },
     stop() {
       const { horde } = this;
@@ -102,7 +134,7 @@ export default {
       }
       horde.stop();
     },
-    onGremlinAction() {
+    onGremlin() {
       this.action++;
     }
   },
@@ -117,7 +149,7 @@ export default {
       if (!this.isUnderAttack) {
         return null;
       }
-      return format(Math.min(100, (100 * this.action) / this.realMax));
+      return Math.min(100, (100 * this.action) / this.realMax);
     }
   }
 };

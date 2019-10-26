@@ -46,13 +46,14 @@ function addPropsGremlin(
   return true;
 }
 
-function addFpsMogwai(horde, callback) {
+function addFpsMogwai(horde, fpsWatcher, callback) {
   return horde.mogwai(
     gremlins.mogwais
       .fps()
       .delay(500)
       .levelSelector(fps => {
         callback();
+        fpsWatcher(fps);
         if (fps < 5) return "error";
         return fps < 10 ? "warn" : "log";
       })
@@ -63,9 +64,9 @@ function computeDistribution(successCount, clickProbability) {
   return successCount === 0
     ? [1]
     : [
-      ...repeat(successCount, (1 - clickProbability) / successCount),
-      clickProbability
-    ];
+        ...repeat(successCount, (1 - clickProbability) / successCount),
+        clickProbability
+      ];
 }
 
 function createGremlins(
@@ -78,15 +79,18 @@ function createGremlins(
     maxTentative = 10,
     seed = null
   },
-  callback
+  { onGremlin = () => {}, fpsWatcher = () => {} }
 ) {
   if (seed === null) {
     seed = Math.floor(Math.random() * 100000);
   }
   const chance = new Chance(seed);
   const randomGenerator = new RandomGenerator(chance);
-  const horde = gremlins.createHorde().logger({ log, warn, info, error }).randomizer(chance);
-  addFpsMogwai(horde, callback);
+  const horde = gremlins
+    .createHorde()
+    .logger({ log, warn, info, error })
+    .randomizer(chance);
+  addFpsMogwai(horde, fpsWatcher, onGremlin);
   let successCount = 0;
 
   if (props) {
@@ -96,7 +100,7 @@ function createGremlins(
           horde,
           { prop, changeProp, maxTentative },
           randomGenerator,
-          callback
+          onGremlin
         )
       ) {
         successCount++;
@@ -105,7 +109,7 @@ function createGremlins(
   }
 
   const distribution = computeDistribution(successCount, clickProbability);
-  return addClickGremlin(horde, element, randomGenerator, callback).strategy(
+  return addClickGremlin(horde, element, randomGenerator, onGremlin).strategy(
     gremlins.strategies
       .distribution()
       .delay(delay)
