@@ -32,6 +32,20 @@
       />
     </div>
 
+    <div class="attack">
+      <label class="main">Attack number</label>
+      <span>{{attack.maxOperation}}</span>
+      <input
+        class="main form-control component-input"
+        type="range"
+        min="10"
+        max="1500"
+        :disabled="isUnderAttack"
+        v-model.number="attack.maxOperation"
+      />
+    </div>
+    
+
     <span v-if="isUnderAttack">{{completion | decimal}}%</span>
 
     <div class="actions">
@@ -96,7 +110,7 @@ export default {
     label.main {
       font-weight: bold;
       display: inline-block;
-      width: 100px;
+      width: 130px;
     }
 
     &.actions {
