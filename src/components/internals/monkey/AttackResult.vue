@@ -7,7 +7,7 @@
       <h1
         class="main-feedback"
         :class="status"
-      >Monkey attack: {{status}}</h1>
+      >{{status}}</h1>
     </div>
 
     <div class="attack-type">
@@ -43,10 +43,6 @@
 </template>
 <script>
 import FpsFeedback from "./FpsFeedback";
-
-function format(value) {
-  return Math.round(100 * value) / 100;
-}
 export default {
   components: {
     FpsFeedback
@@ -131,16 +127,20 @@ export default {
     border-color: red;
   }
 
-  .main-feedback.success {
-    color: green;
-  }
+  .main-feedback {
+    text-transform: capitalize;
 
-  .main-feedback.warn {
-    color: orange;
-  }
+    &.success {
+      color: green;
+    }
 
-  .main-feedback.erro {
-    color: red;
+    &.warn {
+      color: orange;
+    }
+
+    &.erro {
+      color: red;
+    }
   }
 }
 </style>

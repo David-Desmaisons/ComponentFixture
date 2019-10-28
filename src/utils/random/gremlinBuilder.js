@@ -77,13 +77,10 @@ function createGremlins(
     changeProp,
     clickProbability = 0.5,
     maxTentative = 10,
-    seed = null
+    seed
   },
   { onGremlin = () => {}, fpsWatcher = () => {} }
 ) {
-  if (seed === null) {
-    seed = Math.floor(Math.random() * 100000);
-  }
   const chance = new Chance(seed);
   const randomGenerator = new RandomGenerator(chance);
   const horde = gremlins

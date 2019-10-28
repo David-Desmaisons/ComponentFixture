@@ -1,13 +1,10 @@
 <template>
   <div class="monkey-attack-editor">
-
-    <span v-if="isUnderAttack">{{completion | decimal}}%</span>
-
-    <MonkeyButton
-      :disabled="isUnderAttack"
-      :activated="isUnderAttack"
-      v-tooltip.left="'Run monkey attack'"
-      @click.native="run"
+    <AttackBuilder
+      @run="run"
+      :attack="attack"
+      :isUnderAttack="isUnderAttack"
+      :completion="completion"
     />
 
     <AttackResult
@@ -18,8 +15,7 @@
   </div>
 </template>
 <script>
-import { VTooltip } from "v-tooltip";
-import MonkeyButton from "../internals/monkey/MonkeyButton";
+import AttackBuilder from "../internals/monkey/AttackBuilder";
 import AttackResult from "../internals/monkey/AttackResult";
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { listenToError } from "../../utils/htmlHelper";
@@ -39,16 +35,8 @@ export default {
   name: "monkey-editor",
   key: "monkey",
   display: "Monkey attack",
-  directives: {
-    tooltip: VTooltip
-  },
-  filters: {
-    decimal(value) {
-      return Math.round(value * 100) / 100;
-    }
-  },
   components: {
-    MonkeyButton,
+    AttackBuilder,
     AttackResult
   },
   inheritAttrs: false,
@@ -57,9 +45,12 @@ export default {
     return {
       horde: null,
       action: 0,
-      delay: 50,
-      maxOperation: 500,
-      seed: null,
+      attack: {
+        delay: 50,
+        maxOperation: 500,
+        generateSeed: true,
+        seed: 0
+      },
       attacks: []
     };
   },
@@ -72,17 +63,19 @@ export default {
         isUnderAttack,
         getUnderTestComponent,
         props,
-        delay,
-        maxOperation: nb,
+        attack: { delay, seed: inputSeed, generateSeed, maxOperation: nb },
         onGremlin,
         onStart,
         onEnded,
-        fpsWatcher,
-        seed
+        fpsWatcher
       } = this;
       if (isUnderAttack) {
         return;
       }
+      const seed = generateSeed
+        ? Math.floor(Math.random() * 100000)
+        : inputSeed;
+      this.attack.seed = seed;
       const changeProp = (key, value) => this.$emit("changed", { key, value });
       const options = {
         props,
@@ -99,8 +92,11 @@ export default {
       horde.unleash({ nb });
     },
     onStart() {
-      const { delay, maxOperation } = this;
+      const {
+        attack: { delay, maxOperation }
+      } = this;
       this._currentAttack = {
+        status: null,
         fps: [],
         error: [],
         delay: delay,
@@ -118,6 +114,10 @@ export default {
       this.horde = null;
       const { _currentAttack } = this;
       _currentAttack.attackNumber = this.action;
+      const { status } = _currentAttack;
+      if (status === null) {
+        _currentAttack.status = "completed";
+      }
       this.attacks.push(_currentAttack);
       this.action = 0;
     },
@@ -132,6 +132,7 @@ export default {
       if (!horde) {
         return;
       }
+      this._currentAttack.status = "stopped";
       horde.stop();
     },
     onGremlin() {
@@ -143,7 +144,7 @@ export default {
       return this.horde !== null;
     },
     realMax() {
-      return this.maxOperation + this.delay;
+      return this.attack.maxOperation + this.attack.delay;
     },
     completion() {
       if (!this.isUnderAttack) {
