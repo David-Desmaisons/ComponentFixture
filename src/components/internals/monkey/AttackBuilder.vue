@@ -44,22 +44,30 @@
         v-model.number="attack.maxOperation"
       />
     </div>
-    
-
-    <span v-if="isUnderAttack">{{completion | decimal}}%</span>
 
     <div class="actions">
+
       <MonkeyButton
+        v-show="!isUnderAttack"
         :disabled="isUnderAttack"
         :activated="isUnderAttack"
         @click.native="$emit('run')"
       />
+
+      <StopButton
+        v-show="isUnderAttack"
+        @click.native="$emit('stop')"
+      />
+
+      <span v-if="isUnderAttack">{{completion | decimal}}%</span>
+
     </div>
 
   </div>
 </template>
 <script>
 import MonkeyButton from "./MonkeyButton";
+import StopButton from "./StopButton";
 
 export default {
   name: "attack-builder",
@@ -83,7 +91,8 @@ export default {
     }
   },
   components: {
-    MonkeyButton
+    MonkeyButton,
+    StopButton
   }
 };
 </script>
@@ -115,6 +124,7 @@ export default {
 
     &.actions {
       flex-direction: row-reverse;
+      justify-content: space-between;
     }
 
     span {

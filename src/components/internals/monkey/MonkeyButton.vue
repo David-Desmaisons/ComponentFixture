@@ -120,7 +120,7 @@ button.monkey-button {
   border: 0;
   border-radius: 40px;
   box-shadow: 0;
-  background: lightblue;
+  background: lightgreen;
 
   .monkey-root {
     display: flex;

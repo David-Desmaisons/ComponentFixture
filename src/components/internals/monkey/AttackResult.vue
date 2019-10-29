@@ -8,6 +8,12 @@
         class="main-feedback"
         :class="status"
       >{{status}}</h1>
+      <i
+        v-if="stopped"
+        :class="status"
+        class="main-feedback fa fa-pause"
+        aria-hidden="true"
+      ></i>
     </div>
 
     <div class="attack-type">
@@ -77,6 +83,9 @@ export default {
       }
       return this.fpsProblem ? "warn" : "success";
     },
+    stopped() {
+      return this.result.status !== "completed";
+    },
     problems() {
       const { minimunAcceptableFps, fpsProblem } = this;
       const result = this.result.error.map(
@@ -96,7 +105,7 @@ export default {
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
-  margin: 5px;
+  margin: 2px;
   padding: 5px;
   border: 2px solid black;
   border-radius: 5px;
@@ -104,11 +113,16 @@ export default {
 
   .attack-sum-up {
     flex: 1 100%;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-left: 5px;
+    }
   }
 
   h1 {
     font-size: 14px;
-    margin: 5px 0 12px 0;
   }
 
   p {

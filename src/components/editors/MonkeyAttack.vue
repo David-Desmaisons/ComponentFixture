@@ -2,6 +2,7 @@
   <div class="monkey-attack-editor">
     <AttackBuilder
       @run="run"
+      @stop="stop"
       :attack="attack"
       :isUnderAttack="isUnderAttack"
       :completion="completion"
