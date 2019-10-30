@@ -123,6 +123,7 @@ export default {
 
   h1 {
     font-size: 14px;
+    margin: 5px 0;
   }
 
   p {

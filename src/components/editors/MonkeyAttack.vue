@@ -121,6 +121,8 @@ export default {
       }
       this.attacks.push(_currentAttack);
       this.action = 0;
+      const res = _currentAttack.error.length === 0 ? "success" : "error";
+      this.$emit(res, `Monkey attack ended with ${res}`);
     },
     onError(error) {
       this._currentAttack.error.push(error);
