@@ -69,7 +69,13 @@ export default {
         isUnderAttack,
         getUnderTestComponent,
         props,
-        attack: { delay, seed: inputSeed, generateSeed, maxOperation: nb, includeMethod },
+        attack: {
+          delay,
+          seed: inputSeed,
+          generateSeed,
+          maxOperation: nb,
+          includeMethod
+        },
         onGremlin,
         onStart,
         onEnded,

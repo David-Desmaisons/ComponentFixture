@@ -111,7 +111,7 @@ export default {
 </script>
 <style lang="less" scoped>
 @button-color: black;
-@button-color-hover: black;
+@button-color-hover: red;
 @button-size: 44px;
 @button-svg-size: 40px;
 
@@ -151,6 +151,7 @@ button.monkey-button {
     }
   }
   &:hover {
+    color: @button-color-hover;
     svg {
       fill: @button-color-hover;
       &.on-fire {
