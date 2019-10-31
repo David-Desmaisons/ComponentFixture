@@ -2,7 +2,7 @@
   <div class="attack-builder">
 
     <h1>
-      Monkey attack builder
+      Monkey test builder
     </h1>
 
     <div class="seed">
