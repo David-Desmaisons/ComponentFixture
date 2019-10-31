@@ -29,6 +29,10 @@ const props = {
   getUnderTestComponent: {
     required: true,
     type: Function
+  },
+  methods: {
+    required: true,
+    type: Array
   }
 };
 
@@ -50,6 +54,7 @@ export default {
         delay: 50,
         maxOperation: 500,
         generateSeed: true,
+        includeMethod: false,
         seed: 0
       },
       attacks: []
@@ -64,10 +69,11 @@ export default {
         isUnderAttack,
         getUnderTestComponent,
         props,
-        attack: { delay, seed: inputSeed, generateSeed, maxOperation: nb },
+        attack: { delay, seed: inputSeed, generateSeed, maxOperation: nb, includeMethod },
         onGremlin,
         onStart,
         onEnded,
+        methods,
         fpsWatcher
       } = this;
       if (isUnderAttack) {
@@ -81,6 +87,8 @@ export default {
       const options = {
         props,
         element: getUnderTestComponent().$el,
+        includeMethod,
+        methods,
         delay,
         seed,
         changeProp

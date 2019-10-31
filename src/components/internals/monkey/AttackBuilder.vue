@@ -45,6 +45,16 @@
       />
     </div>
 
+    <div class="methods">
+      <label class="main">Call methods</label>
+      <input
+        class="form-control component-input"
+        type="checkbox"
+        :disabled="isUnderAttack"
+        v-model="attack.includeMethod"
+      />
+    </div>
+
     <div class="actions">
 
       <MonkeyButton
@@ -125,6 +135,15 @@ export default {
     &.actions {
       flex-direction: row-reverse;
       justify-content: space-between;
+    }
+
+    &.methods {
+      label {
+        width: auto;
+      }
+      input.form-control.component-input {
+        width: auto;
+      }
     }
 
     span {

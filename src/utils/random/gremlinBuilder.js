@@ -75,6 +75,8 @@ function createGremlins(
     element,
     delay,
     changeProp,
+    includeMethod,
+    methods,
     clickProbability = 0.5,
     maxTentative = 10,
     seed
@@ -102,6 +104,16 @@ function createGremlins(
       ) {
         successCount++;
       }
+    });
+  }
+  if (includeMethod) {
+    methods.forEach(({name, execute}) => {
+      horde.gremlin(() => {
+        onGremlin();
+        log(`calling ${name} method`);
+        execute();
+      });
+      successCount++;
     });
   }
 
