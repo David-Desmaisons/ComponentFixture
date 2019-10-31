@@ -173,7 +173,7 @@ export default {
       this.changed({ key: this.attribute, value: getDefaultForType(newType) });
     },
     value(newValue) {
-      const potencialTypes = getTypeFromValue(this.value);
+      const potencialTypes = getTypeFromValue(newValue);
       if (potencialTypes.includes(this.type)) {
         return;
       }
