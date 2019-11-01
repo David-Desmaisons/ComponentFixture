@@ -1,5 +1,8 @@
 <template>
-  <div class="attack-builder" :class="{attack: isUnderAttack}">
+  <div
+    class="attack-builder"
+    :class="{attack: isUnderAttack}"
+  >
 
     <h1>
       Monkey test builder
@@ -45,14 +48,26 @@
       />
     </div>
 
-    <div class="methods">
-      <label class="main">Call methods</label>
-      <input
-        class="form-control component-input"
-        type="checkbox"
-        :disabled="isUnderAttack"
-        v-model="attack.includeMethod"
-      />
+    <div class="others">
+      <div>
+        <label class="main">Call methods</label>
+        <input
+          class="form-control component-input"
+          type="checkbox"
+          :disabled="isUnderAttack"
+          v-model="attack.includeMethod"
+        />
+      </div>
+
+      <div>
+        <label class="main">Stop on console.error</label>
+        <input
+          class="form-control component-input"
+          type="checkbox"
+          :disabled="isUnderAttack"
+          v-model="attack.stopOnErrorLog"
+        />
+      </div>
     </div>
 
     <div class="actions">
@@ -115,11 +130,11 @@ export default {
   display: flex;
   flex-direction: column;
 
-  input {
+  input:not(type[checkbock]) {
     min-width: 0;
   }
 
-  &.attack{
+  &.attack {
     background: rgba(255, 0, 0, 0.5);
   }
 
@@ -145,12 +160,19 @@ export default {
       justify-content: space-between;
     }
 
-    &.methods {
-      label {
-        width: auto;
-      }
-      input.form-control.component-input {
-        width: auto;
+    &.others {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      div {
+        display: flex;
+        flex-direction: row;
+        label {
+          width: auto;
+        }
+        input.form-control.component-input {
+          width: auto;
+        }
       }
     }
 

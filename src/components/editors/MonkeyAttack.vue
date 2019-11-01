@@ -109,13 +109,14 @@ export default {
     },
     onStart() {
       const {
-        attack: { delay, maxOperation }
+        attack: { delay, maxOperation, stopOnErrorLog }
       } = this;
       this._currentAttack = {
         status: null,
         fps: [],
         error: [],
         delay: delay,
+        stopOnErrorLog,
         maxOperation,
         seed: this.horde.randomizer().seed,
         attackNumber: 0
@@ -141,7 +142,7 @@ export default {
     },
     onError(error) {
       this._currentAttack.error.push(error);
-      if (error.type !== "exception" || !this.stopOnErrorLog) {
+      if (error.type !== "exception" && !this._currentAttack.stopOnErrorLog) {
         return;
       }
       this.stop();
