@@ -55,6 +55,7 @@ export default {
         maxOperation: 500,
         generateSeed: true,
         includeMethod: false,
+        stopOnErrorLog: false,
         seed: 0
       },
       attacks: []
@@ -140,6 +141,9 @@ export default {
     },
     onError(error) {
       this._currentAttack.error.push(error);
+      if (error.type !== "exception" || !this.stopOnErrorLog) {
+        return;
+      }
       this.stop();
     },
     fpsWatcher(fps) {
