@@ -1,5 +1,5 @@
 <template>
-  <div class="attack-builder">
+  <div class="attack-builder" :class="{attack: isUnderAttack}">
 
     <h1>
       Monkey test builder
@@ -114,6 +114,14 @@ export default {
   padding: 5px 10px;
   display: flex;
   flex-direction: column;
+
+  input {
+    min-width: 0;
+  }
+
+  &.attack{
+    background: rgba(255, 0, 0, 0.5);
+  }
 
   h1 {
     margin-top: 5px;
