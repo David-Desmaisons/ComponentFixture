@@ -69,7 +69,13 @@ export default {
         isUnderAttack,
         getUnderTestComponent,
         props,
-        attack: { delay, seed: inputSeed, generateSeed, maxOperation: nb, includeMethod },
+        attack: {
+          delay,
+          seed: inputSeed,
+          generateSeed,
+          maxOperation: nb,
+          includeMethod
+        },
         onGremlin,
         onStart,
         onEnded,
@@ -134,6 +140,7 @@ export default {
     },
     onError(error) {
       this._currentAttack.error.push(error);
+      this.stop();
     },
     fpsWatcher(fps) {
       this._currentAttack.fps.push(fps);

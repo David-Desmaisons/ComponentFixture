@@ -89,7 +89,7 @@ export default {
     problems() {
       const { minimunAcceptableFps, fpsProblem } = this;
       const result = this.result.error.map(
-        erro => `Exception raised: ${erro.message}`
+        ({ message, type }) => `${type}: ${message}`
       );
       if (fpsProblem) {
         result.push(`Fps lower than ${minimunAcceptableFps}`);
