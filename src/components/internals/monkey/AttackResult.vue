@@ -39,7 +39,7 @@
       v-if="status!=='success'"
       class="problems"
     >
-      <div><b>Problems: </b></div>
+      <div><b>Problems ({{problems.length}}):</b></div>
       <div
         v-for="(problem,idx) in problems"
         :key="idx"
