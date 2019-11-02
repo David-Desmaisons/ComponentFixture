@@ -11,7 +11,7 @@
       <i
         v-if="stopped"
         :class="status"
-        class="main-feedback fa fa-pause"
+        class="main-feedback fa fa-stop"
         aria-hidden="true"
       ></i>
     </div>
