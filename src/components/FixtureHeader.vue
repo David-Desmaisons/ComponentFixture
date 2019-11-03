@@ -73,7 +73,7 @@ export default {
     executeUpdate() {
       this.update();
       this.$nextTick(() => {
-        this.$emit("success", "$forceUpdate called on component");
+        this.$emit("success", "component has been re-created");
       });
     }
   },

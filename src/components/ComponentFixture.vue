@@ -214,7 +214,7 @@ export default {
     },
 
     update() {
-      this.getUnderTestComponent().$forceUpdate();
+      this.componentKey++;
     },
 
     getComponentInformation() {
@@ -231,6 +231,10 @@ export default {
     },
 
     afterMount() {
+      if (this.$updatedEventKey === this.componentKey) {
+        return;
+      }
+      this.$updatedEventKey = this.componentKey;
       const componentUnderTest = this.getUnderTestComponent();
       const emit = componentUnderTest.$emit;
       const newEmit = (eventName, ...args) => {
@@ -249,6 +253,7 @@ export default {
   },
 
   created() {
+    this.$updatedEventKey = 0;
     this.id = id++;
   },
 
@@ -277,12 +282,13 @@ export default {
 
     const {
       clearEvents,
-      dynamicAttributes,
-      data,
-      computed,
+      componentKey,
       componentName,
       componentMethods: methods,
       componentModel,
+      computed,
+      data,
+      dynamicAttributes,
       events,
       getUnderTestComponent,
       propsDefinition,
@@ -300,6 +306,7 @@ export default {
       scopedSlots,
       slots: childSlots,
       class: { "real-component": true },
+      key: componentKey,
       ref: "cut",
       on: this.setupEventsListeners(props, componentModel)
     };
@@ -386,10 +393,10 @@ export default {
   },
 
   updated() {
-    if (this.$stage !== 0) {
+    this.$stage = 1;
+    if (this.$updatedEventKey === this.componentKey) {
       return;
     }
-    this.$stage = 1;
     this.$nextTick(() => this.afterMount());
   },
 
@@ -417,6 +424,11 @@ export default {
        * The component under test name.
        */
       componentName: null,
+
+      /**
+       * The component under key to force re-creation.
+       */
+      componentKey: 1,
 
       /**
        * This object will contain all the props to be bound with the component under test.
