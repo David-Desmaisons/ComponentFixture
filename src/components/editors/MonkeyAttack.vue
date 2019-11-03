@@ -53,6 +53,7 @@ export default {
       attack: {
         delay: 50,
         maxOperation: 500,
+        mouseEvents: true,
         generateSeed: true,
         includeMethod: false,
         stopOnErrorLog: false,
@@ -75,7 +76,8 @@ export default {
           seed: inputSeed,
           generateSeed,
           maxOperation: nb,
-          includeMethod
+          includeMethod,
+          mouseEvents
         },
         onGremlin,
         onStart,
@@ -95,6 +97,7 @@ export default {
         props,
         element: getUnderTestComponent().$el,
         includeMethod,
+        mouseEvents,
         methods,
         delay,
         seed,
@@ -109,7 +112,7 @@ export default {
     },
     onStart() {
       const {
-        attack: { delay, maxOperation, stopOnErrorLog }
+        attack: { delay, maxOperation, stopOnErrorLog, mouseEvents }
       } = this;
       this._currentAttack = {
         status: null,
@@ -118,6 +121,7 @@ export default {
         delay: delay,
         stopOnErrorLog,
         maxOperation,
+        mouseEvents,
         seed: this.horde.randomizer().seed,
         attackNumber: 0
       };

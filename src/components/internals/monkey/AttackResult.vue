@@ -20,6 +20,7 @@
       <p><b>Seed: </b>{{result.seed}}</p>
       <p><b>Operations: </b>{{result.maxOperation}}</p>
       <p><b>Delay: </b>{{result.delay}}</p>
+      <p><b>Mouse events used: </b>{{result.mouseEvents? 'yes' : 'no'}}</p>
     </div>
     <div class="attack-results">
       <FpsFeedback

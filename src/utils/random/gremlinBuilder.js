@@ -64,9 +64,9 @@ function computeDistribution(successCount, clickProbability) {
   return successCount === 0
     ? [1]
     : [
-        ...repeat(successCount, (1 - clickProbability) / successCount),
-        clickProbability
-      ];
+      ...repeat(successCount, (1 - clickProbability) / successCount),
+      clickProbability
+    ];
 }
 
 function createGremlins(
@@ -77,12 +77,16 @@ function createGremlins(
     changeProp,
     includeMethod,
     methods,
+    mouseEvents,
     clickProbability = 0.5,
     maxTentative = 10,
     seed
   },
-  { onGremlin = () => {}, fpsWatcher = () => {} }
+  { onGremlin = () => { }, fpsWatcher = () => { } }
 ) {
+  if (!mouseEvents) {
+    clickProbability = 0;
+  }
   const chance = new Chance(seed);
   const randomGenerator = new RandomGenerator(chance);
   const horde = gremlins
@@ -107,7 +111,7 @@ function createGremlins(
     });
   }
   if (includeMethod) {
-    methods.forEach(({name, execute}) => {
+    methods.forEach(({ name, execute }) => {
       horde.gremlin(() => {
         onGremlin();
         log(`calling ${name} method`);

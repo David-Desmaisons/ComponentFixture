@@ -4,6 +4,25 @@
     :class="{attack: isUnderAttack}"
   >
 
+    <svg 
+      version="1.1"
+      baseProfile="full"
+      width="100%"
+      height="8"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line v-show="isUnderAttack"
+        x1="0"
+        y1="4"
+        :x2="`${completion}%`"
+        y2="4"
+        stroke="red"
+        stroke-width="16"
+        stroke-linecap="round"
+      />
+
+    </svg>
+
     <h1>
       Monkey test builder
     </h1>
@@ -49,6 +68,17 @@
     </div>
 
     <div class="others">
+
+      <div>
+        <label class="main">Mouse events</label>
+        <input
+          class="form-control component-input"
+          type="checkbox"
+          :disabled="isUnderAttack"
+          v-model="attack.mouseEvents"
+        />
+      </div>
+
       <div>
         <label class="main">Call methods</label>
         <input
@@ -84,8 +114,6 @@
         @click.native="$emit('stop')"
       />
 
-      <span v-if="isUnderAttack">{{completion | decimal}}%</span>
-
     </div>
 
   </div>
@@ -108,11 +136,6 @@ export default {
     completion: {
       type: Number,
       required: false
-    }
-  },
-  filters: {
-    decimal(value) {
-      return Math.round(value * 100) / 100;
     }
   },
   components: {
@@ -164,6 +187,7 @@ export default {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+      align-items: center;
       div {
         display: flex;
         flex-direction: row;
