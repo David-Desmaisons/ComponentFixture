@@ -90,6 +90,11 @@ export default {
 
     button {
       font-size: 12px;
+
+      &:hover{
+        background: red;
+        border-color: red;
+      }
     }
   }
 }
