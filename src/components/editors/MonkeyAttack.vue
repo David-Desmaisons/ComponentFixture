@@ -6,6 +6,17 @@
       v-bind="{attack, isUnderAttack}"
     />
 
+    <div class="attack-cleaner" v-if="attacks.length!==0">
+      <button
+        type="button"
+        @click.prevent="clear"
+        v-tooltip.bottom="'Clear'"
+      >
+      <i class="fa fa-times-circle"></i>
+      </button>
+    </div>
+
+
     <AttackResult
       v-for="(result,idx) in attacks"
       :key="idx"
@@ -18,6 +29,7 @@ import AttackBuilder from "../internals/monkey/AttackBuilder";
 import AttackResult from "../internals/monkey/AttackResult";
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { Attack } from "@/utils/random/attack";
+import { VTooltip } from "v-tooltip";
 
 import { listenToError } from "../../utils/htmlHelper";
 
@@ -40,6 +52,9 @@ export default {
   name: "monkey-editor",
   key: "monkey",
   display: "Monkey attack",
+  directives: {
+    tooltip: VTooltip
+  },
   components: {
     AttackBuilder,
     AttackResult
@@ -117,6 +132,9 @@ export default {
       horde.after(onEnded);
       horde.unleash({ nb: maxOperation });
     },
+    clear() {
+      this.attacks =[];
+    },
     onStart() {
       const { currentAttack } = this;
       this._listener = listenToError(currentAttack.onError.bind(currentAttack));
@@ -147,3 +165,18 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+
+.attack-cleaner {
+  button {
+    background: white;
+    border: 0;
+  }
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 1em;
+}
+</style>

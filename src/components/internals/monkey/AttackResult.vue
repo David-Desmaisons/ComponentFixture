@@ -86,6 +86,9 @@ export default {
       required: true
     }
   },
+  beforeDestroy(){
+    this.result.stop();
+  },
   computed: {
     minFps() {
       return Math.min(...this.result.fps);
