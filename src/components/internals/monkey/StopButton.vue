@@ -24,7 +24,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@button-color: black;
+@button-color: white;
 @button-size: 40px;
 
 button.stop-button {
@@ -33,7 +33,7 @@ button.stop-button {
   border-radius: 40px;
   box-shadow: 0;
   color: @button-color;
-  background: white;
+  background: red;
 
   .stop-root {
     display: flex;
@@ -49,10 +49,10 @@ button.stop-button {
     outline: 0;
   }
   &:hover {
-    color: red;
+    color: black;
   }
   &:active {
-    color: red;
+    color: black;
   }
 }
 </style>

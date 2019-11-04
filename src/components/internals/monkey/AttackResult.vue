@@ -3,6 +3,26 @@
     class="attack-result"
     :class="status"
   >
+    <svg
+      version="1.1"
+      baseProfile="full"
+      width="100%"
+      height="8"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line
+        v-show="result.isUnderAttack"
+        x1="0"
+        y1="4"
+        :x2="`${completion}%`"
+        y2="4"
+        stroke="blue"
+        stroke-width="16"
+        stroke-linecap="round"
+      />
+
+    </svg>
+
     <div class="attack-sum-up">
       <h1
         class="main-feedback"
@@ -37,7 +57,7 @@
 
     </div>
     <div
-      v-if="status!=='success'"
+      v-if="showProblems"
       class="problems"
     >
       <div><b>Problems ({{problems.length}}):</b></div>
@@ -79,13 +99,19 @@ export default {
       return this.minFps < this.minimunAcceptableFps;
     },
     status() {
+      const {
+        result: { status }
+      } = this;
+      if (status === "running") {
+        return status;
+      }
       if (this.errorCount !== 0) {
         return "erro";
       }
       return this.fpsProblem ? "warn" : "success";
     },
     stopped() {
-      return this.result.status !== "completed";
+      return this.result.status === "stopped";
     },
     problems() {
       const { minimunAcceptableFps, fpsProblem } = this;
@@ -96,6 +122,18 @@ export default {
         result.push(`Fps lower than ${minimunAcceptableFps}`);
       }
       return result;
+    },
+    showProblems() {
+      return this.status !== "success" && this.status !== "running";
+    },
+    completion() {
+      if (!this.result.isUnderAttack) {
+        return 0;
+      }
+      return Math.min(100, (100 * this.result.attackNumber) / this.realMax);
+    },
+    realMax() {
+      return this.result.maxOperation + this.result.delay;
     }
   }
 };
@@ -143,11 +181,19 @@ export default {
     border-color: red;
   }
 
+  &.running {
+    border-color: blue;
+  }
+
   .main-feedback {
     text-transform: capitalize;
 
     &.success {
       color: green;
+    }
+
+    &.running {
+      color: blue;
     }
 
     &.warn {

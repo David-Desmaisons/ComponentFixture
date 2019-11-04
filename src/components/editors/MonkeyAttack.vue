@@ -3,9 +3,7 @@
     <AttackBuilder
       @run="run"
       @stop="stop"
-      :attack="attack"
-      :isUnderAttack="isUnderAttack"
-      :completion="completion"
+      v-bind="{attack, isUnderAttack}"
     />
 
     <AttackResult
@@ -19,6 +17,8 @@
 import AttackBuilder from "../internals/monkey/AttackBuilder";
 import AttackResult from "../internals/monkey/AttackResult";
 import { createGremlins } from "@/utils/random/gremlinBuilder";
+import { Attack } from "@/utils/random/attack";
+
 import { listenToError } from "../../utils/htmlHelper";
 
 const props = {
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       horde: null,
-      action: 0,
+      currentAttack: null,
       attack: {
         delay: 50,
         maxOperation: 500,
@@ -75,15 +75,14 @@ export default {
           delay,
           seed: inputSeed,
           generateSeed,
-          maxOperation: nb,
+          maxOperation,
           includeMethod,
-          mouseEvents
+          mouseEvents,
+          stopOnErrorLog
         },
-        onGremlin,
         onStart,
         onEnded,
-        methods,
-        fpsWatcher
+        methods
       } = this;
       if (isUnderAttack) {
         return;
@@ -93,6 +92,13 @@ export default {
         : inputSeed;
       this.attack.seed = seed;
       const changeProp = (key, value) => this.$emit("changed", { key, value });
+      const currentAttack = new Attack({
+        delay,
+        stopOnErrorLog,
+        maxOperation,
+        mouseEvents
+      });
+      const watchers = currentAttack.getWatchers();
       const options = {
         props,
         element: getUnderTestComponent().$el,
@@ -103,81 +109,40 @@ export default {
         seed,
         changeProp
       };
-      const horde = createGremlins(options, { onGremlin, fpsWatcher });
-
-      this.horde = horde;
+      const horde = createGremlins(options, watchers);
+      currentAttack.setHorde(horde);
+      this.attacks.unshift(currentAttack);
+      this.currentAttack = currentAttack;
       horde.before(onStart);
       horde.after(onEnded);
-      horde.unleash({ nb });
+      horde.unleash({ nb: maxOperation });
     },
     onStart() {
-      const {
-        attack: { delay, maxOperation, stopOnErrorLog, mouseEvents }
-      } = this;
-      this._currentAttack = {
-        status: null,
-        fps: [],
-        error: [],
-        delay: delay,
-        stopOnErrorLog,
-        maxOperation,
-        mouseEvents,
-        seed: this.horde.randomizer().seed,
-        attackNumber: 0
-      };
-      this._listener = listenToError(this.onError);
+      const {currentAttack} = this;
+      this._listener = listenToError(currentAttack.onError.bind(currentAttack));
     },
     onEnded() {
       if (this._listener) {
         this._listener();
         this._listener = null;
       }
-      this.horde = null;
-      const { _currentAttack } = this;
-      _currentAttack.attackNumber = this.action;
-      const { status } = _currentAttack;
-      if (status === null) {
-        _currentAttack.status = "completed";
-      }
-      this.attacks.push(_currentAttack);
-      this.action = 0;
-      const res = _currentAttack.error.length === 0 ? "success" : "error";
+      const { currentAttack } = this;
+      currentAttack.onEnded();
+      this.currentAttack = null;
+      const res = currentAttack.error.length === 0 ? "success" : "error";
       this.$emit(res, `Monkey attack ended with ${res}`);
     },
-    onError(error) {
-      this._currentAttack.error.push(error);
-      if (error.type !== "exception" && !this._currentAttack.stopOnErrorLog) {
-        return;
-      }
-      this.stop();
-    },
-    fpsWatcher(fps) {
-      this._currentAttack.fps.push(fps);
-    },
     stop() {
-      const { horde } = this;
-      if (!horde) {
+      const { currentAttack } = this;
+      if (!currentAttack) {
         return;
       }
-      this._currentAttack.status = "stopped";
-      horde.stop();
-    },
-    onGremlin() {
-      this.action++;
+      this.currentAttack.stop();
     }
   },
   computed: {
     isUnderAttack() {
-      return this.horde !== null;
-    },
-    realMax() {
-      return this.attack.maxOperation + this.attack.delay;
-    },
-    completion() {
-      if (!this.isUnderAttack) {
-        return null;
-      }
-      return Math.min(100, (100 * this.action) / this.realMax);
+      return this.currentAttack !== null;
     }
   }
 };

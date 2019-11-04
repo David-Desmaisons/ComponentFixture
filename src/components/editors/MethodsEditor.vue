@@ -91,7 +91,7 @@ export default {
     button {
       font-size: 12px;
 
-      &:hover{
+      &:hover {
         background: red;
         border-color: red;
       }

@@ -9,19 +9,22 @@ function getOffset(element) {
 }
 
 function listenToError(callback) {
-  const { onerror: realOnError, console: { error: realConsoleError } } = window;
+  const {
+    onerror: realOnError,
+    console: { error: realConsoleError }
+  } = window;
   window.onerror = (message, url, lineNumber) => {
     callback({ type: "exception", message, url, lineNumber });
     return realOnError ? realOnError(message, url, lineNumber) : false;
   };
-  window.console.error = function () {
+  window.console.error = function() {
     callback({ type: "console.error", message: [...arguments] });
     realConsoleError.apply(window.console, arguments);
   };
   return () => {
     window.onerror = realOnError;
     window.console.error = realConsoleError;
-  }
+  };
 }
 
 export { getOffset, listenToError };

@@ -64,9 +64,9 @@ function computeDistribution(successCount, clickProbability) {
   return successCount === 0
     ? [1]
     : [
-      ...repeat(successCount, (1 - clickProbability) / successCount),
-      clickProbability
-    ];
+        ...repeat(successCount, (1 - clickProbability) / successCount),
+        clickProbability
+      ];
 }
 
 function createGremlins(
@@ -82,7 +82,7 @@ function createGremlins(
     maxTentative = 10,
     seed
   },
-  { onGremlin = () => { }, fpsWatcher = () => { } }
+  { onGremlin = () => {}, fpsWatcher = () => {} }
 ) {
   if (!mouseEvents) {
     clickProbability = 0;

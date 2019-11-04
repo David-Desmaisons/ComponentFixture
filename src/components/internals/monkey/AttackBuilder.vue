@@ -1,28 +1,7 @@
 <template>
   <div
     class="attack-builder"
-    :class="{attack: isUnderAttack}"
   >
-
-    <svg 
-      version="1.1"
-      baseProfile="full"
-      width="100%"
-      height="8"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <line v-show="isUnderAttack"
-        x1="0"
-        y1="4"
-        :x2="`${completion}%`"
-        y2="4"
-        stroke="red"
-        stroke-width="16"
-        stroke-linecap="round"
-      />
-
-    </svg>
-
     <h1>
       Monkey test builder
     </h1>
@@ -132,10 +111,6 @@ export default {
     isUnderAttack: {
       type: Boolean,
       required: true
-    },
-    completion: {
-      type: Number,
-      required: false
     }
   },
   components: {

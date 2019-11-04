@@ -9,7 +9,7 @@ import { advanceTo } from "jest-date-mock";
 
 const { console } = window;
 const { error: originalError, warn: originalWarn } = console;
-const nullFunction = () => { };
+const nullFunction = () => {};
 
 const mountComponentWithDefaultSlot = ({
   slot = FakeComponent,
@@ -60,7 +60,7 @@ const mountComponentWithDefaultSlotAndControllerSlot = control =>
   });
 
 const buildFakeEditor = () => {
-  return jest.fn(function (props) {
+  return jest.fn(function(props) {
     return this.$createElement(FakeEditor, { props });
   });
 };
@@ -126,11 +126,12 @@ describe("ComponentFixture.vue", () => {
       expect(vm.componentKey).toEqual(1);
     });
 
-    it("use key 1 for component under test",
-      () => {
-        const { vm: { $vnode: node } } = wrapper.find({ ref: "cut" });
-        expect(node.key).toEqual(1);
-      });
+    it("use key 1 for component under test", () => {
+      const {
+        vm: { $vnode: node }
+      } = wrapper.find({ ref: "cut" });
+      expect(node.key).toEqual(1);
+    });
 
     it("computes the dynamicAttributes number with all props", () => {
       expect(Object.keys(dynamicAttributes).length).toEqual(5);
@@ -277,11 +278,12 @@ describe("ComponentFixture.vue", () => {
         expect(vm.componentKey).toEqual(2);
       });
 
-      it("update component under test key attribute",
-        () => {
-          const { vm: { $vnode: node } } = wrapper.find({ ref: "cut" });
-          expect(node.key).toEqual(2);
-        });
+      it("update component under test key attribute", () => {
+        const {
+          vm: { $vnode: node }
+        } = wrapper.find({ ref: "cut" });
+        expect(node.key).toEqual(2);
+      });
     });
   });
 
@@ -546,7 +548,7 @@ describe("ComponentFixture.vue", () => {
     let store;
     beforeEach(() => {
       store = {
-        registerModule: jest.fn(function (name, module) {
+        registerModule: jest.fn(function(name, module) {
           this.state[name] = module.state();
         }),
         unregisterModule: jest.fn(),
