@@ -118,7 +118,7 @@ export default {
       horde.unleash({ nb: maxOperation });
     },
     onStart() {
-      const {currentAttack} = this;
+      const { currentAttack } = this;
       this._listener = listenToError(currentAttack.onError.bind(currentAttack));
     },
     onEnded() {
