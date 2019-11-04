@@ -7,17 +7,17 @@
       version="1.1"
       baseProfile="full"
       width="100%"
-      height="8"
+      height="6"
       xmlns="http://www.w3.org/2000/svg"
     >
       <line
         v-show="result.isUnderAttack"
         x1="0"
-        y1="4"
+        y1="3"
         :x2="`${completion}%`"
-        y2="4"
+        y2="3"
         stroke="blue"
-        stroke-width="16"
+        stroke-width="6"
         stroke-linecap="round"
       />
 
@@ -41,6 +41,7 @@
       <p><b>Operations: </b>{{result.maxOperation}}</p>
       <p><b>Delay: </b>{{result.delay}}</p>
       <p><b>Mouse events used: </b>{{result.mouseEvents? 'yes' : 'no'}}</p>
+      <p><b>Methods used: </b>{{result.includeMethod? 'yes' : 'no'}}</p>
     </div>
     <div class="attack-results">
       <FpsFeedback
@@ -162,7 +163,7 @@ export default {
 
   h1 {
     font-size: 14px;
-    margin: 5px 0;
+    margin: 2px 0;
   }
 
   p {
