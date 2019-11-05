@@ -122,6 +122,15 @@ export default {
       this.events = [];
     },
 
+    resetAllProps() {
+      const { changed, propsDefinition } = this;
+      Object.keys(propsDefinition)
+      .forEach(key => {
+        const { defaultValue: value } = propsDefinition[key];
+        changed({ key, value });
+      });
+    },
+
     changed({ key: prop, value }) {
       const { $store, storeName } = this;
       const commited = commit({ $store, prop, storeName, value });
@@ -297,6 +306,7 @@ export default {
       componentWidth: inicialWidth,
       isResizable,
       changed,
+      resetAllProps,
       storeName
     } = this;
 
@@ -327,6 +337,7 @@ export default {
         header({
           componentName,
           update,
+          resetAllProps,
           methods,
           isResizable
         }),

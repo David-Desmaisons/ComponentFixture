@@ -86,7 +86,7 @@ export default {
       required: true
     }
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.result.stop();
   },
   computed: {

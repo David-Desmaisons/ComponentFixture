@@ -133,7 +133,7 @@ export default {
       horde.unleash({ nb: maxOperation });
     },
     clear() {
-      this.attacks =[];
+      this.attacks = [];
     },
     onStart() {
       const { currentAttack } = this;
@@ -166,7 +166,6 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-
 .attack-cleaner {
   button {
     background: white;

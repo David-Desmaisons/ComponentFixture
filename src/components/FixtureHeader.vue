@@ -34,6 +34,17 @@
           aria-hidden="true"
         ></i>
       </button>
+
+            <button
+        class="btn"
+        @click="resetProps"
+        v-tooltip.left="'Reset all props'"
+      >
+        <i
+          class="fa fa-power-off"
+          aria-hidden="true"
+        ></i>
+      </button>
     </div>
   </div>
 </template>
@@ -50,6 +61,10 @@ const props = {
     required: true
   },
   update: {
+    required: true,
+    type: Function
+  },
+  resetAllProps: {
     required: true,
     type: Function
   }
@@ -74,6 +89,13 @@ export default {
       this.update();
       this.$nextTick(() => {
         this.$emit("success", "component has been re-created");
+      });
+    },
+
+    resetProps() {
+      this.resetAllProps();
+       this.$nextTick(() => {
+        this.$emit("success", "Props have been reset");
       });
     }
   },

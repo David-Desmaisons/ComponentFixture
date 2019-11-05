@@ -43,12 +43,12 @@ class Attack {
   }
 
   stop() {
-    if (this.horde===null){
+    if (this.horde === null) {
       return;
     }
     this.status = "stopped";
     this.horde.stop();
-    this.horde= null;
+    this.horde = null;
   }
 
   onEnded() {

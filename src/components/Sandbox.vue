@@ -7,12 +7,12 @@
       >
         <component-fixture  ref="fixture" v-bind="$attrs" :isResizable="isResizable" @success="success">
           <!-- Use the default slot to manipulate the component under test -->
-          <template v-slot:header="{componentName, update}">
+          <template v-slot:header="{componentName, update, resetAllProps}">
             <FixtureHeader
               @toggle="showEditor = !showEditor"
               @resize="isResizable = !isResizable"
               @success="success"
-              v-bind="{componentName, update, isResizable}"
+              v-bind="{componentName, update, isResizable, resetAllProps}"
             />
           </template>
 
