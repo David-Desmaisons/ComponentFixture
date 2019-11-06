@@ -27,7 +27,7 @@
       <button
         class="btn btn--refresh-component"
         @click="executeUpdate"
-        v-tooltip.left="'Update component'"
+        v-tooltip.left="'Force component update'"
       >
         <i
           class="fa fa-repeat"
