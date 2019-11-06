@@ -94,7 +94,7 @@ export default {
 
     resetProps() {
       this.resetAllProps();
-       this.$nextTick(() => {
+      this.$nextTick(() => {
         this.$emit("success", "Props have been reset");
       });
     }

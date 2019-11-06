@@ -124,8 +124,7 @@ export default {
 
     resetAllProps() {
       const { changed, propsDefinition } = this;
-      Object.keys(propsDefinition)
-      .forEach(key => {
+      Object.keys(propsDefinition).forEach(key => {
         const { defaultValue: value } = propsDefinition[key];
         changed({ key, value });
       });

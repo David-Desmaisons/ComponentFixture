@@ -134,10 +134,10 @@ export default {
       if (!this.result.isUnderAttack) {
         return 0;
       }
-      return Math.min(100, (100 * this.result.attackNumber) / this.realMax);
-    },
-    realMax() {
-      return this.result.maxOperation + this.result.delay;
+      return Math.min(
+        100,
+        (100 * this.result.attackNumber) / this.result.realMax
+      );
     }
   }
 };
