@@ -37,7 +37,7 @@ class RandomGenerator {
   }
 
   range(min, max) {
-    return Math.random() * max + min;
+    return this._chance.integer({ min, max });
   }
 }
 
