@@ -146,6 +146,7 @@ function createGremlins(
       .distribution()
       .delay(delay)
       .distribution(distribution)
+      .randomizer(chance)
   );
 }
 
