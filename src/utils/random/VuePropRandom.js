@@ -27,7 +27,7 @@ function randomUpdateFromPureRandom(
   random
 ) {
   return () => {
-    const type = random.oneOf(compatibleTypes);
+    const type = compatibleTypes.length === 0 ? compatibleTypes[0] : random.oneOf(compatibleTypes);
     const getRandom = random.getRandomForType(type);
     const { success, value } = getCompatibleValue(
       getRandom,

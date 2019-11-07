@@ -5,25 +5,6 @@ import { randomUpdateForProp } from "./VuePropRandom";
 import { RandomGenerator } from "./randomHelper";
 import Chance from "chance";
 
-function traceMethodCalls(obj) {
-  let handler = {
-    get(target, propKey) {
-      const origMethod = target[propKey];
-      if (typeof origMethod !== "function") {
-        return origMethod;
-      }
-      return function(...args) {
-        let result = origMethod.apply(target, args);
-        window.console.log(
-          propKey + JSON.stringify(args) + " -> " + JSON.stringify(result)
-        );
-        return result;
-      };
-    }
-  };
-  return new Proxy(obj, handler);
-}
-
 function repeat(count, value) {
   return Array(count).fill(value);
 }
@@ -106,7 +87,7 @@ function createGremlins(
   if (!mouseEvents) {
     clickProbability = 0;
   }
-  const chance = traceMethodCalls(new Chance(seed));
+  const chance = new Chance(seed);
   const randomGenerator = new RandomGenerator(chance);
   const horde = gremlins
     .createHorde()
