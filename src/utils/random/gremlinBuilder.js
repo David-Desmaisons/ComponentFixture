@@ -97,11 +97,15 @@ function createGremlins(
   let successCount = 0;
 
   if (props) {
+    const propChanger = (key, value) => {
+      log(`Updating props: ${key} with value:`, value);
+      changeProp(key, value);
+    };
     props.forEach(prop => {
       if (
         addPropsGremlin(
           horde,
-          { prop, changeProp, maxTentative },
+          { prop, changeProp: propChanger, maxTentative },
           randomGenerator,
           onGremlin
         )
