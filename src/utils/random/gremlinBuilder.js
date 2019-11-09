@@ -16,12 +16,12 @@ function getClickGremlin({ element, randomGenerator, onGremlin }) {
   });
 }
 
-function getFpsMogwai(fpsWatcher, callback) {
+function getFpsMogwai({ fpsWatcher, onGremlin }) {
   return gremlins.mogwais
     .fps()
     .delay(500)
     .levelSelector(fps => {
-      callback();
+      onGremlin();
       fpsWatcher(fps);
       if (fps < 5) {
         return "error";
@@ -44,25 +44,21 @@ function getPropGremlin(option) {
 
 function getPropsGremlins({
   props,
-  changeProp,
+  changeProp: rawChangeProp,
   maxTentative,
   randomGenerator,
   onGremlin
 }) {
-  if (!props) {
-    return [];
-  }
-
-  const propChanger = (key, value) => {
+  const changeProp = (key, value) => {
     log(`Updating props: ${key} with value:`, value);
-    changeProp(key, value);
+    rawChangeProp(key, value);
   };
 
-  return props
+  return (props || [])
     .map(prop =>
       getPropGremlin({
         prop,
-        changeProp: propChanger,
+        changeProp,
         maxTentative,
         randomGenerator,
         onGremlin
@@ -129,7 +125,7 @@ function createGremlins(option, watcher) {
     .createHorde()
     .logger({ log, warn, info, error })
     .randomizer(chance)
-    .mogwai(getFpsMogwai(completeOption.fpsWatcher, completeOption.onGremlin));
+    .mogwai(getFpsMogwai(completeOption));
 
   const allGremlins = getAllGremlins(completeOption);
   allGremlins.forEach(gremlin => horde.gremlin(gremlin));
