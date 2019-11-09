@@ -2,45 +2,37 @@ import gremlins from "gremlins.js/src/main";
 import { getOffset } from "../htmlHelper";
 import { log, warn, info, error } from "@/utils/logger";
 import { randomUpdateForProp } from "./VuePropRandom";
-import { RandomGenerator } from "./randomHelper";
+import { RandomGenerator } from "./RandomGenerator";
 import Chance from "chance";
 
 function repeat(count, value) {
   return Array(count).fill(value);
 }
 
-function addClickGremlin(horde, element, random, callback) {
+function addClickGremlin(horde, { element, randomGenerator, onGremlin }) {
   if (!element) {
     return horde;
   }
   return horde.gremlin(
     gremlins.species.clicker().positionSelector(() => {
       var offset = getOffset(element);
-      callback();
+      onGremlin();
       return [
-        parseInt(random.range(0, element.clientWidth) + offset.x),
-        parseInt(random.range(0, element.clientHeight) + offset.y)
+        parseInt(randomGenerator.range(0, element.clientWidth) + offset.x),
+        parseInt(randomGenerator.range(0, element.clientHeight) + offset.y)
       ];
     })
   );
 }
 
-function addPropsGremlin(
-  horde,
-  { prop, changeProp, maxTentative },
-  random,
-  callback
-) {
-  const updater = randomUpdateForProp(
-    { prop, changeProp, maxTentative },
-    random
-  );
+function addPropsGremlin(horde, option) {
+  const updater = randomUpdateForProp(option);
   if (!updater) {
     return false;
   }
 
   horde.gremlin(() => {
-    callback();
+    option.onGremlin();
     updater();
   });
   return true;
@@ -69,6 +61,42 @@ function computeDistribution(successCount, clickProbability) {
       ];
 }
 
+function addPropsGremlins(
+  horde,
+  { props, changeProp, maxTentative, randomGenerator, onGremlin }
+) {
+  if (!props) {
+    return 0;
+  }
+
+  const propChanger = (key, value) => {
+    log(`Updating props: ${key} with value:`, value);
+    changeProp(key, value);
+  };
+
+  return props.filter(prop =>
+    addPropsGremlin(horde, {
+      prop,
+      changeProp: propChanger,
+      maxTentative,
+      randomGenerator,
+      onGremlin
+    })
+  ).length;
+}
+
+function addMethodsGremlins(horde, { methods, onGremlin }) {
+  methods.forEach(({ name, execute }) => {
+    horde.gremlin(() => {
+      onGremlin();
+      log(`calling ${name} method`);
+      execute();
+    });
+  });
+
+  return methods.length;
+}
+
 function createGremlins(
   {
     props,
@@ -94,39 +122,25 @@ function createGremlins(
     .logger({ log, warn, info, error })
     .randomizer(chance);
   addFpsMogwai(horde, fpsWatcher, onGremlin);
-  let successCount = 0;
 
-  if (props) {
-    const propChanger = (key, value) => {
-      log(`Updating props: ${key} with value:`, value);
-      changeProp(key, value);
-    };
-    props.forEach(prop => {
-      if (
-        addPropsGremlin(
-          horde,
-          { prop, changeProp: propChanger, maxTentative },
-          randomGenerator,
-          onGremlin
-        )
-      ) {
-        successCount++;
-      }
-    });
-  }
+  let successCount = addPropsGremlins(horde, {
+    props,
+    changeProp,
+    maxTentative,
+    randomGenerator,
+    onGremlin
+  });
+
   if (includeMethod) {
-    methods.forEach(({ name, execute }) => {
-      horde.gremlin(() => {
-        onGremlin();
-        log(`calling ${name} method`);
-        execute();
-      });
-      successCount++;
-    });
+    successCount += addMethodsGremlins(horde, { methods, onGremlin });
   }
 
   const distribution = computeDistribution(successCount, clickProbability);
-  return addClickGremlin(horde, element, randomGenerator, onGremlin).strategy(
+  return addClickGremlin(horde, {
+    element,
+    randomGenerator,
+    onGremlin
+  }).strategy(
     gremlins.strategies
       .distribution()
       .delay(delay)
