@@ -57,24 +57,20 @@ function randomUpdateForProp({
   randomGenerator
 }) {
   const { possibleValues, types, validate } = metaData;
-  if (possibleValues) {
-    return randomUpdateFromPossibleValues({
-      key,
-      validate,
-      changeProp,
-      possibleValues,
-      randomGenerator
-    });
-  }
-  const compatibleTypes = randomGenerator.getRandomTypes(types);
-  return randomUpdateFromPureRandom({
+  const option = {
     key,
-    compatibleTypes,
     validate,
     changeProp,
     maxTentative,
+    possibleValues,
     randomGenerator
-  });
+  };
+  if (possibleValues) {
+    return randomUpdateFromPossibleValues(option);
+  }
+  const compatibleTypes = randomGenerator.getRandomTypes(types);
+  Object.assign(option, {compatibleTypes});
+  return randomUpdateFromPureRandom(option);
 }
 
 export { randomUpdateForProp };
