@@ -1,17 +1,13 @@
 class Attack {
   constructor({ delay, stopOnErrorLog, maxOperation, mouseEvents }) {
     this.status = "running";
+    this.isUnderAttack = true;
     this.fps = [];
     this.error = [];
     this.attackNumber = 0;
     this.horde = null;
     this.seed = 0;
-    this.delay = delay;
-    this.stopOnErrorLog = stopOnErrorLog;
-    this.maxOperation = maxOperation;
-    this.mouseEvents = mouseEvents;
-    this.attackNumber = 0;
-    this.isUnderAttack = true;
+    Object.assign(this, { delay, stopOnErrorLog, maxOperation, mouseEvents });
   }
 
   setHorde(horde) {
