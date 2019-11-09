@@ -33,6 +33,9 @@ function randomUpdateFromPureRandom({
   maxTentative,
   randomGenerator
 }) {
+  if (compatibleTypes.length === 0) {
+    return null;
+  }
   return () => {
     const type = randomGenerator.oneOf(compatibleTypes);
     const getRandom = randomGenerator.getRandomForType(type);
@@ -64,9 +67,6 @@ function randomUpdateForProp({
     });
   }
   const compatibleTypes = randomGenerator.getRandomTypes(types);
-  if (compatibleTypes.length === 0) {
-    return null;
-  }
   return randomUpdateFromPureRandom({
     key,
     compatibleTypes,
