@@ -5,10 +5,6 @@ import { randomUpdateForProp } from "./VuePropRandom";
 import { RandomGenerator } from "./RandomGenerator";
 import Chance from "chance";
 
-function repeat(count, value) {
-  return Array(count).fill(value);
-}
-
 function getClickGremlin({ element, randomGenerator, onGremlin }) {
   return gremlins.species.clicker().positionSelector(() => {
     var offset = getOffset(element);
@@ -34,7 +30,7 @@ function getFpsMogwai(fpsWatcher, callback) {
     });
 }
 
-function getropsGremlin(option) {
+function getPropGremlin(option) {
   const updater = randomUpdateForProp(option);
   if (!updater) {
     return null;
@@ -64,7 +60,7 @@ function getPropsGremlins({
 
   return props
     .map(prop =>
-      getropsGremlin({
+      getPropGremlin({
         prop,
         changeProp: propChanger,
         maxTentative,
@@ -83,6 +79,18 @@ function getMethodsGremlins({ methods, onGremlin }) {
   });
 }
 
+function getAllGremlins(option) {
+  const allGgremlins = getPropsGremlins(option);
+  if (!option.includeMethod) {
+    return allGgremlins;
+  }
+  return [...allGgremlins, ...getMethodsGremlins(option)];
+}
+
+function repeat(count, value) {
+  return Array(count).fill(value);
+}
+
 function computeDistribution({ gremlinsCount, clickProbability }) {
   return gremlinsCount === 0
     ? [1]
@@ -92,16 +100,15 @@ function computeDistribution({ gremlinsCount, clickProbability }) {
       ];
 }
 
-function getAllGremlins(option) {
-  const allGgremlins = getPropsGremlins(option);
-  if (!option.includeMethod) {
-    return allGgremlins;
-  }
-  return [...allGgremlins, ...getMethodsGremlins(option)]
-}
-
-function getStrategy({ delay, chance, gremlinsCount, clickProbability }) {
-  const distribution = computeDistribution({ gremlinsCount, clickProbability });
+function getStrategy(
+  { delay, chance, mouseEvents, clickProbability },
+  gremlinsCount
+) {
+  const realClickProbability = mouseEvents ? clickProbability : 0;
+  const distribution = computeDistribution({
+    gremlinsCount,
+    clickProbability: realClickProbability
+  });
   return gremlins.strategies
     .distribution()
     .delay(delay)
@@ -109,49 +116,26 @@ function getStrategy({ delay, chance, gremlinsCount, clickProbability }) {
     .randomizer(chance);
 }
 
-function createGremlins(
-  {
-    props,
-    element,
-    delay,
-    changeProp,
-    includeMethod,
-    methods,
-    mouseEvents,
-    clickProbability = 0.5,
-    maxTentative = 10,
-    seed
-  },
-  { onGremlin = () => {}, fpsWatcher = () => {} }
-) {
-  clickProbability = mouseEvents ? clickProbability : 0;
-  const chance = new Chance(seed);
+function createGremlins(option, watcher) {
+  const chance = new Chance(option.seed);
   const randomGenerator = new RandomGenerator(chance);
+  const completeOption = Object.assign(
+    { maxTentative: 10, clickProbability: 0.5 },
+    option,
+    watcher,
+    { randomGenerator }
+  );
   const horde = gremlins
     .createHorde()
     .logger({ log, warn, info, error })
     .randomizer(chance)
-    .mogwai(getFpsMogwai(fpsWatcher, onGremlin));
+    .mogwai(getFpsMogwai(completeOption.fpsWatcher, completeOption.onGremlin));
 
-  const allGgremlins = getAllGremlins({
-    includeMethod,
-    methods,
-    props,
-    changeProp,
-    maxTentative,
-    randomGenerator,
-    onGremlin
-  });
-  allGgremlins.forEach(gremlin => horde.gremlin(gremlin));
+  const allGremlins = getAllGremlins(completeOption);
+  allGremlins.forEach(gremlin => horde.gremlin(gremlin));
 
-  horde.gremlin(getClickGremlin({ element, randomGenerator, onGremlin }));
-
-  const strategy = getStrategy({
-    delay,
-    chance,
-    gremlinsCount: allGgremlins.length,
-    clickProbability
-  });
+  horde.gremlin(getClickGremlin(completeOption));
+  const strategy = getStrategy(completeOption, allGremlins.length);
   return horde.strategy(strategy);
 }
 
