@@ -285,6 +285,32 @@ describe("ComponentFixture.vue", () => {
         expect(node.key).toEqual(2);
       });
     });
+
+    describe("when calling changed", () => {
+      test.each([
+        { key: "number", value: 56 },
+        { key: "string", value: "newValue" },
+        { key: "oddNumber", value: 6}
+      ])("with %o changes the property key with the given value", argument => {
+        vm.changed(argument);
+        const testComponentVm = vm.$children[0];
+        expect(testComponentVm[argument.key]).toEqual(argument.value);
+      });
+    });
+
+    describe("when calling resetAllProps", () => {
+      test.each([
+        { key: "number", value: 56 },
+        { key: "string", value: "newValue" },
+        { key: "oddNumber", value: 10 },
+      ])("after changing props with: %o reset to default value", argument => {
+        vm.changed(argument);
+        vm.resetAllProps();
+        const testComponentVm = vm.$children[0];
+        const {number, string, oddNumber} = testComponentVm;
+        expect({number, string, oddNumber}).toEqual({number: 25, string: "", oddNumber: 2});
+      });
+    });
   });
 
   describe("when initialized with defaults and possibleValues", () => {
