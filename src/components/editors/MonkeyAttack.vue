@@ -30,8 +30,7 @@ import AttackResult from "../internals/monkey/AttackResult";
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { Attack } from "@/utils/random/attack";
 import { VTooltip } from "v-tooltip";
-
-import { listenToError } from "../../utils/htmlHelper";
+import { listenToError } from "../../utils/browserHelper";
 
 const props = {
   props: {

@@ -1,5 +1,5 @@
 import gremlins from "gremlins.js/src/main";
-import { getOffset } from "../htmlHelper";
+import { getOffset } from "../browserHelper";
 import { log, warn, info, error } from "@/utils/logger";
 import { randomUpdateForProp } from "./VuePropRandom";
 import { RandomGenerator } from "./RandomGenerator";
@@ -76,11 +76,10 @@ function getMethodsGremlins({ methods, onGremlin }) {
 }
 
 function getAllGremlins(option) {
-  const allGgremlins = getPropsGremlins(option);
-  if (!option.includeMethod) {
-    return allGgremlins;
-  }
-  return [...allGgremlins, ...getMethodsGremlins(option)];
+  const allGremlins = getPropsGremlins(option);
+  return option.includeMethod
+    ? [...allGremlins, ...getMethodsGremlins(option)]
+    : allGremlins;
 }
 
 function repeat(count, value) {
@@ -89,10 +88,10 @@ function repeat(count, value) {
 
 function computeDistribution({ gremlinsCount, clickProbability }) {
   return gremlinsCount === 0
-    ? [1]
+    ? [clickProbability !== 0 ? 1 : 0]
     : [
-        ...repeat(gremlinsCount, (1 - clickProbability) / gremlinsCount),
-        clickProbability
+        clickProbability,
+        ...repeat(gremlinsCount, (1 - clickProbability) / gremlinsCount)
       ];
 }
 
@@ -125,12 +124,12 @@ function createGremlins(option, watcher) {
     .createHorde()
     .logger({ log, warn, info, error })
     .randomizer(chance)
-    .mogwai(getFpsMogwai(completeOption));
+    .mogwai(getFpsMogwai(completeOption))
+    .gremlin(getClickGremlin(completeOption));
 
   const allGremlins = getAllGremlins(completeOption);
   allGremlins.forEach(gremlin => horde.gremlin(gremlin));
 
-  horde.gremlin(getClickGremlin(completeOption));
   const strategy = getStrategy(completeOption, allGremlins.length);
   return horde.strategy(strategy);
 }

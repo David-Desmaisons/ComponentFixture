@@ -9,13 +9,10 @@ function getCompatibleValue(getRandom, validate, maxTentative) {
   return { value, success };
 }
 
-function randomUpdateFromPossibleValues({
-  key,
-  validate,
-  changeProp,
-  possibleValues,
-  randomGenerator
-}) {
+function randomUpdateFromPossibleValues(
+  { key, validate, changeProp, randomGenerator },
+  possibleValues
+) {
   return () => {
     const value = randomGenerator.oneOf(possibleValues);
     if (!validate(value).ok) {
@@ -25,14 +22,10 @@ function randomUpdateFromPossibleValues({
   };
 }
 
-function randomUpdateFromPureRandom({
-  key,
-  compatibleTypes,
-  validate,
-  changeProp,
-  maxTentative,
-  randomGenerator
-}) {
+function randomUpdateFromPureRandom(
+  { key, validate, changeProp, maxTentative, randomGenerator },
+  compatibleTypes
+) {
   if (compatibleTypes.length === 0) {
     return null;
   }
@@ -62,15 +55,13 @@ function randomUpdateForProp({
     validate,
     changeProp,
     maxTentative,
-    possibleValues,
     randomGenerator
   };
   if (possibleValues) {
-    return randomUpdateFromPossibleValues(option);
+    return randomUpdateFromPossibleValues(option, possibleValues);
   }
   const compatibleTypes = randomGenerator.getRandomTypes(types);
-  Object.assign(option, {compatibleTypes});
-  return randomUpdateFromPureRandom(option);
+  return randomUpdateFromPureRandom(option, compatibleTypes);
 }
 
 export { randomUpdateForProp };

@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { getOffset } from "@/utils/htmlHelper";
+import { getOffset } from "@/utils/browserHelper";
 export default {
   props: {
     isResizable: {
