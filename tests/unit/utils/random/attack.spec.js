@@ -20,34 +20,32 @@ describe("Attack", () => {
     );
   });
 
-  it("constructor default properties", () => {
-    const expected = {
-      status: "running",
-      isUnderAttack: true,
-      fps: [],
-      error: [],
-      attackNumber: 0,
-      horde: null,
-      seed: 0
-    };
-    const {
-      status,
-      isUnderAttack,
-      fps,
-      error,
-      attackNumber,
-      horde,
-      seed
-    } = attack;
-    expect({
-      status,
-      isUnderAttack,
-      fps,
-      error,
-      attackNumber,
-      horde,
-      seed
-    }).toEqual(expected);
+  it("constructor default status to 'running'", () => {
+    expect(attack.status).toEqual("running");
+  });
+
+  it("constructor default isUnderAttack to true", () => {
+    expect(attack.isUnderAttack).toEqual(true);
+  });
+
+  it("constructor default fps to empty array", () => {
+    expect(attack.fps).toEqual([]);
+  });
+
+  it("constructor default error to empty array", () => {
+    expect(attack.error).toEqual([]);
+  });
+
+  it("constructor default attackNumber to 0", () => {
+    expect(attack.attackNumber).toEqual(0);
+  });
+
+  it("constructor default seed to 0", () => {
+    expect(attack.seed).toEqual(0);
+  });
+
+  it("constructor default horde to null", () => {
+    expect(attack.horde).toEqual(null);
   });
 
   describe("after setting horde", () => {
@@ -85,5 +83,9 @@ describe("Attack", () => {
         expect(attack.attackNumber).toBe(count);
       }
     );
+
+    describe("",()=>{
+
+    });
   });
 });
