@@ -84,8 +84,63 @@ describe("Attack", () => {
       }
     );
 
-    describe("",()=>{
+    describe("when calling onError", () => {
+      test.each([
+        { type: "" },
+        { type: "exception" },
+        { type: "console.error" }
+      ])("with %o add error to list", error => {
+        attack.onError(error);
+        expect(attack.error).toEqual([error]);
+      });
 
+      it("calls stop on horde on exception", () => {
+        attack.onError({ type: "exception" });
+        expect(horde.stop).toHaveBeenCalled();
+      });
+
+      test.each([{ type: "other" }, { type: "console.error" }])(
+        "with %o and stopOnErrorLog true calls stop on horde",
+        error => {
+          attack.stopOnErrorLog = true;
+          attack.onError(error);
+          expect(horde.stop).toHaveBeenCalled();
+        }
+      );
+
+      test.each([{ type: "other" }, { type: "console.error" }])(
+        "with %o and stopOnErrorLog false does not call stop on horde",
+        error => {
+          attack.stopOnErrorLog = false;
+          attack.onError(error);
+          expect(horde.stop).not.toHaveBeenCalled();
+        }
+      );
+
+      const dataToStopHorde = [
+        [{ type: "other" }, true],
+        [{ type: "console.error" }, true],
+        [{ type: "exception" }, true],
+        [{ type: "exception" }, false]
+      ];
+
+      test.each(dataToStopHorde)(
+        "with %o and stopOnErrorLog true calls set status as stopped",
+        (error, stopOnErrorLog) => {
+          attack.stopOnErrorLog = stopOnErrorLog;
+          attack.onError(error);
+          expect(attack.status).toBe("stopped");
+        }
+      );
+
+      test.each(dataToStopHorde)(
+        "with %o and stopOnErrorLog true calls set horde to null",
+        (error, stopOnErrorLog) => {
+          attack.stopOnErrorLog = stopOnErrorLog;
+          attack.onError(error);
+          expect(attack.horde).toBe(null);
+        }
+      );
     });
   });
 });
