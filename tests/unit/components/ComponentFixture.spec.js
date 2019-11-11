@@ -290,7 +290,7 @@ describe("ComponentFixture.vue", () => {
       test.each([
         { key: "number", value: 56 },
         { key: "string", value: "newValue" },
-        { key: "oddNumber", value: 6}
+        { key: "oddNumber", value: 6 }
       ])("with %o changes the property key with the given value", argument => {
         vm.changed(argument);
         const testComponentVm = vm.$children[0];
@@ -302,13 +302,17 @@ describe("ComponentFixture.vue", () => {
       test.each([
         { key: "number", value: 56 },
         { key: "string", value: "newValue" },
-        { key: "oddNumber", value: 10 },
+        { key: "oddNumber", value: 10 }
       ])("after changing props with: %o reset to default value", argument => {
         vm.changed(argument);
         vm.resetAllProps();
         const testComponentVm = vm.$children[0];
-        const {number, string, oddNumber} = testComponentVm;
-        expect({number, string, oddNumber}).toEqual({number: 25, string: "", oddNumber: 2});
+        const { number, string, oddNumber } = testComponentVm;
+        expect({ number, string, oddNumber }).toEqual({
+          number: 25,
+          string: "",
+          oddNumber: 2
+        });
       });
     });
   });
