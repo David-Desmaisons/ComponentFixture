@@ -17,7 +17,7 @@ function listenToError(callback) {
     callback({ type: "exception", message, url, lineNumber });
     return realOnError ? realOnError(message, url, lineNumber) : false;
   };
-  window.console.error = () => {
+  window.console.error = function() {
     callback({ type: "console.error", message: [...arguments] });
     realConsoleError.apply(window.console, arguments);
   };

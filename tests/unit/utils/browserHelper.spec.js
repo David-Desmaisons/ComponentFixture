@@ -20,3 +20,56 @@ describe("getOffset", () => {
     }
   );
 });
+
+describe("listenToError", () => {
+  let originalErrorLog;
+  let originalOnError;
+  let listener;
+  let result;
+
+  beforeEach(() => {
+    originalErrorLog = window.console.error;
+    originalOnError = window.onerror;
+    window.console.error = jest.fn();
+    window.onerror = jest.fn();
+
+    listener = jest.fn();
+    result = listenToError(listener);
+  });
+
+  afterEach(() => {
+    window.console.error = originalErrorLog;
+    window.onerror = originalOnError;
+  });
+
+  it("call listener when calling window log error", () => {
+    window.console.error("error here");
+    expect(listener).toHaveBeenCalledWith({
+      message: ["error here"],
+      type: "console.error"
+    });
+  });
+
+  it("call listener when calling window onerror", () => {
+    const error = new Error();
+    window.onerror(error);
+    expect(listener).toHaveBeenCalledWith({
+      lineNumber: undefined,
+      message: error,
+      type: "exception",
+      url: undefined
+    });
+  });
+
+  it("does call listener when calling window log error after calling result function", () => {
+    result();
+    window.console.error("error here");
+    expect(listener).not.toHaveBeenCalled();
+  });
+
+  it("does call listener when calling window log error after calling result function", () => {
+    result();
+    window.onerror(new Error());
+    expect(listener).not.toHaveBeenCalled();
+  });
+});
