@@ -84,12 +84,82 @@ describe("Attack", () => {
       }
     );
 
-    it("when calling fpsWatcher adds fps to the collection",()=>{
+    describe("getWatchers", () => {
+      let watchers;
+
+      beforeEach(() => {
+        watchers = attack.getWatchers();
+      });
+
+      it("returns an object with a fpsWatcher function", () => {
+        expect(typeof watchers.fpsWatcher).toEqual("function");
+      });
+
+      it("returns an object with a onGremlin function", () => {
+        expect(typeof watchers.onGremlin).toEqual("function");
+      });
+    });
+
+    test.each([
+      [100, 100, 120],
+      [1000, 100, 1200],
+      [100, 1000, 300],
+      [50, 10, 51],
+      [2000, 0, 2000]
+    ])(
+      "realMax when maxOperation is %d and is %d return: %d",
+      (maxOperation, delay, expected) => {
+        attack.maxOperation = maxOperation;
+        attack.delay = delay;
+        const actual = attack.realMax;
+        expect(actual).toEqual(expected);
+      }
+    );
+
+    it("when calling fpsWatcher adds fps to the collection", () => {
       attack.fpsWatcher(30);
       attack.fpsWatcher(60);
 
       expect(attack.fps).toEqual([30, 60]);
-    })
+    });
+
+    describe("when calling stop", () => {
+      it("set status to stopped", () => {
+        attack.stop();
+        expect(attack.status).toBe("stopped");
+      });
+
+      it("set horde to null", () => {
+        attack.stop();
+        expect(attack.horde).toBe(null);
+      });
+
+      it("does not throw when called twice", () => {
+        attack.stop();
+        expect(() => attack.stop()).not.toThrow();
+      });
+    });
+
+    describe("when calling onEnded", () => {
+      it("set status to completed if status null", () => {
+        attack.onEnded();
+        expect(attack.status).toBe("completed");
+      });
+
+      test.each(["cancelled", "other"])(
+        "keep status when sets to %s",
+        status => {
+          attack.status = status;
+          attack.onEnded();
+          expect(attack.status).toBe(status);
+        }
+      );
+
+      it("set isUnderAttack to false", () => {
+        attack.onEnded();
+        expect(attack.isUnderAttack).toBe(false);
+      });
+    });
 
     describe("when calling onError", () => {
       test.each([
