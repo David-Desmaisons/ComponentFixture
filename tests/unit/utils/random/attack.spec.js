@@ -84,6 +84,13 @@ describe("Attack", () => {
       }
     );
 
+    it("when calling fpsWatcher adds fps to the collection",()=>{
+      attack.fpsWatcher(30);
+      attack.fpsWatcher(60);
+
+      expect(attack.fps).toEqual([30, 60]);
+    })
+
     describe("when calling onError", () => {
       test.each([
         { type: "" },
