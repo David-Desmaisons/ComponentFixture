@@ -61,9 +61,12 @@ describe("RandomGenerator", () => {
     ["String", "random", "string"],
     ["Number", 99, "integer"],
     ["Boolean", true, "bool"]
-  ])("getRandomForType receiving %o returns %o and calls %o", (type, expected, method) => {
-    const actual = randomGenerator.getRandomForType(type)();
-    expect(actual).toEqual(expected);
-    expect(chance[method]).toHaveBeenCalled();
-  });
+  ])(
+    "getRandomForType receiving %o returns %o and calls %o",
+    (type, expected, method) => {
+      const actual = randomGenerator.getRandomForType(type)();
+      expect(actual).toEqual(expected);
+      expect(chance[method]).toHaveBeenCalled();
+    }
+  );
 });
