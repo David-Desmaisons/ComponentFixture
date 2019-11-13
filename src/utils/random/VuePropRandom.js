@@ -2,7 +2,7 @@ function getCompatibleValue(getRandom, validate, maxTentative) {
   let value;
   let success = false;
   let tentative = 0;
-  while (tentative++ <= maxTentative && !success) {
+  while (tentative++ < maxTentative && !success) {
     value = getRandom();
     success = validate(value).ok;
   }
