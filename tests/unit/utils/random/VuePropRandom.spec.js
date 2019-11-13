@@ -50,7 +50,7 @@ describe("randomUpdateForProp", () => {
       expect(randomGenerator.oneOf).toHaveBeenCalledWith(possibleValues);
     });
 
-    it("calls validate with choosed option", () => {
+    it("calls validate with chosen option", () => {
       updater();
       expect(validate).toHaveBeenCalledWith(oneOfResult);
     });
