@@ -33,4 +33,37 @@ describe("RandomGenerator", () => {
       expect(chance.pickone).toHaveBeenCalledWith(array);
     }
   );
+
+  test.each([undefined, null, []])(
+    "oneOf do not delegate to chance pickone when array is %o",
+    array => {
+      const actual = randomGenerator.oneOf(array);
+      expect(actual).toBe(undefined);
+      expect(chance.pickone).not.toHaveBeenCalledWith();
+    }
+  );
+
+  test.each([
+    [["Function", "Object"], []],
+    [["String"], ["String"]],
+    [["Number"], ["Number"]],
+    [["Boolean"], ["Boolean"]],
+    [["Boolean", "String", "Number"], ["Boolean", "String", "Number"]],
+    [["String", "Object"], ["String"]],
+    [["Number", "Function"], ["Number"]],
+    [["Boolean", "String", "Number", "Object"], ["Boolean", "String", "Number"]]
+  ])("getRandomTypes receiving %o returns %o", (argument, expected) => {
+    const actual = randomGenerator.getRandomTypes(argument);
+    expect(actual).toEqual(expected);
+  });
+
+  test.each([
+    ["String", "random", "string"],
+    ["Number", 99, "integer"],
+    ["Boolean", true, "bool"]
+  ])("getRandomForType receiving %o returns %o and calls %o", (type, expected, method) => {
+    const actual = randomGenerator.getRandomForType(type)();
+    expect(actual).toEqual(expected);
+    expect(chance[method]).toHaveBeenCalled();
+  });
 });
