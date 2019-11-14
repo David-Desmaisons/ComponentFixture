@@ -27,11 +27,7 @@ describe("randomUpdateForProp", () => {
     };
   });
 
-  function buildArgument({
-    key = key,
-    possibleValues = null,
-    types = []
-  }) {
+  function buildArgument({ key = key, possibleValues = null, types = [] }) {
     key = key || keyProp;
     return {
       prop: { key, metaData: { possibleValues, types, validate } },
