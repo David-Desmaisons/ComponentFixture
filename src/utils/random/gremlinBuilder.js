@@ -16,7 +16,7 @@ function getClickGremlin({ element, randomGenerator, onGremlin }) {
   });
 }
 
-function getFpsMogwai({ fpsWatcher, onGremlin }) {
+function getFpsMogwai({ fpsWatcher }) {
   return gremlins.mogwais
     .fps()
     .delay(500)
