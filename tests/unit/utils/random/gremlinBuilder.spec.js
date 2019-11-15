@@ -38,22 +38,74 @@ jest.mock("gremlins.js/src/main", () => {
   };
 });
 
+jest.mock("@/utils/random/VuePropRandom",()=>{
+  return {
+    randomUpdateForProp: jest.fn()
+  }
+});
+
+jest.mock("@/utils/random/RandomGenerator",()=>{
+  return {
+    RandomGenerator: jest.fn()
+  }
+});
+
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { mocks } from "gremlins.js/src/main";
+import { randomUpdateForProp } from "@/utils/random/VuePropRandom";
+import { RandomGenerator } from "@/utils/random/RandomGenerator";
 
 describe("createGremlins", () => {
   let option;
   let watchers;
 
   beforeEach(() => {
-    option = {};
+    option = {
+      props:[{
+        key: "prop1"
+      },{
+        key: "prop2"
+      }],
+      methods:[
+
+      ],
+      delay: 10,
+      maxTentative: 40,
+      changeProp: jest.fn()
+    };
     watchers = {
       onGremlin: jest.fn(),
       fpsWatcher: jest.fn()
     };
   });
+
+  beforeEach(()=>{
+    randomUpdateForProp.mockReset();
+  });
+
+  afterEach(() => {
+    jest.resetModules();
+  });
+
   it("returns horde", () => {
     const res = createGremlins(option, watchers);
     expect(res).toBe(mocks.horde);
+  });
+
+  it("create gremlins from props horde", () => {
+    createGremlins(option, watchers);
+
+    const {changeProp, maxTentative} = option;
+    const {onGremlin} = watchers;
+    expect(randomUpdateForProp).toHaveBeenCalledTimes(option.props.length);
+    option.props.forEach(prop=>{
+      expect(randomUpdateForProp).toHaveBeenCalledWith({
+        prop,
+        changeProp,
+        maxTentative,
+        onGremlin,
+        randomGenerator: new RandomGenerator()
+      });
+    })
   });
 });

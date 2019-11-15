@@ -6,16 +6,18 @@
       v-bind="{attack, isUnderAttack}"
     />
 
-    <div class="attack-cleaner" v-if="attacks.length!==0">
+    <div
+      class="attack-cleaner"
+      v-if="attacks.length!==0"
+    >
       <button
         type="button"
         @click.prevent="clear"
         v-tooltip.bottom="'Clear'"
       >
-      <i class="fa fa-times-circle"></i>
+        <i class="fa fa-times-circle"></i>
       </button>
     </div>
-
 
     <AttackResult
       v-for="(result,idx) in attacks"
@@ -31,6 +33,7 @@ import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { Attack } from "@/utils/random/attack";
 import { VTooltip } from "v-tooltip";
 import { listenToError } from "../../utils/browserHelper";
+import { log } from "@/utils/logger";
 
 const props = {
   props: {
@@ -80,6 +83,10 @@ export default {
     this.stop();
   },
   methods: {
+    changeProp(key, value) {
+      log(`Updating props: ${key} with value:`, value);
+      this.$emit("changed", { key, value });
+    },
     run() {
       const {
         isUnderAttack,
@@ -96,6 +103,7 @@ export default {
         },
         onStart,
         onEnded,
+        changeProp,
         methods
       } = this;
       if (isUnderAttack) {
@@ -105,7 +113,6 @@ export default {
         ? Math.floor(Math.random() * 100000)
         : inputSeed;
       this.attack.seed = seed;
-      const changeProp = (key, value) => this.$emit("changed", { key, value });
       const currentAttack = new Attack({
         delay,
         stopOnErrorLog,
