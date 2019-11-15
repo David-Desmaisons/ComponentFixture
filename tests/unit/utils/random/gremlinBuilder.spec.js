@@ -13,10 +13,10 @@ jest.mock("gremlins.js/src/main", () => {
   const clickerSpecie = {
     positionSelector: jest.fn(() => clickerSpecie)
   };
-  const distribution ={
+  const distribution = {
     delay: jest.fn(() => distribution),
     distribution: jest.fn(() => distribution),
-    randomizer: jest.fn(() => distribution),
+    randomizer: jest.fn(() => distribution)
   };
   return {
     createHorde: jest.fn(() => horde),
@@ -38,16 +38,22 @@ jest.mock("gremlins.js/src/main", () => {
   };
 });
 
-jest.mock("@/utils/random/VuePropRandom",()=>{
+jest.mock("@/utils/random/VuePropRandom", () => {
+  const mockUpdaters = {};
   return {
-    randomUpdateForProp: jest.fn()
-  }
+    randomUpdateForProp: jest.fn(({ key }) => {
+      const res = jest.fn();
+      mockUpdaters[key] = res;
+      return res;
+    }),
+    mockUpdaters
+  };
 });
 
-jest.mock("@/utils/random/RandomGenerator",()=>{
+jest.mock("@/utils/random/RandomGenerator", () => {
   return {
     RandomGenerator: jest.fn()
-  }
+  };
 });
 
 import { createGremlins } from "@/utils/random/gremlinBuilder";
@@ -61,14 +67,20 @@ describe("createGremlins", () => {
 
   beforeEach(() => {
     option = {
-      props:[{
-        key: "prop1"
-      },{
-        key: "prop2"
-      }],
-      methods:[
-
+      props: [
+        {
+          key: "prop1"
+        },
+        {
+          key: "prop2"
+        }
       ],
+      methods: [
+        { name: "method1", execute: jest.fn() },
+        { name: "method1", execute: jest.fn() }
+      ],
+      includeMethod: true,
+      mouseEvents: true,
       delay: 10,
       maxTentative: 40,
       changeProp: jest.fn()
@@ -79,8 +91,8 @@ describe("createGremlins", () => {
     };
   });
 
-  beforeEach(()=>{
-    randomUpdateForProp.mockReset();
+  beforeEach(() => {
+    randomUpdateForProp.mockClear();
   });
 
   afterEach(() => {
@@ -95,10 +107,10 @@ describe("createGremlins", () => {
   it("create gremlins from props horde", () => {
     createGremlins(option, watchers);
 
-    const {changeProp, maxTentative} = option;
-    const {onGremlin} = watchers;
+    const { changeProp, maxTentative } = option;
+    const { onGremlin } = watchers;
     expect(randomUpdateForProp).toHaveBeenCalledTimes(option.props.length);
-    option.props.forEach(prop=>{
+    option.props.forEach(prop => {
       expect(randomUpdateForProp).toHaveBeenCalledWith({
         prop,
         changeProp,
@@ -106,6 +118,6 @@ describe("createGremlins", () => {
         onGremlin,
         randomGenerator: new RandomGenerator()
       });
-    })
+    });
   });
 });

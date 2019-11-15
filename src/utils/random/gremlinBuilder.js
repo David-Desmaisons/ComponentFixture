@@ -45,16 +45,10 @@ function getPropGremlin(option) {
 function getPropsGremlins({
   props,
   changeProp,
-  //changeProp: rawChangeProp,
   maxTentative,
   randomGenerator,
   onGremlin
 }) {
-  // const changeProp = (key, value) => {
-  //   log(`Updating props: ${key} with value:`, value);
-  //   rawChangeProp(key, value);
-  // };
-
   return (props || [])
     .map(prop =>
       getPropGremlin({
