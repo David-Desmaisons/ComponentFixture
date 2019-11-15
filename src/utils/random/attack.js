@@ -26,10 +26,6 @@ class Attack {
     this.attackNumber++;
   }
 
-  get realMax() {
-    return this.maxOperation * (1 + this.delay * 0.002);
-  }
-
   fpsWatcher(fps) {
     this.fps.push(fps);
   }

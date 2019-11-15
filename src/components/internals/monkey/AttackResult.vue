@@ -136,7 +136,7 @@ export default {
       }
       return Math.min(
         100,
-        (100 * this.result.attackNumber) / this.result.realMax
+        (100 * this.result.attackNumber) / this.result.maxOperation
       );
     }
   }

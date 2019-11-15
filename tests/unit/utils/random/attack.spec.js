@@ -100,22 +100,6 @@ describe("Attack", () => {
       });
     });
 
-    test.each([
-      [100, 100, 120],
-      [1000, 100, 1200],
-      [100, 1000, 300],
-      [50, 10, 51],
-      [2000, 0, 2000]
-    ])(
-      "realMax when maxOperation is %d and is %d return: %d",
-      (maxOperation, delay, expected) => {
-        attack.maxOperation = maxOperation;
-        attack.delay = delay;
-        const actual = attack.realMax;
-        expect(actual).toEqual(expected);
-      }
-    );
-
     it("when calling fpsWatcher adds fps to the collection", () => {
       attack.fpsWatcher(30);
       attack.fpsWatcher(60);

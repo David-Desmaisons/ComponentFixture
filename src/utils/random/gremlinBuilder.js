@@ -21,7 +21,6 @@ function getFpsMogwai({ fpsWatcher, onGremlin }) {
     .fps()
     .delay(500)
     .levelSelector(fps => {
-      onGremlin();
       fpsWatcher(fps);
       if (fps < 5) {
         return "error";

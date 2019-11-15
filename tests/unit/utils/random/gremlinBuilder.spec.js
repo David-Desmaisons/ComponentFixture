@@ -6,9 +6,9 @@ jest.mock("gremlins.js/src/main", () => {
     gremlin: jest.fn(() => horde),
     strategy: jest.fn(() => horde)
   };
-  const mogwais = {
-    delay: jest.fn(() => mogwais),
-    levelSelector: jest.fn(() => mogwais)
+  const fpsMogwais = {
+    delay: jest.fn(() => fpsMogwais),
+    levelSelector: jest.fn(() => fpsMogwais)
   };
   const clickerSpecie = {
     positionSelector: jest.fn(() => clickerSpecie)
@@ -21,7 +21,7 @@ jest.mock("gremlins.js/src/main", () => {
   return {
     createHorde: jest.fn(() => horde),
     mogwais: {
-      fps: jest.fn(() => mogwais)
+      fps: jest.fn(() => fpsMogwais)
     },
     species: {
       clicker: jest.fn(() => clickerSpecie)
@@ -31,7 +31,7 @@ jest.mock("gremlins.js/src/main", () => {
     },
     mocks: {
       horde,
-      mogwais,
+      fpsMogwais,
       clickerSpecie,
       distribution
     }
@@ -60,6 +60,14 @@ import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { mocks } from "gremlins.js/src/main";
 import { randomUpdateForProp } from "@/utils/random/VuePropRandom";
 import { RandomGenerator } from "@/utils/random/RandomGenerator";
+
+function resetAllJestFn(mock) {
+  Object.keys(mock).forEach(key => mock[key].mockClear());
+}
+
+function resetAllJestFnForMocks(mocks) {
+  Object.keys(mocks).forEach(key => resetAllJestFn(mocks[key]));
+}
 
 describe("createGremlins", () => {
   let option;
@@ -92,6 +100,7 @@ describe("createGremlins", () => {
   });
 
   beforeEach(() => {
+    resetAllJestFnForMocks(mocks);
     randomUpdateForProp.mockClear();
   });
 
@@ -104,7 +113,55 @@ describe("createGremlins", () => {
     expect(res).toBe(mocks.horde);
   });
 
-  it("create gremlins from props horde", () => {
+  it("add fps mogwais", () => {
+    const horde = createGremlins(option, watchers);
+    expect(horde.mogwai).toHaveBeenCalledWith(mocks.fpsMogwais);
+  });
+
+  describe("configure mogwai", () => {
+    let fpsMogwais;
+    beforeEach(() => {
+      createGremlins(option, watchers);
+      fpsMogwais = mocks.fpsMogwais;
+    });
+
+    it("with 500ms delay", () => {
+      expect(fpsMogwais.delay).toHaveBeenCalledWith(500);
+    });
+
+    it("with levelSelector", () => {
+      expect(fpsMogwais.levelSelector).toHaveBeenCalled();
+    });
+
+    describe("when calling levelSelector", () => {
+      let levelSelector;
+      beforeEach(() => {
+        levelSelector = fpsMogwais.levelSelector.mock.calls[0][0];
+      });
+
+      test.each([30, 60])("calls fpsWatcher with passed %d", arg => {
+        levelSelector(arg);
+        expect(watchers.fpsWatcher).toHaveBeenCalledTimes(1);
+        expect(watchers.fpsWatcher).toHaveBeenCalledWith(arg);
+      });
+
+      test.each([
+        [60, "log"],
+        [30, "log"],
+        [19, "log"],
+        [10, "log"],
+        [9, "warn"],
+        [5, "warn"],
+        [4.9, "error"],
+        [0, "error"],
+      ])("when called with %d return %s", (arg, expected) => {
+        const actual = levelSelector(arg);
+        expect(actual).toBe(expected);
+      });
+    });
+  });
+
+  it("create gremlins from props", () => {
     createGremlins(option, watchers);
 
     const { changeProp, maxTentative } = option;
