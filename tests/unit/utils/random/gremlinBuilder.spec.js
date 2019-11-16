@@ -56,6 +56,15 @@ jest.mock("@/utils/random/RandomGenerator", () => {
   };
 });
 
+jest.mock("@/utils/logger", () => {
+  return {
+    log: jest.fn(),
+    warn: jest.fn(),
+    info: jest.fn(),
+    error: jest.fn()
+  };
+});
+
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { mocks } from "gremlins.js/src/main";
 import { randomUpdateForProp } from "@/utils/random/VuePropRandom";
@@ -180,11 +189,24 @@ describe("createGremlins", () => {
           .map(([arg]) => arg);
       });
 
-      it("calls execute when called", () => {
-        methodsGremlins[0]();
+      test.each([0, 1])(
+        "that when called on gremlins methods %d calls execute of the same method",
+        index => {
+          const notCalledIndex = index === 0 ? 1 : 0;
+          methodsGremlins[index]();
 
-        expect(option.methods[0].execute).toHaveBeenCalled();
-      });
+          expect(option.methods[index].execute).toHaveBeenCalled();
+          expect(option.methods[notCalledIndex].execute).not.toHaveBeenCalled();
+        }
+      );
+
+      test.each([0, 1])(
+        "that when called on gremlins methods %d calls onGremlin",
+        index => {
+          methodsGremlins[index]();
+          expect(watchers.onGremlin).toHaveBeenCalledTimes(1);
+        }
+      );
     });
 
     it("calls randomUpdateForProp to create gremlins from props", () => {
