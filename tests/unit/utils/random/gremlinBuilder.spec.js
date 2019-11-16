@@ -41,7 +41,7 @@ jest.mock("gremlins.js/src/main", () => {
 jest.mock("@/utils/random/VuePropRandom", () => {
   const mockUpdaters = {};
   return {
-    randomUpdateForProp: jest.fn(({ key }) => {
+    randomUpdateForProp: jest.fn(({ prop: { key } }) => {
       const res = jest.fn();
       mockUpdaters[key] = res;
       return res;
@@ -67,8 +67,10 @@ jest.mock("@/utils/logger", () => {
 
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { mocks } from "gremlins.js/src/main";
-import { randomUpdateForProp } from "@/utils/random/VuePropRandom";
+import { randomUpdateForProp, mockUpdaters } from "@/utils/random/VuePropRandom";
 import { RandomGenerator } from "@/utils/random/RandomGenerator";
+import { log } from "@/utils/logger";
+
 
 function resetAllJestFn(mock) {
   Object.keys(mock).forEach(key => mock[key].mockClear());
@@ -110,7 +112,7 @@ describe("createGremlins", () => {
 
   beforeEach(() => {
     resetAllJestFnForMocks(mocks);
-    randomUpdateForProp.mockClear();
+    [randomUpdateForProp, log].forEach(f => f.mockClear());
   });
 
   afterEach(() => {
@@ -200,6 +202,16 @@ describe("createGremlins", () => {
         }
       );
 
+      test.each([[0, "method1"], [1, "method2"]])(
+        "that log the information",
+        (index, name) => {
+          methodsGremlins[index]();
+
+          expect(log).toHaveBeenCalledTimes(1);
+          expect(log).toHaveBeenCalledWith(`calling ${name} method`);
+        }
+      );
+
       test.each([0, 1])(
         "that when called on gremlins methods %d calls onGremlin",
         index => {
@@ -209,21 +221,54 @@ describe("createGremlins", () => {
       );
     });
 
-    it("calls randomUpdateForProp to create gremlins from props", () => {
-      createGremlins(option, watchers);
+    describe("adding gremlins for props", () => {
+      let propsGremlins;
+      beforeEach(() => {
+        createGremlins(option, watchers);
+        propsGremlins = mocks.horde.gremlin.mock.calls
+          .slice(1, -2)
+          .map(([arg]) => arg);
+      });
 
-      const { changeProp, maxTentative } = option;
-      const { onGremlin } = watchers;
-      expect(randomUpdateForProp).toHaveBeenCalledTimes(option.props.length);
-      option.props.forEach(prop => {
-        expect(randomUpdateForProp).toHaveBeenCalledWith({
-          prop,
-          changeProp,
-          maxTentative,
-          onGremlin,
-          randomGenerator: new RandomGenerator()
+      it("calls randomUpdateForProp to create gremlins from props", () => {
+        const { changeProp, maxTentative } = option;
+        const { onGremlin } = watchers;
+        expect(randomUpdateForProp).toHaveBeenCalledTimes(option.props.length);
+        option.props.forEach(prop => {
+          expect(randomUpdateForProp).toHaveBeenCalledWith({
+            prop,
+            changeProp,
+            maxTentative,
+            onGremlin,
+            randomGenerator: new RandomGenerator()
+          });
         });
       });
+
+      function getMockForProp(index) {
+        return mockUpdaters[`prop${index + 1}`];
+      }
+
+      test.each([0, 1])(
+        "that when called on gremlins props %d calls randomUpdateForProp result",
+        index => {
+          const expectedFunction = getMockForProp(index);
+          const notCalledFunction = getMockForProp(index === 0 ? 1 : 0);
+
+          propsGremlins[index]();
+
+          expect(expectedFunction).toHaveBeenCalled();
+          expect(notCalledFunction).not.toHaveBeenCalled();
+        }
+      );
+
+      test.each([0, 1])(
+        "that when called on gremlins methods %d calls onGremlin",
+        index => {
+          propsGremlins[index]();
+          expect(watchers.onGremlin).toHaveBeenCalledTimes(1);
+        }
+      );
     });
   });
 });
