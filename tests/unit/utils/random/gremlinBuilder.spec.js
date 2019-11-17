@@ -330,4 +330,67 @@ describe("createGremlins", () => {
       );
     });
   });
+
+  describe("configure distribution", () => {
+    let distribution;
+    beforeEach(() => {
+      distribution = mocks.distribution;
+    });
+
+    it("by calling strategy with distribution", () => {
+      const horde = createGremlins(option, watchers);
+
+      expect(horde.strategy).toHaveBeenCalledWith(distribution);
+    });
+
+    it("by adding delay", () => {
+      createGremlins(option, watchers);
+
+      expect(distribution.delay).toHaveBeenCalledWith(option.delay);
+    });
+
+    it("by adding distribution", () => {
+      createGremlins(option, watchers);
+
+      expect(distribution.distribution).toHaveBeenCalledWith([
+        0.5,
+        0.1,
+        0.1,
+        0.1,
+        0.1,
+        0.1
+      ]);
+    });
+
+    test.each([
+      [0.5, true, [0.5, 0.1, 0.1, 0.1, 0.1, 0.1]],
+      [0.25, true, [0.25, 0.15, 0.15, 0.15, 0.15, 0.15]],
+      [1, true, [1, 0, 0, 0, 0, 0]],
+      [1, false, [0, 0.2, 0.2, 0.2, 0.2, 0.2]],
+      [0.5, false, [0, 0.2, 0.2, 0.2, 0.2, 0.2]]
+    ])(
+      "when receiving a clickProbability of %d and a mouseEvents of %o adds a distribution of %o",
+      (clickProbability, mouseEvents, expected) => {
+        option.clickProbability = clickProbability;
+        option.mouseEvents = mouseEvents;
+        createGremlins(option, watchers);
+
+        expect(distribution.distribution).toHaveBeenCalledWith(expected);
+      }
+    );
+
+    test.each([[true, [1]], [false, [0]]])(
+      "by adding distribution that adjust when there is no gremlins",
+      (mouseEvents, expected) => {
+        option.clickProbability = 0.5;
+        option.props = null;
+        option.includeMethod = false;
+        option.mouseEvents = mouseEvents;
+
+        createGremlins(option, watchers);
+
+        expect(distribution.distribution).toHaveBeenCalledWith(expected);
+      }
+    );
+  });
 });
