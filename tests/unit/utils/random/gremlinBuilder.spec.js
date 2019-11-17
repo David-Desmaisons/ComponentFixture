@@ -102,6 +102,9 @@ describe("createGremlins", () => {
         },
         {
           key: "prop2"
+        },
+        {
+          key: "prop3"
         }
       ],
       methods: [
@@ -190,6 +193,15 @@ describe("createGremlins", () => {
     it("adding gremlin for props and methods and click", () => {
       const { props, methods } = option;
       const expectedCount = props.length + methods.length + 1;
+
+      createGremlins(option, watchers);
+
+      expect(mocks.horde.gremlin).toHaveBeenCalledTimes(expectedCount);
+    });
+
+    it("adding only gremlin for props when option.method is false", () => {
+      option.includeMethod = false;
+      const expectedCount = option.props.length + 1;
 
       createGremlins(option, watchers);
 
@@ -299,20 +311,22 @@ describe("createGremlins", () => {
         return mockUpdaters[`prop${index + 1}`];
       }
 
-      test.each([0, 1])(
+      test.each([0, 1, 2])(
         "that when called on gremlins props %d calls randomUpdateForProp result",
         index => {
           const expectedFunction = getMockForProp(index);
-          const notCalledFunction = getMockForProp(index === 0 ? 1 : 0);
+          const notCalledFunctions = [0, 1, 2].filter(idx => idx !== index).map(idx => getMockForProp(idx));
 
           propsGremlins[index]();
 
           expect(expectedFunction).toHaveBeenCalled();
-          expect(notCalledFunction).not.toHaveBeenCalled();
+          notCalledFunctions.forEach(notCalledFunction =>{
+            expect(notCalledFunction).not.toHaveBeenCalled();
+          });
         }
       );
 
-      test.each([0, 1])(
+      test.each([0, 1, 2])(
         "that when called on gremlins methods %d calls onGremlin",
         index => {
           propsGremlins[index]();
