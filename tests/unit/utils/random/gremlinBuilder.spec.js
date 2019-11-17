@@ -1,42 +1,4 @@
-jest.mock("gremlins.js/src/main", () => {
-  const horde = {
-    logger: jest.fn(() => horde),
-    randomizer: jest.fn(() => horde),
-    mogwai: jest.fn(() => horde),
-    gremlin: jest.fn(() => horde),
-    strategy: jest.fn(() => horde)
-  };
-  const fpsMogwais = {
-    delay: jest.fn(() => fpsMogwais),
-    levelSelector: jest.fn(() => fpsMogwais)
-  };
-  const clickerSpecie = {
-    positionSelector: jest.fn(() => clickerSpecie)
-  };
-  const distribution = {
-    delay: jest.fn(() => distribution),
-    distribution: jest.fn(() => distribution),
-    randomizer: jest.fn(() => distribution)
-  };
-  return {
-    createHorde: jest.fn(() => horde),
-    mogwais: {
-      fps: jest.fn(() => fpsMogwais)
-    },
-    species: {
-      clicker: jest.fn(() => clickerSpecie)
-    },
-    strategies: {
-      distribution: jest.fn(() => distribution)
-    },
-    mocks: {
-      horde,
-      fpsMogwais,
-      clickerSpecie,
-      distribution
-    }
-  };
-});
+jest.mock("gremlins.js/src/main");
 
 jest.mock("@/utils/random/VuePropRandom", () => {
   const mockUpdaters = {};
@@ -51,7 +13,7 @@ jest.mock("@/utils/random/VuePropRandom", () => {
 });
 
 jest.mock("@/utils/random/RandomGenerator", () => {
-  function RandomGenerator() {};
+  function RandomGenerator() {}
   RandomGenerator.prototype.range = jest.fn((min, max) => (min + max) / 2);
   return {
     RandomGenerator
@@ -61,7 +23,7 @@ jest.mock("@/utils/random/RandomGenerator", () => {
 jest.mock("@/utils/browserHelper", () => {
   return {
     getOffset: () => ({ x: 30, y: 50 })
-  }
+  };
 });
 
 jest.mock("@/utils/logger", () => {
@@ -190,7 +152,7 @@ describe("createGremlins", () => {
   });
 
   describe("configure gremlins", () => {
-    it("adding gremlin for props and methods and click", () => {
+    it("adding gremlin for props and methods and click when option.includeMethod is true", () => {
       const { props, methods } = option;
       const expectedCount = props.length + methods.length + 1;
 
@@ -199,7 +161,38 @@ describe("createGremlins", () => {
       expect(mocks.horde.gremlin).toHaveBeenCalledTimes(expectedCount);
     });
 
-    it("adding only gremlin for props when option.method is false", () => {
+    it("adding only gremlin for props when option.includeMethod is false", () => {
+      option.includeMethod = false;
+      const expectedCount = option.props.length + 1;
+
+      createGremlins(option, watchers);
+
+      expect(mocks.horde.gremlin).toHaveBeenCalledTimes(expectedCount);
+    });
+
+    it("not adding only gremlin for props when randomUpdateForProp return null", () => {
+      for (let index = 0; index < option.props.length; index++) {
+        randomUpdateForProp.mockReturnValueOnce(null);
+      }
+      option.includeMethod = false;
+      const expectedCount = 1;
+
+      createGremlins(option, watchers);
+
+      expect(mocks.horde.gremlin).toHaveBeenCalledTimes(expectedCount);
+    });
+
+    it("not adding only gremlin for props when props is null", () => {
+      option.props = null;
+      option.includeMethod = false;
+      const expectedCount = 1;
+
+      createGremlins(option, watchers);
+
+      expect(mocks.horde.gremlin).toHaveBeenCalledTimes(expectedCount);
+    });
+
+    it("adding only gremlin for props when option.includeMethod is false", () => {
       option.includeMethod = false;
       const expectedCount = option.props.length + 1;
 
@@ -226,7 +219,7 @@ describe("createGremlins", () => {
       });
 
       it("with a positionSelector that calls range", () => {
-        const {range} = RandomGenerator.prototype;
+        const { range } = RandomGenerator.prototype;
         selector();
         expect(range).toHaveBeenCalledTimes(2);
         expect(range).toHaveBeenCalledWith(0, 400);
@@ -315,12 +308,14 @@ describe("createGremlins", () => {
         "that when called on gremlins props %d calls randomUpdateForProp result",
         index => {
           const expectedFunction = getMockForProp(index);
-          const notCalledFunctions = [0, 1, 2].filter(idx => idx !== index).map(idx => getMockForProp(idx));
+          const notCalledFunctions = [0, 1, 2]
+            .filter(idx => idx !== index)
+            .map(idx => getMockForProp(idx));
 
           propsGremlins[index]();
 
           expect(expectedFunction).toHaveBeenCalled();
-          notCalledFunctions.forEach(notCalledFunction =>{
+          notCalledFunctions.forEach(notCalledFunction => {
             expect(notCalledFunction).not.toHaveBeenCalled();
           });
         }
