@@ -51,9 +51,17 @@ jest.mock("@/utils/random/VuePropRandom", () => {
 });
 
 jest.mock("@/utils/random/RandomGenerator", () => {
+  function RandomGenerator() {};
+  RandomGenerator.prototype.range = jest.fn((min, max) => (min + max) / 2);
   return {
-    RandomGenerator: jest.fn()
+    RandomGenerator
   };
+});
+
+jest.mock("@/utils/browserHelper", () => {
+  return {
+    getOffset: () => ({ x: 30, y: 50 })
+  }
 });
 
 jest.mock("@/utils/logger", () => {
@@ -100,6 +108,10 @@ describe("createGremlins", () => {
         { name: "method1", execute: jest.fn() },
         { name: "method2", execute: jest.fn() }
       ],
+      element: {
+        clientWidth: 300,
+        clientHeight: 400
+      },
       includeMethod: true,
       mouseEvents: true,
       delay: 10,
@@ -182,6 +194,42 @@ describe("createGremlins", () => {
       createGremlins(option, watchers);
 
       expect(mocks.horde.gremlin).toHaveBeenCalledTimes(expectedCount);
+    });
+
+    describe("adding gremlins for click", () => {
+      let clickGremlin;
+      let selector;
+      beforeEach(() => {
+        createGremlins(option, watchers);
+        clickGremlin = mocks.horde.gremlin.mock.calls[0][0];
+        selector = mocks.clickerSpecie.positionSelector.mock.calls[0][0];
+      });
+
+      it("as first gremlin", () => {
+        expect(clickGremlin).toBe(mocks.clickerSpecie);
+      });
+
+      it("that calls positionSelector", () => {
+        expect(mocks.clickerSpecie.positionSelector).toHaveBeenCalledTimes(1);
+      });
+
+      it("with a positionSelector that calls range", () => {
+        const {range} = RandomGenerator.prototype;
+        selector();
+        expect(range).toHaveBeenCalledTimes(2);
+        expect(range).toHaveBeenCalledWith(0, 400);
+        expect(range).toHaveBeenCalledWith(0, 300);
+      });
+
+      it("with a positionSelector that calls radom range ", () => {
+        const res = selector();
+        expect(res).toEqual([180, 250]);
+      });
+
+      it("with a positionSelector that respects calls gremlins", () => {
+        selector();
+        expect(watchers.onGremlin).toHaveBeenCalledTimes(1);
+      });
     });
 
     describe("adding gremlins for methods", () => {
