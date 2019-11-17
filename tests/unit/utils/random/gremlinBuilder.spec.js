@@ -67,10 +67,12 @@ jest.mock("@/utils/logger", () => {
 
 import { createGremlins } from "@/utils/random/gremlinBuilder";
 import { mocks } from "gremlins.js/src/main";
-import { randomUpdateForProp, mockUpdaters } from "@/utils/random/VuePropRandom";
+import {
+  randomUpdateForProp,
+  mockUpdaters
+} from "@/utils/random/VuePropRandom";
 import { RandomGenerator } from "@/utils/random/RandomGenerator";
 import { log } from "@/utils/logger";
-
 
 function resetAllJestFn(mock) {
   Object.keys(mock).forEach(key => mock[key].mockClear());

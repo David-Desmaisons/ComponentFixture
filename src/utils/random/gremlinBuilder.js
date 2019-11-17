@@ -31,14 +31,13 @@ function getFpsMogwai({ fpsWatcher }) {
 
 function getPropGremlin(option) {
   const updater = randomUpdateForProp(option);
-  if (!updater) {
-    return null;
-  }
 
-  return () => {
-    option.onGremlin();
-    updater();
-  };
+  return !updater
+    ? null
+    : () => {
+        option.onGremlin();
+        updater();
+      };
 }
 
 function getPropsGremlins({
