@@ -5,7 +5,8 @@ describe("Attack", () => {
     delay: 100,
     stopOnErrorLog: true,
     maxOperation: 1000,
-    mouseEvents: false
+    mouseEvents: false,
+    includeMethod: true
   };
   let attack;
 
@@ -14,10 +15,20 @@ describe("Attack", () => {
   });
 
   it("constructor copy options", () => {
-    const { delay, stopOnErrorLog, maxOperation, mouseEvents } = attack;
-    expect({ delay, stopOnErrorLog, maxOperation, mouseEvents }).toEqual(
-      option
-    );
+    const {
+      delay,
+      stopOnErrorLog,
+      maxOperation,
+      mouseEvents,
+      includeMethod
+    } = attack;
+    expect({
+      delay,
+      stopOnErrorLog,
+      maxOperation,
+      mouseEvents,
+      includeMethod
+    }).toEqual(option);
   });
 
   it("constructor default status to 'running'", () => {

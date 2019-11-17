@@ -30,7 +30,7 @@
         v-tooltip.left="'Force component update'"
       >
         <i
-          class="fa fa-repeat"
+          class="fa fa-refresh"
           aria-hidden="true"
         ></i>
       </button>

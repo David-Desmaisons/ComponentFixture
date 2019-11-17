@@ -24,16 +24,30 @@
     </svg>
 
     <div class="attack-sum-up">
-      <h1
-        class="main-feedback"
-        :class="status"
-      >{{status}}</h1>
-      <i
-        v-if="stopped"
-        :class="status"
-        class="main-feedback fa fa-stop"
-        aria-hidden="true"
-      ></i>
+      <div class="status">
+        <h1
+          class="main-feedback"
+          :class="status"
+        >{{status}}</h1>
+        <i
+          v-if="stopped"
+          :class="status"
+          class="main-feedback fa fa-stop"
+          aria-hidden="true"
+        ></i>
+      </div>
+
+      <button
+        v-if="!result.isUnderAttack"
+        class="btn"
+        @click="reUse"
+        v-tooltip.left="'Use parameter for new attack'"
+      >
+        <i
+          class="fa fa-recycle"
+          aria-hidden="true"
+        ></i>
+      </button>
     </div>
 
     <div class="attack-type">
@@ -71,7 +85,12 @@
 </template>
 <script>
 import FpsFeedback from "./FpsFeedback";
+import { VTooltip } from "v-tooltip";
+
 export default {
+  directives: {
+    tooltip: VTooltip
+  },
   components: {
     FpsFeedback
   },
@@ -88,6 +107,11 @@ export default {
   },
   beforeDestroy() {
     this.result.stop();
+  },
+  methods: {
+    reUse() {
+      this.$emit("reUse", this.result);
+    }
   },
   computed: {
     minFps() {
@@ -158,9 +182,14 @@ export default {
     flex: 1 100%;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
-    i {
-      margin-left: 5px;
+    .status {
+      display: flex;
+      align-items: center;
+      i {
+        margin-left: 5px;
+      }
     }
   }
 
@@ -207,6 +236,13 @@ export default {
     &.erro {
       color: red;
     }
+  }
+
+  button {
+    outline: transparent;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
   }
 }
 </style>

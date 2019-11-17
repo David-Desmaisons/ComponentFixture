@@ -23,6 +23,7 @@
       v-for="(result,idx) in attacks"
       :key="idx"
       :result="result"
+      @reUse="reUse"
     />
   </div>
 </template>
@@ -117,7 +118,8 @@ export default {
         delay,
         stopOnErrorLog,
         maxOperation,
-        mouseEvents
+        mouseEvents,
+        includeMethod
       });
       const watchers = currentAttack.getWatchers();
       const options = {
@@ -137,6 +139,23 @@ export default {
       horde.before(onStart);
       horde.after(onEnded);
       horde.unleash({ nb: maxOperation });
+    },
+    reUse({
+      delay,
+      mouseEvents,
+      includeMethod,
+      seed,
+      maxOperation,
+      stopOnErrorLog
+    }) {
+      const { attack } = this;
+      attack.delay = delay;
+      attack.mouseEvents = mouseEvents;
+      attack.seed = seed;
+      attack.includeMethod = includeMethod;
+      attack.maxOperation = maxOperation;
+      attack.generateSeed = false;
+      attack.stopOnErrorLog = stopOnErrorLog;
     },
     clear() {
       this.attacks = [];
@@ -176,6 +195,7 @@ export default {
   button {
     background: white;
     border: 0;
+    font-size: 16px;
   }
   display: flex;
   flex-direction: row-reverse;
