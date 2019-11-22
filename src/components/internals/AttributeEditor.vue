@@ -55,7 +55,7 @@
           v-if="metaData.isModel"
         >
           <i
-            class="fa fa-refresh"
+            class="fa fa-arrows-h"
             v-tooltip.bottom="'v-model'"
           />
         </div>
@@ -165,12 +165,19 @@ export default {
       },
       immediate: true
     },
-    type(newValue) {
+    type(newType) {
       const currentTypes = getTypeFromValue(this.value);
-      if (currentTypes.includes(newValue)) {
+      if (currentTypes.includes(newType)) {
         return;
       }
-      this.changed({ key: this.attribute, value: getDefaultForType(newValue) });
+      this.changed({ key: this.attribute, value: getDefaultForType(newType) });
+    },
+    value(newValue) {
+      const potencialTypes = getTypeFromValue(newValue);
+      if (potencialTypes.includes(this.type)) {
+        return;
+      }
+      this.type = potencialTypes[0];
     }
   },
 

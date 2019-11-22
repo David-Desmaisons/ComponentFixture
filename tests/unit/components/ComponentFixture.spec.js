@@ -122,6 +122,17 @@ describe("ComponentFixture.vue", () => {
       expect(vm.useStore).toEqual(false);
     });
 
+    it("sets componentKey to 1", () => {
+      expect(vm.componentKey).toEqual(1);
+    });
+
+    it("use key 1 for component under test", () => {
+      const {
+        vm: { $vnode: node }
+      } = wrapper.find({ ref: "cut" });
+      expect(node.key).toEqual(1);
+    });
+
     it("computes the dynamicAttributes number with all props", () => {
       expect(Object.keys(dynamicAttributes).length).toEqual(5);
     });
@@ -207,7 +218,7 @@ describe("ComponentFixture.vue", () => {
       expect(actualTypes).toEqual(expectedTypes);
     });
 
-    it("tracks events on component under fixtures", () => {
+    it("tracks events on component under fixture", () => {
       const testComponentVm = vm.$children[0];
       testComponentVm.$emit("event1", 0);
       testComponentVm.$emit("event2", "a", "b", true);
@@ -221,6 +232,20 @@ describe("ComponentFixture.vue", () => {
           name: "event2",
           instant: new Date(),
           args: ["a", "b", true]
+        }
+      ]);
+    });
+
+    it("tracks events on component under fixture after update", async () => {
+      vm.update();
+      await vm.$nextTick();
+      const testComponentVm = vm.$children[0];
+      testComponentVm.$emit("event3", "argument");
+      expect(vm.events).toEqual([
+        {
+          name: "event3",
+          instant: new Date(),
+          args: ["argument"]
         }
       ]);
     });
@@ -245,16 +270,49 @@ describe("ComponentFixture.vue", () => {
     });
 
     describe("when calling update", () => {
-      let testedComponent;
-
       beforeEach(() => {
-        testedComponent = vm.$refs.cut;
-        testedComponent.$forceUpdate = jest.fn();
         vm.update();
       });
 
-      it("calls force update", () => {
-        expect(testedComponent.$forceUpdate).toHaveBeenCalled();
+      it("update componentKey", () => {
+        expect(vm.componentKey).toEqual(2);
+      });
+
+      it("update component under test key attribute", () => {
+        const {
+          vm: { $vnode: node }
+        } = wrapper.find({ ref: "cut" });
+        expect(node.key).toEqual(2);
+      });
+    });
+
+    describe("when calling changed", () => {
+      test.each([
+        { key: "number", value: 56 },
+        { key: "string", value: "newValue" },
+        { key: "oddNumber", value: 6 }
+      ])("with %o changes the property key with the given value", argument => {
+        vm.changed(argument);
+        const testComponentVm = vm.$children[0];
+        expect(testComponentVm[argument.key]).toEqual(argument.value);
+      });
+    });
+
+    describe("when calling resetAllProps", () => {
+      test.each([
+        { key: "number", value: 56 },
+        { key: "string", value: "newValue" },
+        { key: "oddNumber", value: 10 }
+      ])("after changing props with: %o reset to default value", argument => {
+        vm.changed(argument);
+        vm.resetAllProps();
+        const testComponentVm = vm.$children[0];
+        const { number, string, oddNumber } = testComponentVm;
+        expect({ number, string, oddNumber }).toEqual({
+          number: 25,
+          string: "",
+          oddNumber: 2
+        });
       });
     });
   });

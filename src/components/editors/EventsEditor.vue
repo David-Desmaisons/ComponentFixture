@@ -10,9 +10,7 @@
       >
         <i class="fa fa-times-circle"></i>
       </button>
-      <div
-        v-if="events.length===0"
-      >No
+      <div v-if="events.length===0">No
         events to display.
       </div>
     </div>
@@ -69,6 +67,7 @@ export default {
 button {
   background: white;
   border: 0;
+  font-size: 16px !important;
 }
 .no-info-events {
   display: flex;

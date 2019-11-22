@@ -10,4 +10,12 @@ function warn(...args) {
   applyNative(window.console.warn, args);
 }
 
-export { log, warn };
+function info(...args) {
+  applyNative(window.console.info, args);
+}
+
+function error(...args) {
+  applyNative(window.console.error, args);
+}
+
+export { info, error, log, warn };

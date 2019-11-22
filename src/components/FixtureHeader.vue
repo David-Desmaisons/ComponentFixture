@@ -27,10 +27,21 @@
       <button
         class="btn btn--refresh-component"
         @click="executeUpdate"
-        v-tooltip.left="'Update component'"
+        v-tooltip.left="'Force component update'"
       >
         <i
-          class="fa fa-repeat"
+          class="fa fa-refresh"
+          aria-hidden="true"
+        ></i>
+      </button>
+
+            <button
+        class="btn"
+        @click="resetProps"
+        v-tooltip.left="'Reset all props'"
+      >
+        <i
+          class="fa fa-power-off"
           aria-hidden="true"
         ></i>
       </button>
@@ -50,6 +61,10 @@ const props = {
     required: true
   },
   update: {
+    required: true,
+    type: Function
+  },
+  resetAllProps: {
     required: true,
     type: Function
   }
@@ -73,7 +88,14 @@ export default {
     executeUpdate() {
       this.update();
       this.$nextTick(() => {
-        this.$emit("success", "$forceUpdate called on component");
+        this.$emit("success", "component has been re-created");
+      });
+    },
+
+    resetProps() {
+      this.resetAllProps();
+      this.$nextTick(() => {
+        this.$emit("success", "Props have been reset");
       });
     }
   },

@@ -122,6 +122,14 @@ export default {
       this.events = [];
     },
 
+    resetAllProps() {
+      const { changed, propsDefinition } = this;
+      Object.keys(propsDefinition).forEach(key => {
+        const { defaultValue: value } = propsDefinition[key];
+        changed({ key, value });
+      });
+    },
+
     changed({ key: prop, value }) {
       const { $store, storeName } = this;
       const commited = commit({ $store, prop, storeName, value });
@@ -214,7 +222,7 @@ export default {
     },
 
     update() {
-      this.getUnderTestComponent().$forceUpdate();
+      this.componentKey++;
     },
 
     getComponentInformation() {
@@ -231,6 +239,10 @@ export default {
     },
 
     afterMount() {
+      if (this.$updatedEventKey === this.componentKey) {
+        return;
+      }
+      this.$updatedEventKey = this.componentKey;
       const componentUnderTest = this.getUnderTestComponent();
       const emit = componentUnderTest.$emit;
       const newEmit = (eventName, ...args) => {
@@ -249,6 +261,7 @@ export default {
   },
 
   created() {
+    this.$updatedEventKey = 0;
     this.id = id++;
   },
 
@@ -277,19 +290,22 @@ export default {
 
     const {
       clearEvents,
-      dynamicAttributes,
-      data,
-      computed,
+      componentKey,
       componentName,
       componentMethods: methods,
       componentModel,
+      computed,
+      data,
+      dynamicAttributes,
       events,
+      getUnderTestComponent,
       propsDefinition,
       update,
       componentHeight: inicialHeight,
       componentWidth: inicialWidth,
       isResizable,
       changed,
+      resetAllProps,
       storeName
     } = this;
 
@@ -299,6 +315,7 @@ export default {
       scopedSlots,
       slots: childSlots,
       class: { "real-component": true },
+      key: componentKey,
       ref: "cut",
       on: this.setupEventsListeners(props, componentModel)
     };
@@ -319,6 +336,7 @@ export default {
         header({
           componentName,
           update,
+          resetAllProps,
           methods,
           isResizable
         }),
@@ -350,6 +368,7 @@ export default {
                   methods,
                   events,
                   clearEvents,
+                  getUnderTestComponent,
                   changed
                 })
               ]
@@ -384,10 +403,10 @@ export default {
   },
 
   updated() {
-    if (this.$stage !== 0) {
+    this.$stage = 1;
+    if (this.$updatedEventKey === this.componentKey) {
       return;
     }
-    this.$stage = 1;
     this.$nextTick(() => this.afterMount());
   },
 
@@ -415,6 +434,11 @@ export default {
        * The component under test name.
        */
       componentName: null,
+
+      /**
+       * The component under key to force re-creation.
+       */
+      componentKey: 1,
 
       /**
        * This object will contain all the props to be bound with the component under test.
