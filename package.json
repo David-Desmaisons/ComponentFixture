@@ -18,7 +18,7 @@
     "font-awesome": "^4.7.0",
     "gremlins.js": "github:marmelab/gremlins.js",
     "izitoast": "^1.4.0",
-    "prismjs": "^1.16.0",
+    "prismjs": "^1.21.0",
     "v-tooltip": "^2.0.0-rc.33",
     "vue": "^2.6.9",
     "vue-notifications": "^0.9.0",
